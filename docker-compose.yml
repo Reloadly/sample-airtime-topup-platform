@@ -1,0 +1,58 @@
+version: '3.3'
+networks:
+  supernetwork:
+    driver: bridge
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/DockerFiles/Dockerfile
+    container_name: ${DOCKER_PROJECT_CODE}_php
+    restart: always
+    volumes:
+      - ".:/var/www/html"
+      - "./docker/etc/php/php.ini:/usr/local/etc/php/conf.d/custom.ini"
+    environment:
+      - "PHP_IDE_CONFIG=serverName=PHPSTORM_DOCKER"
+    networks:
+      - supernetwork
+    links:
+      - "mariadb:database"
+    ports:
+      - "${DOCKER_PROJECT_WEB_PORT}:80"
+      - "${DOCKER_PROJECT_WEB_SSL_PORT}:443"
+
+  mariadb:
+    container_name: ${DOCKER_PROJECT_CODE}_db
+    build:
+      context: docker/etc/mariadb
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    volumes:
+      - ./volumes/mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - supernetwork
+
+  phpmyadmin:
+    container_name: ${DOCKER_PROJECT_CODE}_pma
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_PORT: 3306
+      PMA_HOST: ${DOCKER_PROJECT_CODE}_db
+      PMA_USER: root
+      PMA_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+    ports:
+      - "${DOCKER_PROJECT_PMA_PORT}:80"
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - supernetwork
