@@ -52,7 +52,7 @@ class Topup extends Model
             ],
             'operatorId' => $this['operator']['rid'],
             'amount' => $this['is_local']?$this['topup']:$this['topup']/$this['operator']['fx_rate'],
-            'useLocalAmount' => $this['is_local']
+            'useLocalAmount' => $this['is_local']?"true":"false"
         ]));
 
         $response = curl_exec($ch);
