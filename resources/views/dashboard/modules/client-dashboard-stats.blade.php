@@ -114,7 +114,7 @@
                     <div class="card-header align-items-center">
                         <h4 class="card-title"><i class="feather icon-globe"></i> Send Topup</h4>
                     </div>
-                    <send-topup int_input="{{ App\Models\Country::GetForInputField() }}" v-bind:token="'{{$stats['token']}}'"></send-topup>
+                    <send-topup int_input="{{ App\Models\Country::GetForInputField() }}" v-bind:send="'{{$stats['send']}}'" v-bind:token="'{{$stats['token']}}'"></send-topup>
                 </div>
             </div>
         </div>

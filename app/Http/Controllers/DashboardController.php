@@ -40,7 +40,8 @@ class DashboardController extends Controller
                     'invoices' => Auth::user()->invoices()->count(),
                     'cards' => Auth::user()->stripe_payment_methods()->count(),
                     'topups_total' => Auth::user()->topups()->sum('amount'),
-                    'token' => Auth::user()->createToken('Token')->accessToken
+                    'token' => Auth::user()->createToken('Token')->accessToken,
+                    'send'=>true
                 ]
             ]);
     }

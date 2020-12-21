@@ -53,7 +53,8 @@ class SyncTopupDIscounts extends Command
 
             $this->line("Syncing with Topups for Discount.");
             foreach ($resellers as $reseller) {
-                $topups = $reseller->topups()->where('status', 'SUCCESS')->get();
+                $accountTransactions = $reseller->account_transactions()->where('topup_id', '!=' , NULL)->where('type', 'CREDIT')->pluck('topup_id')->toArray();
+                $topups = $reseller->topups()->where('status', 'SUCCESS')->whereNotIn('id',$accountTransactions)->get();
                 $this->info(sizeof($topups) . " Topup(s) Found for ".$reseller['name']);
                 foreach ($topups as $topup) {
                     $discountPercentage = 0;

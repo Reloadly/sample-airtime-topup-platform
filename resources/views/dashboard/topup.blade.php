@@ -1,9 +1,10 @@
 @extends('dashboard.layout.app')
 
-@section('body-class','2-column')
-@section('page-name','Send Topup')
+@section('body-class','1-column bg-full-screen-image  blank-page blank-page')
+@section('page-name','Login')
 
 @push('css')
+    <link rel="stylesheet" type="text/css" href="/css/pages/authentication.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.min.css"/>
     <style>
         .iti{
@@ -17,34 +18,22 @@
 @endpush
 
 @section('content')
-    @if( @OTIFSolutions\Laravel\Settings\Models\Setting::get('reloadly_api_token') && sizeof($countries) > 0)
-        <div id="app">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header align-items-center">
-                            <h4 class="card-title"><i class="feather icon-globe"></i> Send Topup</h4>
+    <section class="row flexbox-container ">
+        <div class="col-xl-8 col-11 d-flex justify-content-center">
+            <div class="row justify-content-center w-100">
+                <div class="col-md-6 col-12">
+                    <div id="app">
+                        <div class="card">
+                            <div class="card-header align-items-center">
+                                <h4 class="card-title"><i class="feather icon-globe"></i> Send Topup</h4>
+                            </div>
+                            <send-topup int_input="{{ App\Models\Country::GetForInputField() }}" send="{{$send}}" v-bind:token="'{{$token}}'"></send-topup>
                         </div>
-                        <send-topup int_input="{{ App\Models\Country::GetForInputField() }}" send="{{$send}}" v-bind:token="'{{$token}}'"></send-topup>
                     </div>
                 </div>
             </div>
         </div>
-        @include('dashboard.layout.modals')
-    @else
-        <div class="card">
-            <div class="card-header justify-content-center">
-                <h4 class="card-title"><i class="feather icon-codepen"></i> Topup Sender</h4>
-            </div>
-            <div class="card-content pt-2">
-                <div class="card-body">
-                    <div class="row justify-content-center align-items-center">
-                        <p class="col-auto">Please add API keys in settings to enable this module.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    </section>
 @endsection
 
 @push('js')

@@ -9,6 +9,7 @@ use App\Models\Operator;
 use App\Models\System;
 use Illuminate\Http\Request;
 use App\Models\Topup;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use OTIFSolutions\Laravel\Settings\Models\Setting;
 
@@ -23,6 +24,18 @@ class TopupsController extends Controller
         ]);
     }
 
+    public function getHomePageTopup(){
+        if(Auth::user())
+            $token = Auth::user()->createToken('Token')->accessToken;
+        else
+            $token = User::admin()->createToken('Token')->accessToken;
+        return view('dashboard.topup', [
+            'countries' => Country::all(),
+            'token' => $token,
+            'send'=>"0"
+        ]);
+    }
+
     public function getWizard(){
         $token = Auth::user()->createToken('Token')->accessToken;
         return view('dashboard.topups.wizard', [
@@ -30,7 +43,8 @@ class TopupsController extends Controller
                 'type' => 'dashboard'
             ],
             'countries' => Country::all(),
-            'token' => $token
+            'token' => $token,
+            'send'=>true
         ]);
     }
 
@@ -63,6 +77,11 @@ class TopupsController extends Controller
             'operator' => 'required',
             'number' => 'required'
         ]);
+        if( !Auth::user())
+            return response()->json([
+                'location' => '/register',
+                'message' => 'Please Register First'
+            ]);
         $isLocal = isset($request['is_local']) && $request['is_local'] == true;
         $user = Auth::user();
         $operator = Operator::find($request['operator']);

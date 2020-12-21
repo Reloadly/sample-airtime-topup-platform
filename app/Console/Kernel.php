@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('sync:topups');
-        $schedule->command('sync:topup_discounts')->everyFiveMinutes();
+        $schedule->command('sync:topup_discounts')->everyMinute();
         $schedule->command('process:files')->runInBackground()->withoutOverlapping(30);
         $schedule->command('sync:countries')->daily();
         $schedule->command('sync:operators')->daily();
