@@ -65,7 +65,7 @@
             Loading,
             VueSwal
         },
-        props : ['model','countries', 'index'],
+        props : ['model','countries', 'index', 'token'],
         data() {
             return {
                 'number' : 'XXXXXXXXXXX',
@@ -161,7 +161,11 @@
                 }
                 if (this.selectedCountry === null || this.selectedCountry === undefined) return this.updateValidity();
                 this.isLoading = true;
-                axios.get("/api/countries/"+this.selectedCountry.id+"/operators").then(response => {
+                let token = this.token;
+                let config = {
+                    headers: {Authorization: `Bearer ${token}`},
+                };
+                axios.get("/api/countries/"+this.selectedCountry.id+"/operators", config).then(response => {
                     this.operators = response.data;
                     this.updateValidity();
                     this.isLoading = false;

@@ -62,15 +62,15 @@ class Topup extends Model
             'params' => 'TOPUP_ID:'.$this['id'].' PHONE:'.$this['number'].' TOPUP:'.$this['topup'],
             'response' => $response
         ]);
-        $this['response'] = json_decode($response);
-        if (isset($this['response']['errorCode']) && $this['response']['errorCode'] != null && $this['response']['errorCode'] != '')
-            $this['status'] = 'FAIL';
-        else{
+        $this['response'] = json_decode('{"timeStamp":"2020-12-14T14:17:32.254+0000","message":"Insufficient funds in the wallet to complete this transaction","path":"\/topups","errorCode":"INSUFFICIENT_BALANCE","infoLink":null,"details":[]}');
+        if (isset($this['response']['transactionId']) && $this['response']['transactionId'] != null && $this['response']['transactionId'] != '') {
             $this['status'] = 'SUCCESS';
             if (isset($this['response']['balanceInfo']['oldBalance']) && isset($this['response']['balanceInfo']['newBalance']))
                 $this['topup'] = $this['response']['balanceInfo']['oldBalance'] - $this['response']['balanceInfo']['newBalance'];
             if (isset($this['response']['pinDetail']))
                 $this['pin'] = $this['response']['pinDetail'];
+        }else{
+            $this['status'] = 'FAIL';
         }
         $this->save();
         if($sendResponse)

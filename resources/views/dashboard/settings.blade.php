@@ -77,7 +77,7 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="settings" aria-labelledby="settings-tab" role="tabpanel">
-                                <div class="row align-items-center mt-3 mb-1">
+                                <div class="row align-items-center mt-3 mb-2">
                                     <div class="col-md-4 col-6">
                                         <p> Allow Customer Registration</p>
                                     </div>
@@ -89,20 +89,6 @@
                                                 <span class="switch-text-left">YES</span>
                                                 <span class="switch-text-right">NO</span>
                                             </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-1">
-                                    <div class="col-md-4 col-6">
-                                        <p> Currency</p>
-                                    </div>
-                                    <div class="col-md-4 col-6">
-                                        <div class="form-group">
-                                            <select id="currency" name="currency" class="form-control required">
-                                                @foreach($currencies as $currency)
-                                                    <option value="{{ $currency['abbr'] }}" {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('currency')==$currency['abbr']?'selected':'' }}>{{ $currency['name'].' ('.$currency['symbol'].')' }} </option>
-                                                @endforeach
-                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -125,6 +111,149 @@
                                                 <i class="feather icon-percent"></i>
                                             </div>
                                             <label for="customer-rate">Customer Rate</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <div class="col-auto">
+                                        <h4 class="card-title"><i class="feather icon-circle"></i> Company Details</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="email" id="company-email" class="form-control" placeholder="Email"
+                                                   name="company_email" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_email') }}">
+                                            <label for="company-email">Email</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="text" id="company-phone" class="form-control" placeholder="Phone"
+                                                   name="company_phone" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_phone') }}">
+                                            <label for="company-phone">Phone</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="text" id="company-address-line-1" class="form-control" placeholder="Address Line 1"
+                                                   name="company_address_line_1" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_address_line_1') }}">
+                                            <label for="company-address-line-1">Address Line 1</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="text" id="company-address-line-2" class="form-control" placeholder="Address Line 2"
+                                                   name="company_address_line_2" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_address_line_2') }}">
+                                            <label for="company-address-line-2">Address Line 2</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="text" id="company-city" class="form-control" placeholder="City"
+                                                   name="company_city" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_city') }}">
+                                            <label for="company-city">City</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="text" id="company-state" class="form-control" placeholder="State"
+                                                   name="company_state" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_state') }}">
+                                            <label for="company-state">State</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="text" id="company-country" class="form-control" placeholder="Country"
+                                                   name="company_country" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_country') }}">
+                                            <label for="company-country">Country</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-6">
+                                        <div class="form-label-group position-relative">
+                                            <input type="text" id="company-region" class="form-control" placeholder="Region"
+                                                   name="company_region" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_region') }}">
+                                            <label for="company-region">Region</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mt-1 mb-1">
+                                    <div class="col-md-4 col-6">
+                                        <p> Same Billing Details</p>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="custom-control custom-switch custom-switch-primary switch-md">
+                                            <input type="checkbox" class="custom-control-input" id="same-billing-details" name="same_billing_details" onclick="handleBilling()"
+                                                {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('same_billing_details')==true?'checked':'' }}>
+                                            <label class="custom-control-label" for="same-billing-details">
+                                                <span class="switch-text-left">YES</span>
+                                                <span class="switch-text-right">NO</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="billing-information" style="display: {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('same_billing_details')==true?'none':'block' }}">
+                                    <div class="row align-items-center mb-1">
+                                        <div class="col-auto">
+                                            <h4 class="card-title"><i class="feather icon-circle"></i> Billing Details</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="email" id="billing-email" class="form-control" placeholder="Email"
+                                                       name="billing_email" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_email') }}">
+                                                <label for="billing-email">Email</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="text" id="billing-phone" class="form-control" placeholder="Phone"
+                                                       name="billing_phone" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_phone') }}">
+                                                <label for="billing-phone">Phone</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="text" id="billing-address-line-1" class="form-control" placeholder="Address Line 1"
+                                                       name="billing_address_line_1" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_address_line_1') }}">
+                                                <label for="billing-address-line-1">Address Line 1</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="text" id="billing-address-line-2" class="form-control" placeholder="Address Line 2"
+                                                       name="billing_address_line_2" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_address_line_2') }}">
+                                                <label for="billing-address-line-2">Address Line 2</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="text" id="billing-city" class="form-control" placeholder="City"
+                                                       name="billing_city" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_city') }}">
+                                                <label for="billing-city">City</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="text" id="billing-state" class="form-control" placeholder="State"
+                                                       name="billing_state" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_state') }}">
+                                                <label for="billing-state">State</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="text" id="billing-country" class="form-control" placeholder="Country"
+                                                       name="billing_country" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_country') }}">
+                                                <label for="billing-country">Country</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-6">
+                                            <div class="form-label-group position-relative">
+                                                <input type="text" id="billing-region" class="form-control" placeholder="Region"
+                                                       name="billing_region" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_region') }}">
+                                                <label for="billing-region">Region</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -543,6 +672,13 @@
                 })
             }
         });
+
+        function handleBilling(){
+            if(document.getElementById('same-billing-details').checked)
+                document.getElementById('billing-information').style.display='none';
+            else
+                document.getElementById('billing-information').style.display='block';
+        }
 
     </script>
 

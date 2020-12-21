@@ -11,9 +11,25 @@
 @endpush
 
 @section('content')
-    <section id="app" class="data-list-view-header">
-        <number-table data-file-id="{{ $file['id'] }}" data-numbers="{{ $file['numbers'] }}" data-countries="{{ $countries }}"></number-table>
-    </section>
+    @if( @OTIFSolutions\Laravel\Settings\Models\Setting::get('reloadly_api_token') && sizeof($countries) > 0)
+        <section id="app" class="data-list-view-header">
+            <number-table token="{{ $token }}" data-file-id="{{ $file['id'] }}" data-numbers="{{ $file['numbers'] }}" data-countries="{{ $countries }}"></number-table>
+        </section>
+    @else
+        <div class="card">
+            <div class="card-header justify-content-center">
+                <h4 class="card-title"><i class="feather icon-codepen"></i> Bulk Topup Sender</h4>
+            </div>
+            <div class="card-content pt-2">
+                <div class="card-body">
+                    <div class="row justify-content-center align-items-center">
+                        <p class="col-auto">Please add API keys in settings to enable this module.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
 @endsection
 
 @push('js')

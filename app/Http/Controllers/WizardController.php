@@ -42,7 +42,7 @@ class WizardController extends Controller
 
     public function start ($id){
         $file = File::find($id);
-        //dd($file['numbers'][1]['operators']);
+        $token = Auth::user()->createToken('Token')->accessToken;
         if ($file === null)
             return response()->json(['errors' => ['error' => 'File not found']],422);
         $user = Auth::user();
@@ -51,7 +51,8 @@ class WizardController extends Controller
         return view('dashboard.wizard.confirm',[
             'page'=>['type' => 'dashboard'],
             'countries' => Country::all(),
-            'file' => $file
+            'file' => $file,
+            'token' => $token
         ]);
     }
 

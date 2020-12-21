@@ -208,8 +208,14 @@ export default {
                         .get("/api/countries/" + this.selectedCountry + "/operators/detect/" + this.selectedNumber, config)
                         .then(response => {
                             if (response.data) {
-                                this.selectedOperator = response.data;
-                                toastr.success('Operator Found');
+                                let filteredOperator = this.operators.filter(X => X.id === response.data.id);
+                                if(filteredOperator[0]) {
+                                    this.selectedOperator = filteredOperator[0];
+                                    toastr.success('Operator Found');
+                                }else{
+                                    this.selectedOperator = this.operators[0];
+                                    toastr.error('Unable to auto-detect Operator');
+                                }
                             } else {
                                 this.selectedOperator = this.operators[0];
                                 toastr.error('Unable to auto-detect Operator');

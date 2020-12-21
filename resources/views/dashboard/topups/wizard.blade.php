@@ -34,7 +34,7 @@
     @else
         <div class="card">
             <div class="card-header justify-content-center">
-                <h4 class="card-title"><i class="feather icon-codepen"></i> Bulk Topup Sender</h4>
+                <h4 class="card-title"><i class="feather icon-codepen"></i> Topup Sender</h4>
             </div>
             <div class="card-content pt-2">
                 <div class="card-body">

@@ -56,36 +56,59 @@
                 </div>
                 <div class="col-sm-6 col-12 text-right">
                     <div class="row">
-                         <div class="col-md-6">
-                             <h5>United Kingdom (UK)</h5>
-                             <div class="company-info my-2">
-                                 <p>19 DEAN ROAD ROOM 3</p>
-                                 <p> LONDON NW2</p>
-                                  <p> 5AB UK.</p>
-                             </div>
-                             <div class="company-contact">
-
-                                 <p>
-                                     <i class="feather icon-phone"></i>
-                                     +44-746-633-5235
-                                 </p>
-                             </div>
-                         </div>
                         <div class="col-md-6">
-                            <h5>West Africa (Nigeria)</h5>
+                            <h5>{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_region') }}</h5>
                             <div class="company-info my-2">
-                                <p>No. 9 Udotung Street</p>
-                                <p>Off Okop Eto Road</p>
-                                <p>Ikot Ekpene,Akwa Ibom, Nigeria</p>
+                                <p>{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_address_line_1') }}</p>
+                                <p>{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_address_line_2') }}</p>
+                                <p>@if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('company_city'))
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_city') }},
+                                    @endif
+                                    @if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('company_state'))
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_state') }},
+                                    @endif
+                                    {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_country') }}</p>
                             </div>
                             <div class="company-contact">
                                 <p>
-                                    <i class="feather icon-mail"></i>
-                                    billing@topup.com
+                                    @if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('company_email'))
+                                        <i class="feather icon-mail"></i>
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_email') }}
+                                    @endif
                                 </p>
                                 <p>
-                                    <i class="feather icon-phone"></i>
-                                    (234) 702 060 4785
+                                    @if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('company_phone'))
+                                        <i class="feather icon-phone"></i>
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('company_phone') }}
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_region') }}</h5>
+                            <div class="company-info my-2">
+                                <p>{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_address_line_1') }}</p>
+                                <p>{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_address_line_2') }}</p>
+                                <p>@if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_city'))
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_city') }},
+                                    @endif
+                                    @if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_state'))
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_state') }},
+                                    @endif
+                                    {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_country') }}</p>
+                            </div>
+                            <div class="company-contact">
+                                <p>
+                                    @if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_email'))
+                                        <i class="feather icon-mail"></i>
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_email') }}
+                                    @endif
+                                </p>
+                                <p>
+                                    @if(@OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_phone'))
+                                        <i class="feather icon-phone"></i>
+                                        {{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('billing_phone') }}
+                                    @endif
                                 </p>
                             </div>
                         </div>

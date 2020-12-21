@@ -15,7 +15,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <number-entry v-for="(number, index) in numbers" v-bind:key="number.id" :model="number" :countries.sync="countries" :index.sync="index" @update="updateNumbers"></number-entry>
+                <number-entry v-for="(number, index) in numbers" v-bind:key="number.id" v-bind:token="token" :model="number" :countries.sync="countries" :index.sync="index" @update="updateNumbers"></number-entry>
                 </tbody>
             </table>
             <div class="d-flex justify-content-end align-items-center">
@@ -36,7 +36,7 @@
 
 <script>
     export default {
-        props: ['dataNumbers','dataCountries', 'dataFileId'],
+        props: ['dataNumbers','dataCountries', 'dataFileId', 'token'],
         data() {
             return {
                 'numbers' : [],

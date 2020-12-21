@@ -32,7 +32,6 @@ class SettingsController extends Controller
         ]);
 
         Setting::set('allow_customer_registration',@$request['allow_customer_registration'],'BOOL');
-        Setting::set('currency',@$request['currency'],'STRING');
         Setting::set('reseller_discount',@$request['reseller_discount'],'DOUBLE');
         Setting::set('customer_rate',@$request['customer_rate'],'DOUBLE');
         Setting::set('stripe_publishable_key',@$request['stripe_publishable_key'],'STRING');
@@ -51,6 +50,24 @@ class SettingsController extends Controller
         Setting::set('sidebar_background_color',@$request['sidebar_background_color'],'STRING');
         Setting::set('sidebar_text_color',@$request['sidebar_text_color'],'STRING');
         Setting::set('sidebar_nav_item_color',@$request['sidebar_nav_item_color'],'STRING');
+        Setting::set('same_billing_details',@$request['same_billing_details'],'BOOL');
+        Setting::set('company_email',@$request['company_email'],'STRING');
+        Setting::set('company_phone',@$request['company_phone'],'STRING');
+        Setting::set('company_address_line_1',@$request['company_address_line_1'],'STRING');
+        Setting::set('company_address_line_2',@$request['company_address_line_2'],'STRING');
+        Setting::set('company_city',@$request['company_city'],'STRING');
+        Setting::set('company_state',@$request['company_state'],'STRING');
+        Setting::set('company_country',@$request['company_country'],'STRING');
+        Setting::set('company_region',@$request['company_region'],'STRING');
+
+        Setting::set('billing_email',@$request['same_billing_details']?@$request['company_email']:@$request['billing_email'],'STRING');
+        Setting::set('billing_phone',@$request['same_billing_details']?@$request['company_phone']:@$request['billing_phone'],'STRING');
+        Setting::set('billing_address_line_1',@$request['same_billing_details']?@$request['company_address_line_1']:@$request['billing_address_line_1'],'STRING');
+        Setting::set('billing_address_line_2',@$request['same_billing_details']?@$request['company_address_line_2']:@$request['billing_address_line_2'],'STRING');
+        Setting::set('billing_city',@$request['same_billing_details']?@$request['company_city']:@$request['billing_city'],'STRING');
+        Setting::set('billing_state',@$request['same_billing_details']?@$request['company_state']:@$request['billing_state'],'STRING');
+        Setting::set('billing_country',@$request['same_billing_details']?@$request['company_country']:@$request['billing_country'],'STRING');
+        Setting::set('billing_region',@$request['same_billing_details']?@$request['company_region']:@$request['billing_region'],'STRING');
 
         $token = Auth::user()->getToken();
         if ($token === null)
