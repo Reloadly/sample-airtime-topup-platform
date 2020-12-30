@@ -30,7 +30,7 @@ use App\Http\Controllers\DropzoneController;
 |
 */
 
-Route::get('/',[TopupsController::class,'getHomePageTopup']);
+Route::view('/','dashboard.login');
 Route::view('/login','dashboard.login')->name('login');
 Route::post('/login',[AuthController::class,'login']);
 Route::view('/forgot/password','dashboard.forgot-password');
@@ -38,6 +38,7 @@ Route::post('/forgot/password',[AuthController::class,'forgotPassword']);
 Route::get('/register', [AuthController::class,'getRegister']);
 Route::post('/register',[AuthController::class,'register']);
 Route::get('/logout',[AuthController::class,'logout']);
+Route::get('/widget',[TopupsController::class,'getHomePageTopup']);
 
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:dashboard'])->group(function (){

@@ -71,7 +71,7 @@ class SyncTopupDIscounts extends Command
                             'amount' => $discount,
                             'currency' => $topup['invoice']['currency_code'],
                             'type' => 'CREDIT',
-                            'description' => 'Topup Discount Added. Topup: ' . $topup['id'],
+                            'description' => 'Commission Paid. Topup # ' . $topup['id'] .' @'. $discountPercentage .'%',
                             'ending_balance' => @$topup['user']['balance_value'] + $discount
                         ]);
                     }

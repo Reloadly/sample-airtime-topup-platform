@@ -50,7 +50,7 @@ class File extends Model
                 'operator_id' => System::autoDetectOperator($item[1],$item[0],$this['id'])['id'],
                 'is_local' => $item[2] != '0',
                 'amount' => floatval($item[3]),
-                'number' => intval($item[1])
+                'number' => doubleval($item[1])
             ]);
             sleep(rand(0,2));
         }

@@ -13,6 +13,7 @@
                 <thead>
                 <tr>
                     <th>TOPUP</th>
+                    <th>Is Local</th>
                     <th>AMOUNT</th>
                     <th>RATE</th>
                     <th>TOTAL</th>
@@ -22,6 +23,13 @@
                 @foreach($invoice['topups'] as $topup)
                     <tr>
                         <td>{{($topup['operator']['name']).' '.$topup['number']}}</td>
+                        <td>
+                            @if($topup['is_local'])
+                                <div class="badge badge-pill badge-warning pl-1 pr-1">Yes</div>
+                            @else
+                                <div class="badge badge-pill badge-primary pl-1 pr-1">No</div>
+                            @endif
+                        </td>
                         <td>{{(number_format($topup['topup'],2)).' '.$topup['receiver_currency'] }}</td>
                         <td>{{ number_format($topup['topup']/($invoice['amount']/sizeof($invoice['topups'])),2) }}</td>
                         <td>{{ number_format($invoice['amount']/sizeof($invoice['topups']),2).' '.$invoice['currency_code'] }}</td>

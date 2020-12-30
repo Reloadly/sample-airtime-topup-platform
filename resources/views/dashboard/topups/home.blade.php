@@ -22,6 +22,8 @@
                                     <thead>
                                     <tr>
                                         <th>Timestamp</th>
+                                        <th>ID</th>
+                                        <th>Is Local</th>
                                         <th>Operator</th>
                                         <th>Number</th>
                                         <th>Amount</th>
@@ -32,6 +34,14 @@
                                     @foreach($topups as $topup)
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($topup['created_at'])->format('Y-m-d H:m') }}</td>
+                                        <td>{{ $topup['id'] }}</td>
+                                        <td>
+                                            @if($topup['is_local'])
+                                                <div class="badge badge-pill badge-warning pl-1 pr-1">Yes</div>
+                                            @else
+                                                <div class="badge badge-pill badge-primary pl-1 pr-1">No</div>
+                                            @endif
+                                        </td>
                                         <td>{{ $topup['operator']['name'] }}</td>
                                         <td>{{ $topup['number'] }}</td>
                                         <td>{{ number_format($topup['topup'],2).' '.$topup['receiver_currency'] }}</td>
@@ -64,6 +74,8 @@
                                     <tfoot>
                                     <tr>
                                         <th>Timestamp</th>
+                                        <th>ID</th>
+                                        <th>Is Local</th>
                                         <th>Operator</th>
                                         <th>Number</th>
                                         <th>Amount</th>
