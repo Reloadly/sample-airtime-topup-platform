@@ -50,9 +50,9 @@ class Operator extends Model
 
     public function getFxRateAttribute($fx){
         $user = Auth::user();
-        if(($user['user_role']['name'] == 'RESELLER') )
+        if(isset($user) && ($user['user_role']['name'] == 'RESELLER'))
             return  $fx;
-        elseif (Setting::get('customer_rate'))
+        elseif(Setting::get('customer_rate'))
             return ($fx * (1 - ( Setting::get('customer_rate') / 100)));
 
         return $fx;

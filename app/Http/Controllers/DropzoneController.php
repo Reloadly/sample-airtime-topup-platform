@@ -14,9 +14,13 @@ class DropzoneController extends Controller
             'csv' => 'required|file'
         ]);
 
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
+
         $file = new \App\Models\File();
         $file['original_name'] = $request['csv']->getClientOriginalName();
-        $file['user_id'] = Auth::user()['id'];
+        $file['user_id'] = $user['id'];
         $file['path'] = 'files';
         $file['name'] = Str::random(32).'.'.\File::extension($file['original_name']);
         $request['csv']->storeAs($file['path'],$file['name']);

@@ -17,13 +17,15 @@ class Discount extends Model
     }
 
     public function getInternationalPercentageResellerAttribute(){
-        if((Auth::user()['user_role']['name'] == 'RESELLER') && (Setting::get('reseller_discount'))){
+        $user = Auth::user();
+        if(isset($user) && ($user['user_role']['name'] == 'RESELLER') && (Setting::get('reseller_discount'))){
             return $this['international_percentage'] * (Setting::get('reseller_discount') / 100);
         }
         return 0;
     }
     public function getLocalPercentageResellerAttribute(){
-        if((Auth::user()['user_role']['name'] == 'RESELLER') && (Setting::get('reseller_discount'))){
+        $user = Auth::user();
+        if(isset($user) && ($user['user_role']['name'] == 'RESELLER') && (Setting::get('reseller_discount'))){
             return $this['local_percentage'] * (Setting::get('reseller_discount') / 100);
         }
         return 0;

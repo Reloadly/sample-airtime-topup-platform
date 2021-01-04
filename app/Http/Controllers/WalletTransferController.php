@@ -27,7 +27,7 @@ class WalletTransferController extends Controller
         ]);
         $user = User::find($request['user']);
         $me = Auth::user();
-        if (!$user)
+        if (!isset($user) || !isset($me))
             return response()->json(['Errors' => ['Error' => 'User Not Found']],422);
         $amount = doubleval($request['amount']);
         if ($amount <= 0)
@@ -36,7 +36,7 @@ class WalletTransferController extends Controller
             return response()->json(['Errors' => ['Error' => 'Cannot transfer to self']],422);
         $fee = 0;
         $system = System::me();
-        if ($me['user_role']['name'] !== "ADMIN" ){
+        if (isset($me['user_role']) && ($me['user_role']['name'] !== "ADMIN") ){
             if ($me['balance_value'] < $amount)
                 return response()->json(['Errors' => ['Error' => 'Insufficient Balance for Transfer']],422);
             if (!isset($me['stripe_response']['currency']))

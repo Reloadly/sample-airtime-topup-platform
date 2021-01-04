@@ -49,7 +49,7 @@ class SyncTopups extends Command
         {
             $this->info(sizeof($topups)." Topups Found.");
             foreach ($topups as $topup){
-                if($topup['scheduled_datetime']){
+                if($topup['scheduled_datetime'] && isset($topup['timezone'])){
                     $now = Carbon::now();
                     $datetime = Carbon::parse($topup['scheduled_datetime'],$topup['timezone']['utc'][0]);
                     if ($datetime <= $now)

@@ -18,11 +18,14 @@ class InvoicesController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        if(!(isset($user) || !isset($user['user_role'])))
+            return response()->json(['errors' => ['error' => 'User or User Role Not Found.']],422);
         return view('dashboard.invoices.home', [
             'page' => [
                 'type' => 'dashboard'
             ],
-            'invoices' => Auth::user()['user_role']['name'] == 'ADMIN'?Invoice::all():Auth::user()['invoices']
+            'invoices' => $user['user_role']['name'] == 'ADMIN' ? Invoice::all() : $user['invoices']
         ]);
     }
 
@@ -69,8 +72,11 @@ class InvoicesController extends Controller
      */
     public function show($id)
     {
+        $user = Auth::user();
         $invoice = Invoice::find($id);
-        if ($invoice === null || Auth::user()['user_role']['name'] !== 'ADMIN')
+        if ($invoice === null )
+            return response()->json(['errors' => ['error' => 'Invoice Not Found.']],422);
+        if(!(isset($user) && isset($user['user_role']) && ($user['user_role']['name'] == 'ADMIN')))
             return response()->json(['errors' => ['error' => 'Not Authorized to perform such action.']],422);
         return view('dashboard.invoices.modal',[
             'item' => $invoice
@@ -91,8 +97,13 @@ class InvoicesController extends Controller
      */
     public function view($id)
     {
+        $user = Auth::user();
         $invoice = Invoice::find($id);
-        if ($invoice === null || (Auth::user()['user_role']['name'] !== 'ADMIN' && Auth::user()['id'] !== $invoice['user_id']))
+        if ($invoice === null )
+            return response()->json(['errors' => ['error' => 'Invoice Not Found.']],422);
+        if(!(isset($user) || !isset($user['user_role'])))
+            return response()->json(['errors' => ['error' => 'User or User Role Not Found.']],422);
+        if (($user['user_role']['name'] !== 'ADMIN' && $user['id'] !== $invoice['user_id']))
             return response()->json(['errors' => ['error' => 'Not Authorized to perform such action.']],422);
         return view('dashboard.invoices.view',[
             'page' => [

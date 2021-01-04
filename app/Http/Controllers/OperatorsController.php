@@ -25,6 +25,8 @@ class OperatorsController extends Controller
     public function promotions($id)
     {
         $operator = Operator::find($id);
+        if (!isset($operator))
+            return response()->json(['errors' => [ 'error' => 'Operator not found.']],422);
         return view('dashboard.promotions.operator_promotions', [
             'page' => [
                 'type' => 'dashboard'
@@ -46,7 +48,7 @@ class OperatorsController extends Controller
         $user = User::find($request->user()['id']);
         if(!$user)
             return response()->json(['errors' => ['error' => 'User not found.']],422);
-        if ($user['user_role']['name'] == 'RESELLER') {
+        if (isset($user['user_role']) && ($user['user_role']['name'] == 'RESELLER')) {
             $operator = $user->api_operators()->where('id', $id)->first();
             $operator->makeHidden(['rid', 'international_discount', 'commission', 'local_discount']);
             unset($operator['rates']['user_id']);

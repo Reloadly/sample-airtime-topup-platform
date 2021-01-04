@@ -69,7 +69,7 @@ class File extends Model
     public function getTotalAmountAttribute(){
         $amount = 0.0;
         foreach($this['numbers'] as $number)
-            if ($number['is_local'])
+            if ($number['is_local'] && isset($number['operator']))
                 $amount += ($number['amount'] / $number['operator']['fx_rate']);
             else
                 $amount += $number['amount'];

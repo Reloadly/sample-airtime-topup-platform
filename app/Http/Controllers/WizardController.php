@@ -21,11 +21,14 @@ use OTIFSolutions\Laravel\Settings\Models\Setting;
 class WizardController extends Controller
 {
     public function index(){
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         return view('dashboard.wizard.home', [
             'page' => [
                 'type' => 'dashboard'
             ],
-            'files' => Auth::user()['files']
+            'files' => $user['files']
         ]);
     }
 
@@ -42,10 +45,12 @@ class WizardController extends Controller
 
     public function start ($id){
         $file = File::find($id);
-        $token = Auth::user()->createToken('Token')->accessToken;
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
+        $token = $user->createToken('Token')->accessToken;
         if ($file === null)
             return response()->json(['errors' => ['error' => 'File not found']],422);
-        $user = Auth::user();
         if ($file['user_id'] !== $user['id'])
             return response()->json(['errors' => ['error' => 'Unauthorized Access']],422);
         return view('dashboard.wizard.confirm',[
@@ -61,6 +66,8 @@ class WizardController extends Controller
         if ($file === null)
             return response()->json(['errors' => ['error' => 'File not found']],422);
         $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         if ($file['user_id'] !== $user['id'])
             return response()->json(['errors' => ['error' => 'Unauthorized Access']],422);
         if ($file['status'] === 'START')
@@ -78,6 +85,8 @@ class WizardController extends Controller
         if ($file === null)
             return response()->json(['errors' => ['error' => 'File not found']],422);
         $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         if ($file['user_id'] !== $user['id'])
             return response()->json(['errors' => ['error' => 'Unauthorized Access']],422);
         if ((isset($request['schedule_now'])) && $request['schedule_now'] == 'true'){
@@ -269,7 +278,10 @@ class WizardController extends Controller
     }
 
     public function deleteEntry($id){
-        FileEntry::find($id)->delete();
+        $fileEntry = FileEntry::find($id);
+        if (!isset($fileEntry))
+            return response()->json(['errors' => [ 'error' => 'File Entry not found.']],422);
+        $fileEntry->delete();
         return response()->json(['message' => 'Successfully Deleted']);
     }
 }

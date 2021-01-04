@@ -122,6 +122,8 @@ class CustomersController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         /*$user->topups()->delete();
         $user->invoices()->delete();
         $user->numbers()->delete();

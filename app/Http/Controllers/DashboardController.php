@@ -13,7 +13,10 @@ class DashboardController extends Controller
 {
     public function index(){
         $admin = User::admin();
-        if (Auth::user()['user_role']['name'] == 'ADMIN')
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
+        if (isset($user['user_role']) && ($user['user_role']['name'] == 'ADMIN'))
             return view('dashboard.dashboard', [
                 'page' => [
                     'type' => 'dashboard'
@@ -47,7 +50,10 @@ class DashboardController extends Controller
     }
 
     public  function statsTopupAmount(){
-        if (Auth::user()['user_role']['name'] == 'ADMIN')
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
+        if (isset($user['user_role']) && ($user['user_role']['name'] == 'ADMIN'))
             $topups = Topup::all()->pluck('amount')->toArray();
         else
             $topups = Auth::user()->topups()->pluck('amount')->toArray();

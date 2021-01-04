@@ -93,7 +93,7 @@ class ResellersController extends Controller
     public function showResellerRates($id)
     {
         $reseller = User::find($id);
-        if(!$reseller)
+        if(!isset($reseller))
             return response()->json(['errors' => ['error' => 'Reseller not found.']],422);
         return view('dashboard.users.reseller_rates', [
             'page' => [
@@ -114,6 +114,8 @@ class ResellersController extends Controller
             'international_discount' => 'required|array'
         ]);
         $user = User::where('id',$request['id'])->first();
+        if (!isset($user) || !isset($user['user_role']))
+            return response()->json(['errors' => [ 'error' => 'User or User Role not found.']],422);
         if($user['user_role']['name'] != 'RESELLER')
             return response()->json(['Errors' => ['Error' => 'Applicable for Resellers Only']],422);
         if (!$user)
@@ -179,6 +181,8 @@ class ResellersController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         $user->operators()->sync([]);
         /*$user->topups()->delete();
         $user->invoices()->delete();

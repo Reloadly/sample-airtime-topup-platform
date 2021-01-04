@@ -57,23 +57,25 @@ class SyncTopupDIscounts extends Command
                 $topups = $reseller->topups()->where('status', 'SUCCESS')->whereNotIn('id',$accountTransactions)->get();
                 $this->info(sizeof($topups) . " Topup(s) Found for ".$reseller['name']);
                 foreach ($topups as $topup) {
-                    $discountPercentage = 0;
-                    $operator =  $reseller->operators()->where('operator_id',$topup['operator']['id'])->first();
-                    if ($topup['is_local'] && $operator->pivot->local_discount)
-                        $discountPercentage = $operator->pivot->local_discount;
-                    elseif (!$topup['is_local'] && $operator->pivot->international_discount)
-                        $discountPercentage = $operator->pivot->international_discount;
-                    if ($discountPercentage) {
-                        $discount = $topup['amount'] * ($discountPercentage / 100);
-                        AccountTransaction::firstOrCreate(['topup_id' => $topup['id']], [
-                            'user_id' => $topup['user_id'],
-                            'topup_id' => $topup['id'],
-                            'amount' => $discount,
-                            'currency' => $topup['invoice']['currency_code'],
-                            'type' => 'CREDIT',
-                            'description' => 'Commission Paid. Topup # ' . $topup['id'] .' @'. $discountPercentage .'%',
-                            'ending_balance' => @$topup['user']['balance_value'] + $discount
-                        ]);
+                    if (isset($topup['invoice']) && isset($topup['operator'])) {
+                        $discountPercentage = 0;
+                        $operator = $reseller->operators()->where('operator_id', $topup['operator']['id'])->first();
+                        if ($topup['is_local'] && $operator->pivot->local_discount)
+                            $discountPercentage = $operator->pivot->local_discount;
+                        elseif (!$topup['is_local'] && $operator->pivot->international_discount)
+                            $discountPercentage = $operator->pivot->international_discount;
+                        if ($discountPercentage) {
+                            $discount = $topup['amount'] * ($discountPercentage / 100);
+                            AccountTransaction::firstOrCreate(['topup_id' => $topup['id']], [
+                                'user_id' => $topup['user_id'],
+                                'topup_id' => $topup['id'],
+                                'amount' => $discount,
+                                'currency' => $topup['invoice']['currency_code'],
+                                'type' => 'CREDIT',
+                                'description' => 'Commission Paid. Topup # ' . $topup['id'] . ' @' . $discountPercentage . '%',
+                                'ending_balance' => $reseller['balance_value'] + $discount
+                            ]);
+                        }
                     }
                 }
             }

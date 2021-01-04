@@ -28,8 +28,10 @@ class ApiController extends Controller
         $operators = $user['api_operators'];
         $operators->makeHidden(['rid','international_discount','commission','local_discount']);
         foreach ($operators as $key => $operator){
-            unset($operator['rates']['user_id']);
-            unset($operator['rates']['operator_id']);
+            if(isset($operator['rates'])) {
+                unset($operator['rates']['user_id']);
+                unset($operator['rates']['operator_id']);
+            }
             $operators[$key] = $operator;
         }
         return response()->json($operators);
@@ -42,8 +44,10 @@ class ApiController extends Controller
             return response()->json(['errors' => ['error' => 'User not found.']],422);
         $operator = $user->api_operators()->where('id', $id)->first();
         $operator->makeHidden(['rid','international_discount','commission','local_discount']);
-        unset($operator['rates']['user_id']);
-        unset($operator['rates']['operator_id']);
+        if(isset($operator['rates'])) {
+            unset($operator['rates']['user_id']);
+            unset($operator['rates']['operator_id']);
+        }
         return response()->json($operator);
     }
 
@@ -54,8 +58,10 @@ class ApiController extends Controller
         $operators = $user->api_operators()->where('country_id', $id)->get();
         $operators->makeHidden(['rid','international_discount','commission','local_discount']);
         foreach ($operators as $key => $operator){
-            unset($operator['rates']['user_id']);
-            unset($operator['rates']['operator_id']);
+            if(isset($operator['rates'])) {
+                unset($operator['rates']['user_id']);
+                unset($operator['rates']['operator_id']);
+            }
             $operators[$key] = $operator;
         }
         return response()->json($operators);
@@ -89,7 +95,7 @@ class ApiController extends Controller
         $user = User::find($request->user()['id']);
         if(!$user)
             return response()->json(['errors' => ['error' => 'User not found.']],422);
-        if($user['user_role']['name'] != 'RESELLER')
+        if(isset($user['user_role']) && ($user['user_role']['name'] != 'RESELLER'))
             return response()->json(['errors' => ['error' => 'This Action is for Resellers Only.']],422);
 
         $validator = Validator::make($request->all(), [

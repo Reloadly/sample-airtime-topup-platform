@@ -14,11 +14,14 @@ use OTIFSolutions\Laravel\Settings\Models\Setting;
 class WalletController extends Controller
 {
     public function index(){
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         return view('dashboard.wallet.account.home', [
             'page' => [
                 'type' => 'dashboard'
             ],
-            'accountTransactions' => Auth::user()['account_transactions']
+            'accountTransactions' => $user['account_transactions']
         ]);
     }
 
@@ -61,11 +64,14 @@ class WalletController extends Controller
             'amount' => 'required',
             'currency' => 'required'
         ]);
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         if ($request['amount'] < 5)
             return response()->json(['Errors' => ['Error' => 'Minimum Amount is 5.00']],422);
 
         $invoice = Invoice::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user['id'],
             'type' => 'AddFunds',
             'currency_code' => $request['currency'],
             'amount' => $request['amount']

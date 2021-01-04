@@ -24,6 +24,8 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         $user['image'] = Str::random(32).'.'.\File::extension($request['avatar']->getClientOriginalName());
         $request['avatar']->storeAs("public",$user['image']);
         $user['image'] = '/storage/'.$user['image'];
@@ -38,6 +40,8 @@ class ProfileController extends Controller
 
     public  function save(Request $request){
         $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users,email,'.$user->id,
@@ -65,6 +69,8 @@ class ProfileController extends Controller
 
     public function removeProfileImage(Request $request){
         $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         if($user['image'] != '/assets/images/default.png') {
             $image = explode('/',$user['image']);
             Storage::delete('/public/'.$image[2]);

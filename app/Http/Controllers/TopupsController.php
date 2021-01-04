@@ -16,11 +16,14 @@ use OTIFSolutions\Laravel\Settings\Models\Setting;
 class TopupsController extends Controller
 {
     public function index(){
+        $user = Auth::user();
+        if (!isset($user) || !isset($user['user_role']))
+            return response()->json(['errors' => [ 'error' => 'User or User Role not found.']],422);
         return view('dashboard.topups.home', [
             'page' => [
                 'type' => 'dashboard'
             ],
-            'topups' => Auth::user()['user_role']['name'] == 'ADMIN'?Topup::all():Auth::user()['topups']
+            'topups' => $user['user_role']['name'] == 'ADMIN'?Topup::all():$user['topups']
         ]);
     }
 
@@ -37,7 +40,10 @@ class TopupsController extends Controller
     }
 
     public function getWizard(){
-        $token = Auth::user()->createToken('Token')->accessToken;
+        $user = Auth::user();
+        if (!isset($user))
+            return response()->json(['errors' => [ 'error' => 'User not found.']],422);
+        $token = $user->createToken('Token')->accessToken;
         return view('dashboard.topups.wizard', [
             'page' => [
                 'type' => 'dashboard'
@@ -58,7 +64,10 @@ class TopupsController extends Controller
         $topup = Topup::find($id);
         if(!$topup)
             return response()->json(['errors' => ['error' => 'Topup not found.']],422);
-        if (Auth::user()['user_role']['name'] !== 'ADMIN')
+        $user = Auth::user();
+        if (!isset($user) || !isset($user['user_role']))
+            return response()->json(['errors' => [ 'error' => 'User or User Role not found.']],422);
+        if ($user['user_role']['name'] !== 'ADMIN')
             return response()->json(['errors' => ['error' => 'Not Authorized to perform such action.']],422);
         $topup['status'] = 'PENDING';
         $topup->save();
@@ -77,13 +86,13 @@ class TopupsController extends Controller
             'operator' => 'required',
             'number' => 'required'
         ]);
-        if( !Auth::user())
+        $user = Auth::user();
+        if (!isset($user))
             return response()->json([
                 'location' => '/register',
                 'message' => 'Please Register First'
             ]);
         $isLocal = isset($request['is_local']) && $request['is_local'] == true;
-        $user = Auth::user();
         $operator = Operator::find($request['operator']);
         if ($isLocal)
             $request->validate([    'local_amount' => 'required'    ]);
@@ -94,15 +103,17 @@ class TopupsController extends Controller
 
         $number = $request['number'];
 
+        if (!isset($user['user_role']))
+            return response()->json(['errors' => [ 'error' => 'User Role not found.']],422);
+
         if(($user['user_role']['name'] == 'RESELLER') && ($user['balance_value'] < $amount))
                 return response()->json( ['error' => 'Insufficient Balance for Transfer']);
 
-            $invoice = new Invoice();
-            $invoice['user_id'] = $user['id'];
-            $invoice['amount'] = 0;
-            $invoice['currency_code'] = $operator['sender_currency_code'];
-            $invoice->save();
-
+        $invoice = new Invoice();
+        $invoice['user_id'] = $user['id'];
+        $invoice['amount'] = 0;
+        $invoice['currency_code'] = $operator['sender_currency_code'];
+        $invoice->save();
 
         $topup = Topup::create([
             'user_id' => $user['id'],
