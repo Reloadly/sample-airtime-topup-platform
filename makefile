@@ -21,6 +21,7 @@ install:
 	@docker exec -it rstp_php composer install -vvv
 	@docker exec -it rstp_php php artisan migrate
 	@docker exec -it rstp_php php artisan db:seed
+	@docker exec -it rstp_php php artisan passport:install
 	@docker exec -it rstp_php php artisan sync:countries
 	@docker-compose down
 	@make -s start
