@@ -16,7 +16,7 @@ You should be able to install both the above requirements on almost all operatin
 
 Once the requirements are met. You can execute the following command to clone the repository and start the installation process.
 
-``git clone https://github.com/Reloadly/sample-topup-project.git && cd sample-topup-project && cp .env.example .env && make install``
+``git clone https://github.com/Reloadly/sample-airtime-topup-platform.git && cd sample-airtime-topup-platform && cp .env.example .env && make install``
 
 
 Just executing the above command should clone the whole repository into `sample-topup-project` folder and start the installation process.
@@ -29,10 +29,11 @@ After completion you can open the project url (localhost or server ip/domain) an
 
 As this repository is built for both local deployment and server deployment. If you are doing server deployment YOU SHOULD ALWAYS change the credentials for root user and database in the `.env` file before running the `make install` command. For server you should not use the one line code but rather the following steps.<br>
 
-1- Clone the repository (`git clone https://github.com/Reloadly/sample-topup-project.git`)<br>
-2- Make .env file (`cp .env.example .env`)<br>
-3- Edit the .env file( Change root password, database, database user, database user password based on server and database details)<br>
-4- Install the project (`make install`) 
+1- Clone the repository (`git clone https://github.com/Reloadly/sample-airtime-topup-platform.git`)<br>
+2- cd into project folder (`cd sample-airtime-topup-platform`)<br>
+3- Make .env file (`cp .env.example .env`)<br>
+4- Edit the .env file( Change root password, database, database user, database user password based on server and database details)<br>
+5- Install the project (`make install`) 
 
 ## Default Credentials
 
