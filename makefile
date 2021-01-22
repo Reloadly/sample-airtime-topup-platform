@@ -17,7 +17,6 @@ install:
 	$(info $(pink)------------------------------------------------------$(reset))
 	@docker-compose build
 	@docker-compose up -d
-	@docker exec -it rstp_php cp .env.example .env
 	@docker exec -it rstp_php composer install -vvv
 	@docker exec -it rstp_php php artisan migrate
 	@docker exec -it rstp_php php artisan db:seed
