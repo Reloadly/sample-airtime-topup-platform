@@ -67,8 +67,6 @@ class Topup extends Model
             $this['response'] = json_decode($response,true);
             if (isset($this['response']['transactionId']) && $this['response']['transactionId'] != null && $this['response']['transactionId'] != '') {
                 $this['status'] = 'SUCCESS';
-                if (isset($this['response']['balanceInfo']['oldBalance']) && isset($this['response']['balanceInfo']['newBalance']))
-                    $this['topup'] = $this['response']['balanceInfo']['oldBalance'] - $this['response']['balanceInfo']['newBalance'];
                 if (isset($this['response']['pinDetail']))
                     $this['pin'] = $this['response']['pinDetail'];
             } else {
