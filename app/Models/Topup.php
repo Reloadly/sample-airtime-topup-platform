@@ -64,7 +64,7 @@ class Topup extends Model
                 'params' => 'TOPUP_ID:' . $this['id'] . ' PHONE:' . $this['number'] . ' TOPUP:' . $this['topup'],
                 'response' => $response
             ]);
-            $this['response'] = $response;
+            $this['response'] = json_decode($response,true);
             if (isset($this['response']['transactionId']) && $this['response']['transactionId'] != null && $this['response']['transactionId'] != '') {
                 $this['status'] = 'SUCCESS';
                 if (isset($this['response']['balanceInfo']['oldBalance']) && isset($this['response']['balanceInfo']['newBalance']))
