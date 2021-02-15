@@ -64,7 +64,7 @@ class Topup extends Model
                 'params' => 'TOPUP_ID:' . $this['id'] . ' PHONE:' . $this['number'] . ' TOPUP:' . $this['topup'],
                 'response' => $response
             ]);
-            $this['response'] = json_decode('{"timeStamp":"2020-12-14T14:17:32.254+0000","message":"Insufficient funds in the wallet to complete this transaction","path":"\/topups","errorCode":"INSUFFICIENT_BALANCE","infoLink":null,"details":[]}');
+            $this['response'] = $response;
             if (isset($this['response']['transactionId']) && $this['response']['transactionId'] != null && $this['response']['transactionId'] != '') {
                 $this['status'] = 'SUCCESS';
                 if (isset($this['response']['balanceInfo']['oldBalance']) && isset($this['response']['balanceInfo']['newBalance']))
