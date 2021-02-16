@@ -84,3 +84,7 @@ In regard to how the web server is build. The system creates an apache-based con
 
 Please note that if you are using this system on an open environment accessible to the world, It is highly advised to change these credentials. You can change these in the `docker-compose.yml` and `.env` file. Once these are changed you will be required to remove the `volumes` directory if it was created and then run 'make install' again to reinstall the system based on the new credentials.
 
+## Video Tutorial
+
+- Installation Process Video ([Youtube Video 1](https://youtu.be/pBJ9KrZcGeA))
+- After Installation Steps ([Youtube Video 2](https://youtu.be/FRzB6tblauw))
