@@ -164,4 +164,33 @@ class SettingsController extends Controller
             'location' => '/settings'
         ]);
     }
+    public function uploadLoginLogo(Request $request){
+        $request->validate([
+            'login_logo' => 'required|file'
+        ]);
+
+        $image = Str::random(32).'.'.\File::extension($request['login_logo']->getClientOriginalName());
+        $request['login_logo']->storeAs("public",$image);
+        Setting::set('login_logo','/storage/'.$image,'STRING');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Upload Success. Reloading Page',
+            'location' => '/settings'
+        ]);
+    }
+
+    public function removeLoginLogo(Request $request){
+        $logo = @Setting::get('login_logo');
+        if($logo != '/assets/images/logo.svg') {
+            $image = explode('/',$logo);
+            Storage::delete('/public/'.$image[2]);
+        }else
+            return response()->json(['errors' => ['error' => 'Cannot Remove Default Image.']],500);
+        Setting::set('login_logo','/assets/images/logo.svg','STRING');
+        return response()->json([
+            'message' => 'Login Logo Removed.',
+            'location' => '/settings'
+        ]);
+    }
 }

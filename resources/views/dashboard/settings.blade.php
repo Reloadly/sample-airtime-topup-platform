@@ -412,6 +412,21 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="media mb-3">
+                                    <a class="col-md-3 control-label" href="#">
+                                        <img src="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('login_logo') }}" alt="Login Logo" class="users-avatar-shadow rounded" width="90" height="90">
+                                    </a>
+                                    <div class="col-6 col-md-4 input-group p-0">
+                                        <h6 class="media-heading">Login Logo</h6>
+
+                                        <div class="col-12 d-flex mt-1 px-0">
+                                            <button type="button" id="dpz-login-logo" class="btn btn-primary d-none d-sm-block mr-75 waves-effect waves-light">Change <i class="fa fa-spinner fa-spin d-none"></i></button>
+                                            <button type="button" class="btn btn-primary d-block d-sm-none mr-75 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>
+                                            <button type="button" data-toggle="post-feed" data-feed="/settings/login_logo/remove" class="btn btn-outline-danger d-none d-sm-block waves-effect waves-light">Remove</button>
+                                            <button type="button" data-toggle="post-feed" data-feed="/settings/login_logo/remove" class="btn btn-outline-danger d-block d-sm-none waves-effect waves-light"><i class="feather icon-trash-2"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="form-group row col-12">
                                     <p class="col-md-3 control-label" for="reseller_rate">UI Color</p>
@@ -662,6 +677,46 @@
                 });
                 this.on("error",function (file,response) {
                     $('button#dpz-favicon i').toggleClass('d-none');
+                    $.each(response, function (key, value) {
+                        if ($.isPlainObject(value)) {
+                            $.each(value, function (key, value) {
+                                toastr.error(value, 'Error');
+                            });
+                        }
+                    });
+                })
+            }
+        });
+        $("button#dpz-login-logo").dropzone({
+            paramName: "login_logo",
+            url: '/settings/login_logo/upload',
+            params: {
+                '_token': $('meta[name="csrf-token"]').attr('content')
+            },
+            maxFiles: 1,
+            uploadMultiple: false,
+            acceptedFiles: 'image/*',
+            previewsContainer: ".dropzone-previews",
+            createImageThumbnails: false,
+            init: function () {
+                this.on("maxfilesexceeded", function (file) {
+                    this.removeAllFiles();
+                    this.addFile(file);
+                });
+                this.on("addedfile",function () {
+                    $('button#dpz-login-logo i').toggleClass('d-none');
+                })
+                this.on("success",function (file,response) {
+                    $('button#dpz-login-logo i').toggleClass('d-none');
+                    if (response.message){
+                        toastr.success(response.message);
+                    }
+                    if (response.location){
+                        window.location = response.location;
+                    }
+                });
+                this.on("error",function (file,response) {
+                    $('button#dpz-login-logo i').toggleClass('d-none');
                     $.each(response, function (key, value) {
                         if ($.isPlainObject(value)) {
                             $.each(value, function (key, value) {

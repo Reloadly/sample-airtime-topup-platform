@@ -14,7 +14,11 @@
             <div class="card rounded-0 mb-0 bg-authentication w-100">
                 <div class="row m-0">
                     <div class="col-lg-6 d-lg-block d-none text-center align-self-center">
-                        <img src="/assets/images/logo.svg" class="w-100">
+                        @if((@OTIFSolutions\Laravel\Settings\Models\Setting::get('custom_theme')==true) && (@OTIFSolutions\Laravel\Settings\Models\Setting::get('login_logo')))
+                            <img src="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('login_logo') }}" class="w-100">
+                        @else
+                            <img src="/assets/images/logo.svg" class="w-100">
+                        @endif
                     </div>
                     <div class="col-lg-6 col-12 p-0">
                         <div class="card rounded-0 mb-0 px-2 py-1">

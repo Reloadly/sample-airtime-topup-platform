@@ -76,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/settings/mini_logo/upload',[SettingsController::class,'uploadMiniLogo']);
     Route::post('/settings/favicon/remove',[SettingsController::class,'removeFavicon']);
     Route::post('/settings/favicon/upload',[SettingsController::class,'uploadFavicon']);
+    Route::post('/settings/login_logo/remove',[SettingsController::class,'removeLoginLogo']);
+    Route::post('/settings/login_logo/upload',[SettingsController::class,'uploadLoginLogo']);
 
     Route::middleware(['role'])->group(function () {
         Route::get('/settings', [SettingsController::class,'index']);
