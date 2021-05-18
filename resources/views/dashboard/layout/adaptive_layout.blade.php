@@ -40,6 +40,7 @@
         <style>
             .main-menu .navbar-header .navbar-brand .brand-logo {
                 background : url({{@OTIFSolutions\Laravel\Settings\Models\Setting::get('mini_logo')}}) no-repeat !important;
+                background-size: contain !important;
             }
         </style>
     @endif
