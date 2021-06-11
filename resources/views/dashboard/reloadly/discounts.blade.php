@@ -36,15 +36,15 @@
                                         <tr>
                                             <td>{{ @$discount['operator']['country']['name'] }}</td>
                                             <td>{{ @$discount['operator']['name'] }}</td>
-                                            <td>{{ @$discount['international_percentage'] }}</td>
-                                            <td>{{ @$discount['local_percentage'] }}</td>
+                                            <td>{{ @$discount['international_percentage']."%" }}</td>
+                                            <td>{{ @$discount['local_percentage']."%" }}</td>
                                         </tr>
                                         @elseif(Auth::user()['user_role']['name'] == 'RESELLER')
                                             <tr>
                                                 <td>{{ @$discount['country']['name'] }}</td>
                                                 <td>{{ @$discount['name'] }}</td>
-                                                <td>{{ @$discount->pivot->international_discount }}</td>
-                                                <td>{{ @$discount->pivot->local_discount }}</td>
+                                                <td>{{ @$discount->pivot->international_discount."%" }}</td>
+                                                <td>{{ @$discount->pivot->local_discount."%" }}</td>
                                             </tr>
                                         @endif
                                     @endforeach
