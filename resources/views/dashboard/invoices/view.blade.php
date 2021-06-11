@@ -14,7 +14,11 @@
             <div id="invoice-company-details" class="row">
                 <div class="col-sm-6 col-12 text-left pt-1">
                     <div class="media pt-1">
-                        <img src="{{ asset('/assets/svgs/logo.svg') }}" width="200px" alt="company logo" />
+                        @if((@OTIFSolutions\Laravel\Settings\Models\Setting::get('custom_theme')==true) && (@OTIFSolutions\Laravel\Settings\Models\Setting::get('login_logo')))
+                            <img src="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('login_logo') }}" width="200px" alt="company logo" >
+                        @else
+                            <img src="{{ asset('/assets/svgs/logo.svg') }}" width="200px" alt="company logo" />
+                        @endif
                     </div>
                 </div>
                 <div class="col-sm-6 col-12 text-right">
