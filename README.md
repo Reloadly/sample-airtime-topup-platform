@@ -25,7 +25,7 @@ Once installation is done the project will run on your localhost (port 80) or on
 
 After completion you can open the project url (localhost or server ip/domain) and simply login using the default credentials
 
-## Recommended Server Installation
+## Recommended Server Installation (Docker and Make)
 
 As this repository is built for both local deployment and server deployment. If you are doing server deployment YOU SHOULD ALWAYS change the credentials for root user and database in the `.env` file before running the `make install` command. For server you should not use the one line code but rather the following steps.<br>
 
@@ -34,6 +34,20 @@ As this repository is built for both local deployment and server deployment. If 
 3- Make .env file (`cp .env.example .env`)<br>
 4- Edit the .env file( Change root password, database, database user, database user password based on server and database details)<br>
 5- Install the project (`make install`) 
+
+## Recommended Server Installation (cPanel without Docker without Make)
+
+As this repository is built for both local deployment and server deployment. If you are doing server deployment YOU SHOULD ALWAYS change the credentials for root user and database in the `.env` file before running the `make install` command. For server you should not use the one line code but rather the following steps.<br>
+
+1- Clone the repository (`git clone https://github.com/Reloadly/sample-airtime-topup-platform.git`)<br>
+2- Change the document root of the account to the public folder inside project. So if your project dir is "/home/something/sample-airtime-topup-platform" The document root should be "/home/something/sample-airtime-topup-platform/public"
+3- cd into project folder (`cd sample-airtime-topup-platform`)<br>
+4- Make .env file (`cp .env.example .env`)<br>
+5- Edit the .env file( Change root password, database, database user, database user password based on server and database details)<br>
+6- Install the project dependencies(`composer install`)
+7- Create Database with migrations (`php artisan migrate`)
+8- Seed the new database with default data (`php artisan db:seed`)
+9- Install Passport to manage authentication (`php artisan passport:install`) 
 
 ## Default Credentials
 
@@ -44,7 +58,7 @@ Email: admin@system.com
 Password: admin 
 ```
 
-#### Database Users
+#### Database Users For Docker
 
 ```
 Root Username: root
