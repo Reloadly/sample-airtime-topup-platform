@@ -109,7 +109,12 @@
     <script src="/js/datatable/buttons.bootstrap.min.js"></script>
     <script src="/js/datatable/datatables.bootstrap4.min.js"></script>
     <script>
-        $('.zero-configuration').DataTable();
+        $('.zero-configuration').DataTable({
+            dom: "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
     </script>
     <script>
         $(document).on('click', '[data-toggle="paid-feed"]', function (e) {
