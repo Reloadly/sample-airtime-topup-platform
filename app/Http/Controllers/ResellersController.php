@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Operator;
 use App\Models\User;
+use App\Traits\GoogleAuthenticator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use OTIFSolutions\ACLMenu\Models\UserRole;
 use OTIFSolutions\Laravel\Settings\Models\Setting;
@@ -66,6 +68,7 @@ class ResellersController extends Controller
             $user['email'] = $request['email'];
             $user['username'] = $request['username'];
             $user['phone'] = $request['phone'];
+            $user['2fa_secret'] = GoogleAuthenticator::Make()->createSecret();
         }
         $user['name'] = $request['name'];
         $user['user_role_id'] = UserRole::where('name','RESELLER')->first()['id'];
@@ -197,5 +200,18 @@ class ResellersController extends Controller
             $card->delete();
         }*/
         $user->delete();
+    }
+
+    public function changeTFAStatus($id){
+        $user = User::find($id);
+        if(!$user)
+            return response()->json(['Errors' => ['Error' => "Sorry! User not found."]],422);
+
+        $user['2fa_mode'] = $user['2fa_mode']==='ENABLED'?'DISABLED':'ENABLED';
+        $user->save();
+        return response()->json([
+            'message' => 'Status Updated.',
+            'refresh' => true
+        ]);
     }
 }

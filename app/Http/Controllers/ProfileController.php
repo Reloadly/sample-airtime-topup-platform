@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Traits\GoogleAuthenticator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +13,12 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
     public function index(){
+        $user = Auth::user();
+        if ($user && !$user['2fa_secret'])
+        {
+            $user['2fa_secret'] = GoogleAuthenticator::Make()->createSecret();
+            $user->save();
+        }
         return view('dashboard.profile',[
             'page' => [
                 'type' => 'dashboard'
@@ -80,6 +88,29 @@ class ProfileController extends Controller
         $user->save();
         return response()->json([
             'message' => 'Image Removed.',
+            'location' => '/profile'
+        ]);
+    }
+
+    public function changeTwoFAStatus(Request $request){
+        if (!Auth::user()->hasPermission('UPDATE'))
+            return response()->json(['Errors' => ['Error' => 'Unauthorized Access.']],422);
+
+        if (isset($request['user_id']))
+            $user = User::find($request['user_id']);
+        else
+            $user = Auth::user();
+        $user['2fa_mode'] = $user['2fa_mode']==='ENABLED'?'DISABLED':'ENABLED';
+        if (!$user['2fa_secret'])
+            $user['2fa_secret'] = GoogleAuthenticator::Make()->createSecret();
+        $user->save();
+        if(isset($request['user_id']))
+            return response()->json([
+                'message' => 'Status Updated.',
+                'location' => '/businesses/accounts/'.$request['user_id']. '?tab=security'
+            ]);
+        return response()->json([
+            'message' => 'Status Updated.',
             'location' => '/profile'
         ]);
     }

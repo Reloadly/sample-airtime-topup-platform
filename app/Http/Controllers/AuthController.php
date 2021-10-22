@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\GoogleAuthenticator;
 use App\Models\System;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -91,17 +92,46 @@ class AuthController extends Controller
         }
     }
 
-    /*public function findUser($search){
-        $user = User::where('username',$search)
-            ->orWhere('email',$search)
-            ->orWhere('phone',$search)->first();
-        $me = Auth::user();
-        if ($user)
-            if ($me['id'] === $user['id'])
-                return response()->json(['Errors' => ['Error' => 'Cannot Transfer for Self.']],422);
-            else
-                return response()->json($user);
-        else
-            return response()->json(['Errors' => ['Error' => 'Not Found']],422);
-    }*/
+    public function sendCode(Request $request){
+        $user = Auth::user();
+        if ($user){
+            if (!$user['2fa_secret'])
+            {
+                $user['2fa_mode'] = 'DISABLED';
+                $user->save();
+                return response()->json(['Errors' => ['Error' => 'Invalid Request.']],422);
+            }
+            return response()->json([
+                'message' => 'Please check OTP on Google Authenticator App.'
+            ]);
+        }else
+            return response()->json(['Errors' => ['Error' => 'Invalid Request.']],422);
+    }
+
+    public function tfaVerify(Request $request){
+        $user = Auth::user();
+        if ($user){
+            $request->validate([
+                'code' => 'required'
+            ]);
+            if (GoogleAuthenticator::Make()->verifyCode(
+                $user['2fa_secret'],
+                $request['code'],
+                2
+            )){
+                $request->session()->put('2fa_code',$request['code']);
+                $request->session()->put('2fa_code_time',floor(time() / 30));
+                $return = '/dashboard';
+                if ($request['return'] && $request['return'] !== '')
+                    $return = '/'.$request['return'];
+                return response()->json([
+                    'message' => 'PIN Verified',
+                    'location' => $return
+                ]);
+            }else
+                return response()->json(['Errors' => ['Error' => 'Invalid PIN']],422);
+        }else
+            return response()->json(['Errors' => ['Error' => 'Invalid Request.']],422);
+
+    }
 }

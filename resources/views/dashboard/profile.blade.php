@@ -39,18 +39,30 @@
             <div class="card-content">
                 <div class="card-body">
 
-                    <div class="media mb-3">
-                        <a class="mr-2 my-25" href="#">
-                            <img src="{{ Auth::user()['image'] }}" alt="users avatar" class="users-avatar-shadow rounded" width="90" height="90">
-                        </a>
-                        <div class="media-body mt-50">
-                            <h4 class="media-heading">{{ Auth::user()['name'] }}</h4>
+                    <div class="row">
+                        <div class="col-auto">
+                            <div class="media mb-3">
+                                <a class="mr-2 my-25" href="#">
+                                    <img src="{{ Auth::user()['image'] }}" alt="users avatar" class="users-avatar-shadow rounded" width="90" height="90">
+                                </a>
+                                <div class="media-body mt-50">
+                                    <h4 class="media-heading">{{ Auth::user()['name'] }}</h4>
 
-                            <div class="col-12 d-flex mt-1 px-0">
-                                <button id="dpz-single-file" class="btn btn-primary d-none d-sm-block mr-75 waves-effect waves-light">Change <i class="fa fa-spinner fa-spin d-none"></i></button>
-                                <button class="btn btn-primary d-block d-sm-none mr-75 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>
-                                <button data-toggle="post-feed" data-feed="/profile/image/remove" class="btn btn-outline-danger d-none d-sm-block waves-effect waves-light">Remove</button>
-                                <button data-toggle="post-feed" data-feed="/profile/image/remove" class="btn btn-outline-danger d-block d-sm-none waves-effect waves-light"><i class="feather icon-trash-2"></i></button>
+                                    <div class="col-12 d-flex mt-1 px-0">
+                                        <button id="dpz-single-file" class="btn btn-primary d-none d-sm-block mr-75 waves-effect waves-light">Change <i class="fa fa-spinner fa-spin d-none"></i></button>
+                                        <button class="btn btn-primary d-block d-sm-none mr-75 waves-effect waves-light"><i class="feather icon-edit-1"></i></button>
+                                        <button data-toggle="post-feed" data-feed="/profile/image/remove" class="btn btn-outline-danger d-none d-sm-block waves-effect waves-light">Remove</button>
+                                        <button data-toggle="post-feed" data-feed="/profile/image/remove" class="btn btn-outline-danger d-block d-sm-none waves-effect waves-light"><i class="feather icon-trash-2"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="media-body mt-50">
+                                <h4 class="media-heading">2FA Status</h4>
+                                <div class="col-12 d-flex mt-1 px-0">
+                                    <button data-toggle="post-feed" data-feed="/profile/2fa/change" data-text="{{ Auth::user()['2fa_mode'] === 'ENABLED'?'Disable 2FA! Are you sure you want to do this ?':"<div class='row justify-content-center'><img src='" .App\Traits\GoogleAuthenticator::Make()->getQRCodeGoogleUrl(env('APP_NAME'),Auth::user()['2fa_secret'])."'></div><br>Please scan the QR code in the google authenticator app. <br><b>You will be locked out if you do not scan and Enable 2FA</b>.<br>You will be required to enter pin after this.<br><br> Enable 2FA ?" }}" class="btn btn-info mr-75 waves-effect waves-light">{{ @Auth::user()['2fa_mode']==='ENABLED'?'Disable':'Enable' }}</button>
+                                </div>
                             </div>
                         </div>
                     </div>

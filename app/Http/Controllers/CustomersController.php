@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Traits\GoogleAuthenticator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use OTIFSolutions\ACLMenu\Models\UserRole;
@@ -62,6 +63,7 @@ class CustomersController extends Controller
             $user['email'] = $request['email'];
             $user['phone'] = $request['phone'];
             $user['username'] = $request['username'];
+            $user['2fa_secret'] = GoogleAuthenticator::Make()->createSecret();
         }
         $user['name'] = $request['name'];
         $user['user_role_id'] = UserRole::where('name','CUSTOMER')->first()['id'];

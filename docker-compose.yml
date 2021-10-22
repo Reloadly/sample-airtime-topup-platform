@@ -40,3 +40,19 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     networks:
       - supernetwork
+
+  phpmyadmin:
+    container_name: ${DOCKER_PROJECT_CODE}_pma
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_PORT: 3306
+      PMA_HOST: ${DOCKER_PROJECT_CODE}_db
+      PMA_USER: root
+      PMA_PASSWORD: ${DOCKER_DB_ROOT_PASSWORD}
+    ports:
+      - "${DOCKER_PROJECT_PMA_PORT}:80"
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - supernetwork

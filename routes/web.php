@@ -39,8 +39,13 @@ Route::get('/register', [AuthController::class,'getRegister']);
 Route::post('/register',[AuthController::class,'register']);
 Route::get('/logout',[AuthController::class,'logout']);
 Route::get('/widget',[TopupsController::class,'getHomePageTopup']);
+Route::middleware(['auth'])->group(function (){
+    Route::view('/2fa/required','dashboard.2fa.home');
+    Route::post('/2fa/required',[AuthController::class,'tfaVerify']);
+    Route::post('/2fa/required/send',[AuthController::class,'sendCode']);
+});
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','tfa'])->group(function () {
     Route::middleware(['role:dashboard'])->group(function (){
         Route::get('/dashboard', [DashboardController::class,'index']);
         Route::get('dashboard/stats/topups/amounts',[DashboardController::class,'statsTopupAmount']);
@@ -50,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/profile', [ProfileController::class,'save']);
         Route::post('/profile/image/remove',[ProfileController::class,'removeProfileImage']);
         Route::post('/profile/image/upload',[ProfileController::class,'uploadProfileImage']);
+        Route::post('/profile/2fa/change',[ProfileController::class,'changeTwoFAStatus']);
     });
     Route::get('storage/{filename}', function ($filename)
     {
@@ -64,10 +70,11 @@ Route::middleware(['auth'])->group(function () {
         return $response;
     });
     Route::resource('/users/customers',CustomersController::class)->middleware(['role:users_customers']);
-    Route::middleware(['role:profile'])->group(function () {
+    Route::middleware(['role:users_resellers'])->group(function () {
         Route::resource('/users/resellers', ResellersController::class);
         Route::get('/users/resellers/{id}/rates', [ResellersController::class,'showResellerRates']);
         Route::post('/users/resellers/{id}/rates', [ResellersController::class,'saveResellerRates']);
+        Route::post('/users/accounts/{id}/2fa/change',[ResellersController::class,'changeTFAStatus']);
     });
 
     Route::post('/settings/full_logo/remove',[SettingsController::class,'removeFullLogo']);
