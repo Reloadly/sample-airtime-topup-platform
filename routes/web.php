@@ -39,6 +39,18 @@ Route::get('/register', [AuthController::class,'getRegister']);
 Route::post('/register',[AuthController::class,'register']);
 Route::get('/logout',[AuthController::class,'logout']);
 Route::get('/widget',[TopupsController::class,'getHomePageTopup']);
+Route::get('storage/{filename}', function ($filename)
+{
+    $path = storage_path('app/public/' . $filename);
+    if (!File::exists($path)) {
+        abort(404);
+    }
+    $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});
 Route::middleware(['auth'])->group(function (){
     Route::view('/2fa/required','dashboard.2fa.home');
     Route::post('/2fa/required',[AuthController::class,'tfaVerify']);
@@ -57,18 +69,7 @@ Route::middleware(['auth','tfa'])->group(function () {
         Route::post('/profile/image/upload',[ProfileController::class,'uploadProfileImage']);
         Route::post('/profile/2fa/change',[ProfileController::class,'changeTwoFAStatus']);
     });
-    Route::get('storage/{filename}', function ($filename)
-    {
-        $path = storage_path('app/public/' . $filename);
-        if (!File::exists($path)) {
-            abort(404);
-        }
-        $file = File::get($path);
-        $type = File::mimeType($path);
-        $response = Response::make($file, 200);
-        $response->header("Content-Type", $type);
-        return $response;
-    });
+
     Route::resource('/users/customers',CustomersController::class)->middleware(['role:users_customers']);
     Route::middleware(['role:users_resellers'])->group(function () {
         Route::resource('/users/resellers', ResellersController::class);
