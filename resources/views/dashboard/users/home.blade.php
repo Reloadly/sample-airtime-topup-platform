@@ -27,6 +27,7 @@
                                         <th>Email</th>
                                         <th>Balance</th>
                                         <th>2FA</th>
+                                        <th>IP Restriction</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
@@ -38,6 +39,7 @@
                                             <td>{{ $user['email'] }}</td>
                                             <td>{{ @$user['balance'].' '.(isset($user['stripe_response']['currency'])?strtoupper($user['stripe_response']['currency']):'') }}</td>
                                             <td><button data-toggle="post-feed" data-feed="accounts/{{ $user['id'] }}/2fa/change" data-text="{{ $user['2fa_mode'] === 'ENABLED'?'Disable 2FA! Are you sure you want to do this ?':"<div class='row justify-content-center'><img src='".\App\Traits\GoogleAuthenticator::Make()->getQRCodeGoogleUrl(env('APP_NAME'),$user['2fa_secret'])."'></div><br>Please scan the QR code in the google authenticator app. You will be required to enter pin after this.<br><br> Enable 2FA ?" }}" class="btn btn-sm waves-effect waves-light {{ $user['2fa_mode'] === 'ENABLED'?'btn-danger':'btn-info' }}">{{ $user['2fa_mode']==='ENABLED'?'Disable':'Enable' }}</button></td>
+                                            <td><button data-toggle="post-feed" data-feed="accounts/{{ $user['id'] }}/ip_restriction/change" data-text="{{ $user['ip_restriction'] === 'ENABLED'?'Disable IP Restriction! Are you sure you want to do this ?':" Enable IP Restriction ? The user might be blocked if their IP is not whitelisted by them." }}" class="btn btn-sm waves-effect waves-light {{ $user['2fa_mode'] === 'ENABLED'?'btn-danger':'btn-info' }}">{{ $user['ip_restriction']==='ENABLED'?'Disable':'Enable' }}</button></td>
                                             <td>
                                                 @if($manage_rates)
                                                     <a type="button" class="btn btn-xs btn-icon btn-outline-primary mr-1 waves-effect waves-light" href="{{ $page['url'] }}/{{ $user['id'] }}/rates"><i class="feather icon-aperture"></i></a>
@@ -55,6 +57,7 @@
                                         <th>Email</th>
                                         <th>Balance</th>
                                         <th>2FA</th>
+                                        <th>IP Restriction</th>
                                         <th>Actions</th>
                                     </tr>
                                     </tfoot>

@@ -39,10 +39,12 @@ class MenuItemsTableSeeder extends Seeder
         MenuItem::updateOrCreate(['id'=>15],['parent_id' => 0,'icon' => 'fa fa-money','name' => 'Wallet','route' => '/wallet'])->user_roles()->sync([1,2]);
         MenuItem::updateOrCreate(['id'=>16],['parent_id' => 15,'icon' => 'fa fa-circle','name' => 'Account','route' => '/wallet/account'])->user_roles()->sync([2]);
         MenuItem::updateOrCreate(['id'=>17],['parent_id' => 15,'icon' => 'fa fa-circle','name' => 'Accounts','route' => '/wallet/accounts'])->user_roles()->sync([1]);
-        //MenuItem::updateOrCreate(['id'=>17],['parent_id' => 15,'icon' => 'fa fa-circle','name' => 'Transfer','route' => '/wallet/transfer'])->user_roles()->sync([1]);
+
         MenuItem::updateOrCreate(['id'=>18],['parent_id' => 15,'icon' => 'fa fa-circle','name' => 'Transactions','route' => '/wallet/transactions'])->user_roles()->sync([1]);
 
         MenuItem::updateOrCreate(['id'=>19],['parent_id' => 0,'icon' => 'feather icon-settings','name' => 'Settings','route' => '/settings', 'generate_permission' => 'MANAGE_ONLY'])->user_roles()->sync([1]);
+
+        MenuItem::updateOrCreate(['id'=>20],['parent_id' => 0,'icon' => 'fa fa-circle','name' => 'Ip Restriction','route' => '/ip_restriction', 'generate_permission' => 'MANAGE_ONLY', 'show_on_sidebar' => 0])->user_roles()->sync([1,2,3]);
 
     }
 }

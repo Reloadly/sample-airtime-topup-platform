@@ -13,8 +13,11 @@
                             <div class="user-nav"><span class="user-name text-bold-600">{{ Auth::user()['name'] }}</span><span class="user-status">Available</span></div>
                             <span><img class="round" src="{{ Auth::user()['image'] }}" alt="avatar" height="40" width="40"></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="/profile"><i class="feather icon-user"></i> Edit Profile</a>
-                            <div class="dropdown-divider"></div><a class="dropdown-item" href="/logout"><i class="feather icon-power"></i> Logout</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/profile"><i class="feather icon-user"></i> Edit Profile</a>
+                            <a class="dropdown-item" href="/ip_restriction"><i class="fa fa-circle"></i> IP Restriction</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout"><i class="feather icon-power"></i> Logout</a>
                         </div>
                     </li>
                 </ul>

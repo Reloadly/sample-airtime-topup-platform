@@ -214,4 +214,17 @@ class ResellersController extends Controller
             'refresh' => true
         ]);
     }
+
+    public function changeIPRStatus($id){
+        $user = User::find($id);
+        if(!$user)
+            return response()->json(['Errors' => ['Error' => "Sorry! User not found."]],422);
+
+        $user['ip_restriction'] = $user['ip_restriction']==='ENABLED'?'DISABLED':'ENABLED';
+        $user->save();
+        return response()->json([
+            'message' => 'Status Updated.',
+            'refresh' => true
+        ]);
+    }
 }

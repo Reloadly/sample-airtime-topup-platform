@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IpRestrictionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -55,9 +56,10 @@ Route::middleware(['auth'])->group(function (){
     Route::view('/2fa/required','dashboard.2fa.home');
     Route::post('/2fa/required',[AuthController::class,'tfaVerify']);
     Route::post('/2fa/required/send',[AuthController::class,'sendCode']);
+    Route::view('ip_address/blocked','dashboard.ips.blocked');
 });
 
-Route::middleware(['auth','tfa'])->group(function () {
+Route::middleware(['auth','tfa','ipr'])->group(function () {
     Route::middleware(['role:dashboard'])->group(function (){
         Route::get('/dashboard', [DashboardController::class,'index']);
         Route::get('dashboard/stats/topups/amounts',[DashboardController::class,'statsTopupAmount']);
@@ -70,12 +72,18 @@ Route::middleware(['auth','tfa'])->group(function () {
         Route::post('/profile/2fa/change',[ProfileController::class,'changeTwoFAStatus']);
     });
 
+    Route::middleware(['role:ip_restriction'])->group(function (){
+        Route::resource('ip_restriction',IpRestrictionController::class);
+        Route::post('/ip_restriction/status/change',[IpRestrictionController::class,'changeStatus']);
+    });
+
     Route::resource('/users/customers',CustomersController::class)->middleware(['role:users_customers']);
     Route::middleware(['role:users_resellers'])->group(function () {
         Route::resource('/users/resellers', ResellersController::class);
         Route::get('/users/resellers/{id}/rates', [ResellersController::class,'showResellerRates']);
         Route::post('/users/resellers/{id}/rates', [ResellersController::class,'saveResellerRates']);
         Route::post('/users/accounts/{id}/2fa/change',[ResellersController::class,'changeTFAStatus']);
+        Route::post('/users/accounts/{id}/ip_restriction/change',[ResellersController::class,'changeIPRStatus']);
     });
 
     Route::post('/settings/full_logo/remove',[SettingsController::class,'removeFullLogo']);

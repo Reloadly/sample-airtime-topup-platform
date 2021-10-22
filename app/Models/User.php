@@ -85,4 +85,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Operator::class,'reseller_rates','user_id','operator_id')->as('rates')->withPivot(['international_discount', 'local_discount']);
     }
 
+    public function ips(){
+        return $this->hasMany(IpAddress::class,'user_id');
+    }
+
 }
