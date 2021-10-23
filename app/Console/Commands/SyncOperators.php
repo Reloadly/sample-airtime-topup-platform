@@ -6,6 +6,8 @@ use App\Models\Operator;
 use App\Models\Country;
 use App\Models\User;
 use Illuminate\Console\Command;
+use OTIFSolutions\ACLMenu\Models\UserRole;
+use OTIFSolutions\Laravel\Settings\Models\Setting;
 
 class SyncOperators extends Command
 {
@@ -92,6 +94,25 @@ class SyncOperators extends Command
         }while($response->totalPages >= $page);
         $this->line("****************************************************************");
         $this->info("All Operators Synced !!! ");
+        $this->line("****************************************************************");
+
+        $this->line("Re-Syncing Reseller User's Operator Rates");
+        $role = UserRole::where('name','RESELLER')->first();
+        $resellers = User::where('user_role_id',$role['id'])->get();
+        foreach ($resellers as $reseller){
+            $exists = $reseller->operators()->pluck('id');
+            $operators = Operator::whereNotIn('id',$exists)->pluck('id');
+            $reseller->operators()->syncWithoutDetaching($operators);
+            $userOperators = $reseller->operators()->whereIn('id',$operators)->get();
+            foreach ($userOperators as $operator){
+                $operator->pivot->international_discount = $operator['discount']['international_percentage'] * (Setting::get('reseller_discount') / 100);
+                $operator->pivot->local_discount = $operator['discount']['local_percentage'] * (Setting::get('reseller_discount') / 100);
+                $operator->pivot->save();
+            }
+        }
+
+        $this->line("****************************************************************");
+        $this->info("All Done !!! ");
         $this->line("****************************************************************");
         $this->line("");
     }
