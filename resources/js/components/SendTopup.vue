@@ -58,7 +58,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-center align-items-center pb-1">
+                                    <div class="row justify-content-center align-items-center pb-1" v-if="selectedZone">
                                         <label>Amount</label>
                                         <div class="pr-1 pl-1">
                                             <div class="input-group">
