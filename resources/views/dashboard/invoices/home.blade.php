@@ -62,6 +62,9 @@
                                                     @case('PROCESSING')
                                                         <div class="badge badge-pill badge-success">Processing</div>
                                                     @break
+                                                    @case('REFUNDED')
+                                                    <div class="badge badge-pill badge-black">Refunded</div>
+                                                    @break
                                                     @case('CANCELLED')
                                                         <div class="badge badge-pill badge-secondary">Cancelled</div>
                                                     @break

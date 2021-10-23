@@ -11,6 +11,7 @@ use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use OTIFSolutions\Laravel\Settings\Models\Setting;
+use PayPalCheckoutSdk\Payments\CapturesRefundRequest;
 
 trait PaypalSystem {
 
@@ -21,7 +22,7 @@ trait PaypalSystem {
         );
     }
 
-    private static function getPaypalClient(){
+    public static function getPaypalClient(){
         $environment = null;
         if (@Setting::get('paypal_api_mode') == 'TEST')
             $environment = new SandboxEnvironment(@Setting::get('paypal_client_id'),@Setting::get('paypal_secret'));
@@ -113,6 +114,34 @@ trait PaypalSystem {
             }
         }
         $invoice->save();
+    }
+
+    public static function refundPaypalOrder($invoice){
+        self::updatePaypalOrder($invoice);
+        $client = self::getPaypalClient();
+        if ($invoice['paypal_order_id'] !== null){
+            try{
+                $invoice['paypal_response'] = $client->execute(new OrdersGetRequest($invoice['paypal_order_id']))->result;
+            }catch (\Exception $ex){
+                return false;
+            }
+            if ($invoice['status'] === 'PAID'){
+                if (isset($invoice['paypal_response']['purchase_units'])){
+                    foreach ($invoice['paypal_response']['purchase_units'] as $purchaseUnit){
+                        if (isset($purchaseUnit['payments']['captures'])){
+                            foreach ($purchaseUnit['payments']['captures'] as $capture){
+                                if ($capture['status'] === "COMPLETED"){
+                                    $request = new CapturesRefundRequest($capture['id']);
+                                    $response = $client->execute($request);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        self::updatePaypalOrder($invoice);
+        return true;
     }
 
 }

@@ -18,10 +18,20 @@
             <input type="checkbox" class="form-control" v-model="isLocal" >
         </td>
         <td>
-            <select v-if="selectedOperator && selectedOperator.denomination_type === 'FIXED'" class="custom-select form-control required text-center" v-model="amount">
-                <option v-for="amount in (isLocal?selectedOperator.local_fixed_amounts:selectedOperator.fixed_amounts)" :value="amount">{{ amount }}</option>
-            </select>
-            <input v-else type="number" step="any" v-model="amount" class="form-control text-center">
+            <div v-if="selectedOperator && selectedOperator.supports_geographical_recharge_plans && selectedOperator.geographical_recharge_plans && selectedOperator.geographical_recharge_plans.length > 0">
+                <select class="custom-select form-control required text-center" v-model="selectedZone">
+                    <option v-for="zone in selectedOperator.geographical_recharge_plans" :value="zone">{{ zone.locationName }}</option>
+                </select>
+                <select v-if="selectedZone" class="custom-select form-control required text-center pt-1" v-model="amount">
+                    <option v-for="amount in selectedZone.fixedAmounts" :value="amount">{{ amount }}</option>
+                </select>
+            </div>
+            <div v-else >
+                <select v-if="selectedOperator && selectedOperator.denomination_type === 'FIXED'" class="custom-select form-control required text-center" v-model="amount">
+                    <option v-for="amount in (isLocal?selectedOperator.local_fixed_amounts:selectedOperator.fixed_amounts)" :value="amount">{{ amount }}</option>
+                </select>
+                <input v-else type="number" step="any" v-model="amount" class="form-control text-center">
+            </div>
         </td>
         <td>
             <div class="badge badge-pill" v-bind:class="[valid===''?'badge-success':'badge-danger']">{{ valid===''? 'VALID':valid}}</div>
@@ -76,7 +86,8 @@
                 'selectedOperator' : {},
                 'valid' : 'LOADING',
                 'isLoading' : false,
-                'init' : false
+                'init' : false,
+                'selectedZone' : null
             }
         },
         mounted() {

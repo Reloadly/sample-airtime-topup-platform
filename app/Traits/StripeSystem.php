@@ -253,4 +253,24 @@ trait StripeSystem {
         }
     }
 
+    public static function refundInvoice(Invoice $invoice){
+        self::updatePaymentIntent($invoice);
+        if (isset($invoice['payment_intent_response']['charges']['data'])){
+            if (!StripeSystem::isStripeEnabled()) return false;
+            if ($invoice['user']['stripe_id'] === null) StripeSystem::registerUserWithStripe($invoice['user']);
+            \Stripe\Stripe::setApiKey(Setting::get('stripe_secret_key'));
+            try{
+                foreach ($invoice['payment_intent_response']['charges']['data'] as $charge){
+                    if (!$charge['refunded']){
+                        $response = \Stripe\Refund::create(['charge' => $charge['id']]);
+                    }
+                }
+            }catch (\Exception $ex){
+                return false;
+            }
+        }
+        self::updatePaymentIntent($invoice);
+        return true;
+    }
+
 }

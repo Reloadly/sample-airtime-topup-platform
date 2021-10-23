@@ -214,10 +214,31 @@ class WizardController extends Controller
                     if (!($isLocal && !$operator['supports_local_amounts']))
                         switch ($operator['denomination_type']) {
                             case 'FIXED':
-                                $amounts = $operator['fixed_amounts'];
-                                if ($isLocal)
-                                    $amounts = $operator['local_fixed_amounts'];
-                                $element = in_array($amount,$amounts);
+                                if ($operator['supports_geographical_recharge_plans']){
+                                    $zoneAmountExist = false;
+                                    foreach ($operator['geographical_recharge_plans'] as $zone){
+                                        $amounts = $zone['fixedAmounts'];
+                                        $element = in_array($amount, $amounts);
+                                        if ($element)
+                                        {
+                                            FileEntry::whereId($fileEntry['id'])->update([
+                                                'country_id' => $country['id'],
+                                                'operator_id' => $operator['id'],
+                                                'is_local' => false,
+                                                'amount' => $amount,
+                                                'number' => $number
+                                            ]);
+                                            $zoneAmountExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!$zoneAmountExist)
+                                        return response()->json(['errors' => ['error' => 'INVALID AMOUNT']],422);
+                                }else{
+                                    $amounts = $operator['fixed_amounts'];
+                                    if ($isLocal)
+                                        $amounts = $operator['local_fixed_amounts'];
+                                    $element = in_array($amount, $amounts);
                                     if ($element)
                                     {
                                         FileEntry::whereId($fileEntry['id'])->update([
@@ -230,7 +251,8 @@ class WizardController extends Controller
                                     }
                                     else
                                         return response()->json(['errors' => ['error' => 'INVALID AMOUNT']],422);
-                                    break;
+                                }
+                                break;
                             case 'RANGE':
                                 $min = $operator['min_amount'];
                                 $max = $operator['max_amount'];

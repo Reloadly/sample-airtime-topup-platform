@@ -43,6 +43,8 @@ class Topup extends Model
                 return isset($this['response']['message'])?$this['response']['message']: "Transaction Failed. No response";
             case "PENDING_PAYMENT":
                 return "Transaction is pending payment";
+            case "REFUNDED":
+                return "Topup has been refunded. It failed due to Error : ".(isset($this['response']['message'])?$this['response']['message']: "Unknown");
             default:
                 return "Error : Unknown Status found.";
         }
