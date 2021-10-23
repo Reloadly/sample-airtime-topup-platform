@@ -21,7 +21,8 @@ class Operator extends Model
         'suggested_amounts' => 'array',
         'suggested_amounts_map' => 'array',
         'local_fixed_amounts' => 'array',
-        'local_fixed_amounts_descriptions' => 'array'
+        'local_fixed_amounts_descriptions' => 'array',
+        'geographical_recharge_plans' => 'array'
     ];
 
     public function country(){

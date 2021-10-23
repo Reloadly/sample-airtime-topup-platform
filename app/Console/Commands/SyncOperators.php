@@ -65,6 +65,7 @@ class SyncOperators extends Command
                             'data' => $operator->data,
                             'pin' => $operator->pin,
                             'supports_local_amounts' => $operator->supportsLocalAmounts,
+                            'supports_geographical_recharge_plans' => $operator->supportsGeographicalRechargePlans,
                             'denomination_type' => $operator->denominationType,
                             'sender_currency_code' => $operator->senderCurrencyCode,
                             'sender_currency_symbol' => $operator->senderCurrencySymbol,
@@ -85,12 +86,13 @@ class SyncOperators extends Command
                             'local_fixed_amounts' => $operator->localFixedAmounts,
                             'local_fixed_amounts_descriptions' => $operator->localFixedAmountsDescriptions,
                             'suggested_amounts' => $operator->suggestedAmounts,
-                            'suggested_amounts_map' => $operator->suggestedAmountsMap
+                            'suggested_amounts_map' => $operator->suggestedAmountsMap,
+                            'geographical_recharge_plans' => $operator->geographicalRechargePlans
                         ]
                     );
                 }
             }
-            $this->info("Sync Completed For ".sizeof($response->content)." Operators");
+            $this->info("Sync Completed For ".count($response->content)." Operators");
         }while($response->totalPages >= $page);
         $this->line("****************************************************************");
         $this->info("All Operators Synced !!! ");

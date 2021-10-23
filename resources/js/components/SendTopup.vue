@@ -47,7 +47,34 @@
                                 </p>
                             </div>
                             <div v-bind:class="[selectedOperator.denomination_type === 'RANGE'?'d-none':'']">
-                                <div class="row justify-content-center align-items-center">
+                                <div v-bind:class="[selectedOperator.supports_geographical_recharge_plans?'':'d-none']">
+                                    <div class="row justify-content-center align-items-center pb-1">
+                                        <label>Select Zone</label>
+                                        <div class="pr-1 pl-1">
+                                            <div class="input-group">
+                                                <select class="custom-select form-control required" id="select_zone" name="selectedZone" v-model="selectedZone">
+                                                    <option v-for="zone in selectedOperator.geographical_recharge_plans" :value="zone">{{ zone.locationName + " [" + zone.locationCode + "]" }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center align-items-center pb-1">
+                                        <label>Amount</label>
+                                        <div class="pr-1 pl-1">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <select class="custom-select form-control">
+                                                        <option>{{ selectedOperator.sender_currency_code }}</option>
+                                                    </select>
+                                                </div>
+                                                <select class="custom-select form-control required" name="amount" v-model="amount">
+                                                    <option v-for="amount in selectedZone.fixedAmounts" :value="amount">{{ amount + " " + selectedOperator.sender_currency_code }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-bind:class="[!selectedOperator.supports_geographical_recharge_plans?'':'d-none']" class="row justify-content-center align-items-center pb-1" >
                                     <label>Amount</label>
                                     <div class="pr-1 pl-1">
                                         <div class="input-group">
@@ -130,13 +157,14 @@ export default {
             selectedFile : null,
             isLoading: false,
             operators: [{"id":4,"rid":"1","country_id":1,"name":"Afghan Wireless Afghanistan","bundle":"0","data":0,"pin":0,"supports_local_amounts":0,"denomination_type":"RANGE","sender_currency_code":"CAD","sender_currency_symbol":"$","destination_currency_code":"AFN","destination_currency_symbol":"\u060b","commission":8,"international_discount":8,"local_discount":0,"most_popular_amount":25,"min_amount":1.04,"local_min_amount":null,"max_amount":103,"local_max_amount":null,"fx_rate":48.2406,"logo_urls":["https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-2.png","https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-3.png","https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-1.png"],"fixed_amounts":[],"fixed_amounts_descriptions":[],"local_fixed_amounts":[],"local_fixed_amounts_descriptions":[],"suggested_amounts":[2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100],"suggested_amounts_map":{"2":111.63,"5":279.06,"10":558.12,"15":837.18,"20":1116.24,"25":1395.3,"30":1674.36,"35":1953.42,"40":2232.48,"45":2511.54,"50":2790.6,"55":3069.66,"60":3348.72,"65":3627.77,"70":3906.83,"75":4185.89,"80":4464.95,"85":4744.01,"90":5023.07,"95":5302.13,"100":5581.19},"created_at":"2020-06-05T11:15:41.000000Z","updated_at":"2020-06-05T11:15:41.000000Z","select_amounts":[2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]},{"id":164,"rid":"3","country_id":1,"name":"Etisalat Afghanistan","bundle":"0","data":0,"pin":0,"supports_local_amounts":0,"denomination_type":"RANGE","sender_currency_code":"CAD","sender_currency_symbol":"$","destination_currency_code":"AFN","destination_currency_symbol":"\u060b","commission":8,"international_discount":8,"local_discount":0,"most_popular_amount":25,"min_amount":0.03,"local_min_amount":null,"max_amount":103,"local_max_amount":null,"fx_rate":48.2406,"logo_urls":["https:\/\/s3.amazonaws.com\/rld-operator\/17d6e30d-2118-4bab-bf54-fd19742880c9-size-3.png","https:\/\/s3.amazonaws.com\/rld-operator\/17d6e30d-2118-4bab-bf54-fd19742880c9-size-2.png","https:\/\/s3.amazonaws.com\/rld-operator\/17d6e30d-2118-4bab-bf54-fd19742880c9-size-1.png"],"fixed_amounts":[],"fixed_amounts_descriptions":[],"local_fixed_amounts":[],"local_fixed_amounts_descriptions":[],"suggested_amounts":[1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100],"suggested_amounts_map":{"1":55.82,"5":279.06,"10":558.12,"15":837.18,"20":1116.24,"25":1395.3,"30":1674.36,"35":1953.42,"40":2232.48,"45":2511.54,"50":2790.6,"55":3069.66,"60":3348.72,"65":3627.77,"70":3906.83,"75":4185.89,"80":4464.95,"85":4744.01,"90":5023.07,"95":5302.13,"100":5581.19},"created_at":"2020-06-05T11:15:49.000000Z","updated_at":"2020-06-05T11:15:49.000000Z","select_amounts":[1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]},{"id":295,"rid":"2","country_id":1,"name":"MTN Afghanistan","bundle":"0","data":0,"pin":0,"supports_local_amounts":0,"denomination_type":"RANGE","sender_currency_code":"CAD","sender_currency_symbol":"$","destination_currency_code":"AFN","destination_currency_symbol":"\u060b","commission":8,"international_discount":8,"local_discount":0,"most_popular_amount":25,"min_amount":0.22,"local_min_amount":null,"max_amount":85,"local_max_amount":null,"fx_rate":46.56583,"logo_urls":["https:\/\/s3.amazonaws.com\/rld-operator\/929e9c5c-a680-4968-9ffc-9b3924c61d9b-size-3.png","https:\/\/s3.amazonaws.com\/rld-operator\/929e9c5c-a680-4968-9ffc-9b3924c61d9b-size-2.png","https:\/\/s3.amazonaws.com\/rld-operator\/929e9c5c-a680-4968-9ffc-9b3924c61d9b-size-1.png"],"fixed_amounts":[],"fixed_amounts_descriptions":[],"local_fixed_amounts":[],"local_fixed_amounts_descriptions":[],"suggested_amounts":[1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85],"suggested_amounts_map":{"1":55.82,"5":279.06,"10":558.12,"15":837.18,"20":1116.24,"25":1395.3,"30":1674.36,"35":1953.42,"40":2232.48,"45":2511.54,"50":2790.6,"55":3069.66,"60":3348.72,"65":3627.77,"70":3906.83,"75":4185.89,"80":4464.95,"85":4744.01},"created_at":"2020-06-05T11:16:20.000000Z","updated_at":"2020-06-05T11:16:20.000000Z","select_amounts":[1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85]},{"id":392,"rid":"4","country_id":1,"name":"Roshan Afghanistan","bundle":"0","data":0,"pin":0,"supports_local_amounts":0,"denomination_type":"RANGE","sender_currency_code":"CAD","sender_currency_symbol":"$","destination_currency_code":"AFN","destination_currency_symbol":"\u060b","commission":8,"international_discount":8,"local_discount":0,"most_popular_amount":25,"min_amount":0.11,"local_min_amount":null,"max_amount":150,"local_max_amount":null,"fx_rate":46.56583,"logo_urls":["https:\/\/s3.amazonaws.com\/rld-operator\/3ef560fa-ee51-4a6e-851d-2874a29bdfa1-size-3.png","https:\/\/s3.amazonaws.com\/rld-operator\/3ef560fa-ee51-4a6e-851d-2874a29bdfa1-size-1.png","https:\/\/s3.amazonaws.com\/rld-operator\/3ef560fa-ee51-4a6e-851d-2874a29bdfa1-size-2.png"],"fixed_amounts":[],"fixed_amounts_descriptions":[],"local_fixed_amounts":[],"local_fixed_amounts_descriptions":[],"suggested_amounts":[1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150],"suggested_amounts_map":{"1":55.82,"5":279.06,"10":558.12,"15":837.18,"20":1116.24,"25":1395.3,"30":1674.36,"35":1953.42,"40":2232.48,"45":2511.54,"50":2790.6,"55":3069.66,"60":3348.72,"65":3627.77,"70":3906.83,"75":4185.89,"80":4464.95,"85":4744.01,"90":5023.07,"95":5302.13,"100":5581.19,"105":5860.25,"110":6139.31,"115":6418.37,"120":6697.43,"125":6976.48,"130":7255.54,"135":7534.6,"140":7813.66,"145":8092.72,"150":8371.78},"created_at":"2020-06-05T11:16:25.000000Z","updated_at":"2020-06-05T11:16:25.000000Z","select_amounts":[1,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150]}],
-            selectedOperator : {"id":4,"rid":"1","country_id":1,"name":"Afghan Wireless Afghanistan","bundle":"0","data":0,"pin":0,"supports_local_amounts":0,"denomination_type":"RANGE","sender_currency_code":"CAD","sender_currency_symbol":"$","destination_currency_code":"AFN","destination_currency_symbol":"\u060b","commission":8,"international_discount":8,"local_discount":0,"most_popular_amount":25,"min_amount":1.04,"local_min_amount":null,"max_amount":103,"local_max_amount":null,"fx_rate":48.2406,"logo_urls":["https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-2.png","https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-3.png","https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-1.png"],"fixed_amounts":[],"fixed_amounts_descriptions":[],"local_fixed_amounts":[],"local_fixed_amounts_descriptions":[],"suggested_amounts":[2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100],"suggested_amounts_map":{"2":111.63,"5":279.06,"10":558.12,"15":837.18,"20":1116.24,"25":1395.3,"30":1674.36,"35":1953.42,"40":2232.48,"45":2511.54,"50":2790.6,"55":3069.66,"60":3348.72,"65":3627.77,"70":3906.83,"75":4185.89,"80":4464.95,"85":4744.01,"90":5023.07,"95":5302.13,"100":5581.19},"created_at":"2020-06-05T11:15:41.000000Z","updated_at":"2020-06-05T11:15:41.000000Z","select_amounts":[2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]},
+            selectedOperator : {"id":4,"rid":"1","supports_geographical_recharge_plans":0,"geographical_recharge_plans":null,"country_id":1,"name":"Afghan Wireless Afghanistan","bundle":"0","data":0,"pin":0,"supports_local_amounts":0,"denomination_type":"RANGE","sender_currency_code":"CAD","sender_currency_symbol":"$","destination_currency_code":"AFN","destination_currency_symbol":"\u060b","commission":8,"international_discount":8,"local_discount":0,"most_popular_amount":25,"min_amount":1.04,"local_min_amount":null,"max_amount":103,"local_max_amount":null,"fx_rate":48.2406,"logo_urls":["https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-2.png","https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-3.png","https:\/\/s3.amazonaws.com\/rld-operator\/b0c4d9d0-9feb-48ba-9a29-3f4a8bcd3268-size-1.png"],"fixed_amounts":[],"fixed_amounts_descriptions":[],"local_fixed_amounts":[],"local_fixed_amounts_descriptions":[],"suggested_amounts":[2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100],"suggested_amounts_map":{"2":111.63,"5":279.06,"10":558.12,"15":837.18,"20":1116.24,"25":1395.3,"30":1674.36,"35":1953.42,"40":2232.48,"45":2511.54,"50":2790.6,"55":3069.66,"60":3348.72,"65":3627.77,"70":3906.83,"75":4185.89,"80":4464.95,"85":4744.01,"90":5023.07,"95":5302.13,"100":5581.19},"created_at":"2020-06-05T11:15:41.000000Z","updated_at":"2020-06-05T11:15:41.000000Z","select_amounts":[2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]},
             amount : 1.07,
             localAmount : 0.00,
             numbers : [],
             isLocalTransfer : false,
             detected: false,
-            intInput: null
+            intInput: null,
+            selectedZone: null
         }
     },
     methods: {
@@ -284,6 +312,10 @@ export default {
     ,watch: {
         'selectedOperator': function (operator, oldVal) {
             this.isLocalTransfer = false;
+            if (this.selectedOperator.supports_geographical_recharge_plans && this.selectedOperator.geographical_recharge_plans && this.selectedOperator.geographical_recharge_plans.length > 0)
+                this.selectedZone = this.selectedOperator.geographical_recharge_plans[0];
+            else
+                this.selectedZone = null;
         },
     },
     components: {
