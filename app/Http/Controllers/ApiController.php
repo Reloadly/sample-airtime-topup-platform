@@ -134,6 +134,7 @@ class ApiController extends Controller
 
         $topup = Topup::create([
             'user_id' => $user['id'],
+            'ref_no' => isset($request['ref'])?$request['ref']:null,
             'operator_id' => $operator['id'],
             'invoice_id' => $invoice['id'],
             'topup' => $isLocal?

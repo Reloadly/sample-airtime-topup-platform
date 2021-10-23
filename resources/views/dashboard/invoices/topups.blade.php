@@ -31,8 +31,8 @@
                             @endif
                         </td>
                         <td>{{(number_format($topup['topup'],2)).' '.$topup['receiver_currency'] }}</td>
-                        <td>{{ number_format($topup['topup']/($invoice['amount']/sizeof($invoice['topups'])),2) }}</td>
-                        <td>{{ number_format($invoice['amount']/sizeof($invoice['topups']),2).' '.$invoice['currency_code'] }}</td>
+                        <td>{{ number_format($topup['topup']/($invoice['amount']/count($invoice['topups'])),2) }}</td>
+                        <td>{{ number_format($invoice['amount']/count($invoice['topups']),2).' '.$invoice['currency_code'] }}</td>
                     </tr>
                 @endforeach
                 </tbody>

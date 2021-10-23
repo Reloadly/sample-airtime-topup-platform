@@ -22,7 +22,7 @@
                                     <thead>
                                     <tr>
                                         <th>Timestamp</th>
-                                        <th>ID</th>
+                                        <th>Invoice ID</th>
                                         <th>Amount</th>
                                         <th>#Topups</th>
                                         <th>Status</th>
@@ -81,7 +81,7 @@
                                     <tfoot>
                                     <tr>
                                         <th>Timestamp</th>
-                                        <th>ID</th>
+                                        <th>Invoice ID</th>
                                         <th>Amount</th>
                                         <th># Topups</th>
                                         <th>Status</th>

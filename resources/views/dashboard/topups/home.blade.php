@@ -22,7 +22,7 @@
                                     <thead>
                                     <tr>
                                         <th>Timestamp</th>
-                                        <th>ID</th>
+                                        <th>Topup ID</th>
                                         <th>Is Local</th>
                                         <th>Operator</th>
                                         <th>Number</th>
@@ -74,7 +74,7 @@
                                     <tfoot>
                                     <tr>
                                         <th>Timestamp</th>
-                                        <th>ID</th>
+                                        <th>Topup ID</th>
                                         <th>Is Local</th>
                                         <th>Operator</th>
                                         <th>Number</th>

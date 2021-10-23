@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TransactionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CountriesController;
@@ -33,5 +34,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('countries/{id}/operators/detect/{number}', [OperatorsController::class, 'detect']);
     Route::get('currencies', [CurrenciesController::class, 'getAll']);
     Route::post('topup', [ApiController::class,'sendTopUp']);
+    Route::get('transactions',[TransactionsController::class,'index']);
+    Route::get('transactions/{ref}',[TransactionsController::class,'show']);
 });
 //Route::get('users/find/{username}',[AuthController::class,'findUser']);

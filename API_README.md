@@ -10,6 +10,8 @@ The project comes packed with reseller side API enabled for external use. There 
 - Get Operators By Country id (`/api/countries/{countryId}/operators`)
 - Get Single Operator (`/api/operators/{operatorId}`)
 - Send Topup (`/api/topup`)
+- Get Transactions (`/api/transactions`)
+- Get Transaction By Ref (`/api/transactions/{refNo}`)
 
 ## Get Token
 
@@ -473,7 +475,8 @@ curl --location --request POST 'https://reloadly.otifcrew.com/api/topup' \
 --header 'Authorization: Bearer TOKEN_GOES_HERE' \
 --form 'operator="555"' \
 --form 'number="0923333333333"' \
---form 'amount="2"'
+--form 'amount="2"' \
+--form 'ref=ABC123'
 ```
 
 Sample Response
@@ -484,4 +487,42 @@ Sample Response
         "message": "Topup created successfully."
     }
 }
+```
+
+## Get Transactions
+
+To get All transctions a user sends `GET` request to the `/api/transactions` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
+
+Sample Request
+
+```json
+curl --location --request GET 'http://localhost/api/transactions' \
+--header 'Authorization: Bearer TOKEN_GOES_HERE'
+```
+
+Sample Response
+
+```json
+[
+    
+]
+```
+
+## Get Transactions By Ref No
+
+To get All transctions by a reference no a user sends `GET` request to the `/api/transactions/{refNo}` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
+
+Sample Request
+
+```json
+curl --location --request GET 'http://localhost/api/transactions/{refNo}' \
+--header 'Authorization: Bearer TOKEN_GOES_HERE'
+```
+
+Sample Response
+
+```json
+[
+    
+]
 ```
