@@ -54,7 +54,7 @@ class TransactionsController extends Controller
         $user = Auth::user();
         if (!$user)
             return response()->json(['Errors' => ['Error' => 'Unauthorized Access']],422);
-        $topups = $user->topups()->where('ref_no',$ref)->get();
+        $topups = $user->topups()->where('ref_no',$ref)->orWhere('id',$ref)->get();
         $topups->makeHidden(['user_id','file_entry_id','response']);
         return response()->json($topups);
     }

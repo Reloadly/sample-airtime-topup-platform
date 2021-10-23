@@ -12,6 +12,7 @@ The project comes packed with reseller side API enabled for external use. There 
 - Send Topup (`/api/topup`)
 - Get Transactions (`/api/transactions`)
 - Get Transaction By Ref (`/api/transactions/{refNo}`)
+- Get Transaction By Id (`/api/transactions/{id}`)
 
 ## Get Token
 
@@ -516,6 +517,25 @@ Sample Request
 
 ```json
 curl --location --request GET 'http://localhost/api/transactions/{refNo}' \
+--header 'Authorization: Bearer TOKEN_GOES_HERE'
+```
+
+Sample Response
+
+```json
+[
+    
+]
+```
+
+## Get Transactions By Id
+
+To get All transctions by id a user sends `GET` request to the `/api/transactions/{id}` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
+
+Sample Request
+
+```json
+curl --location --request GET 'http://localhost/api/transactions/{id}' \
 --header 'Authorization: Bearer TOKEN_GOES_HERE'
 ```
 
