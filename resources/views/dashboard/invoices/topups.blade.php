@@ -12,6 +12,7 @@
             <table class="table table-borderless">
                 <thead>
                 <tr>
+                    <th>Topup Id</th>
                     <th>TOPUP</th>
                     <th>Is Local</th>
                     <th>AMOUNT</th>
@@ -22,6 +23,7 @@
                 <tbody>
                 @foreach($invoice['topups'] as $topup)
                     <tr>
+                        <td>{{ $topup['id'] }}</td>
                         <td>{{($topup['operator']['name']).' '.$topup['number']}}</td>
                         <td>
                             @if($topup['is_local'])
