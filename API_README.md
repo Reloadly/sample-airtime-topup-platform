@@ -485,7 +485,23 @@ Sample Response
 ```json
 {
     "success": {
-        "message": "Topup created successfully."
+        "message": "Transaction created. It will be processed in a few minutes",
+        "transaction": {
+            "ref_no": null,
+            "operator_id": 793,
+            "invoice_id": 4,
+            "topup": 116.4314187,
+            "amount": 1.07,
+            "number": "123123123",
+            "sender_currency": "CAD",
+            "receiver_currency": "PKR",
+            "is_local": false,
+            "updated_at": "2021-10-23T10:18:48.000000Z",
+            "created_at": "2021-10-23T10:18:47.000000Z",
+            "id": 3,
+            "status": "PENDING",
+            "message": "Transaction is paid. But its pending topup. Please wait a few minuites for the status to update."
+        }
     }
 }
 ```
@@ -513,7 +529,7 @@ Sample Response
         "is_local": 0,
         "topup": 9.70746,
         "amount": 0.21,
-        "number": 3238482221,
+        "number": 123123123,
         "sender_currency": "CAD",
         "receiver_currency": "INR",
         "status": "FAIL",
@@ -553,7 +569,7 @@ Sample Response
         "is_local": 0,
         "topup": 9.70746,
         "amount": 0.21,
-        "number": 3238482221,
+        "number": 123123123,
         "sender_currency": "CAD",
         "receiver_currency": "INR",
         "status": "FAIL",
@@ -593,7 +609,7 @@ Sample Response
         "is_local": 0,
         "topup": 9.70746,
         "amount": 0.21,
-        "number": 3238482221,
+        "number": 123123123,
         "sender_currency": "CAD",
         "receiver_currency": "INR",
         "status": "FAIL",
