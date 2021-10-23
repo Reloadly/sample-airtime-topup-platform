@@ -505,7 +505,28 @@ Sample Response
 
 ```json
 [
-    
+    {
+        "id": 2,
+        "ref_no": null,
+        "operator_id": 20,
+        "invoice_id": 3,
+        "is_local": 0,
+        "topup": 9.70746,
+        "amount": 0.21,
+        "number": 3238482221,
+        "sender_currency": "CAD",
+        "receiver_currency": "INR",
+        "status": "FAIL",
+        "timezone_id": null,
+        "scheduled_datetime": null,
+        "type": "USER_INITIATED",
+        "subscription_date": null,
+        "system_initiated_logs": null,
+        "pin": null,
+        "created_at": "2021-10-23T10:08:32.000000Z",
+        "updated_at": "2021-10-23T10:09:09.000000Z",
+        "message": "Insufficient funds in the wallet to complete this transaction"
+    }
 ]
 ```
 
@@ -524,7 +545,28 @@ Sample Response
 
 ```json
 [
-    
+    {
+        "id": 2,
+        "ref_no": null,
+        "operator_id": 20,
+        "invoice_id": 3,
+        "is_local": 0,
+        "topup": 9.70746,
+        "amount": 0.21,
+        "number": 3238482221,
+        "sender_currency": "CAD",
+        "receiver_currency": "INR",
+        "status": "FAIL",
+        "timezone_id": null,
+        "scheduled_datetime": null,
+        "type": "USER_INITIATED",
+        "subscription_date": null,
+        "system_initiated_logs": null,
+        "pin": null,
+        "created_at": "2021-10-23T10:08:32.000000Z",
+        "updated_at": "2021-10-23T10:09:09.000000Z",
+        "message": "Insufficient funds in the wallet to complete this transaction"
+    }
 ]
 ```
 
@@ -543,6 +585,27 @@ Sample Response
 
 ```json
 [
-    
+    {
+        "id": 2,
+        "ref_no": null,
+        "operator_id": 20,
+        "invoice_id": 3,
+        "is_local": 0,
+        "topup": 9.70746,
+        "amount": 0.21,
+        "number": 3238482221,
+        "sender_currency": "CAD",
+        "receiver_currency": "INR",
+        "status": "FAIL",
+        "timezone_id": null,
+        "scheduled_datetime": null,
+        "type": "USER_INITIATED",
+        "subscription_date": null,
+        "system_initiated_logs": null,
+        "pin": null,
+        "created_at": "2021-10-23T10:08:32.000000Z",
+        "updated_at": "2021-10-23T10:09:09.000000Z",
+        "message": "Insufficient funds in the wallet to complete this transaction"
+    }
 ]
 ```

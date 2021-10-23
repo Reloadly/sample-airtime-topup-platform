@@ -15,6 +15,7 @@ class Topup extends Model
         'response' => 'array',
         'pin' => 'array'
     ];
+    protected $appends = ['message'];
 
     public function operator(){
         return $this->belongsTo('App\Models\Operator');
@@ -30,6 +31,21 @@ class Topup extends Model
 
     public function file_entry(){
         return $this->belongsTo('App\Models\FileEntry');
+    }
+
+    public function getMessageAttribute(){
+        switch ($this['status']){
+            case "PENDING":
+                return "Transaction is paid. But its pending topup. Please wait a few minuites for the status to update.";
+            case "SUCCESS":
+                return "Transaction completed successfully.";
+            case "FAIL":
+                return isset($this['response']['message'])?$this['response']['message']: "Transaction Failed. No response";
+            case "PENDING_PAYMENT":
+                return "Transaction is pending payment";
+            default:
+                return "Error : Unknown Status found.";
+        }
     }
 
     public function sendTopup($sendResponse=false)
