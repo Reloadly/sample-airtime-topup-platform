@@ -24,6 +24,10 @@ class IPRVerify
         if ($user->ips()->where('ip',$this->getIp())->first() !== null)
             return $next($request);
 
+        if( $request->is('api/*')){
+            return response()->json(['Errors' => ['Error' => 'IP Address is not authorized for this actions.']],422);
+        }
+
         return redirect('/ip_address/blocked');
     }
     private function getIp(){

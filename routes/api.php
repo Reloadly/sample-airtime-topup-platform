@@ -27,7 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('get_token', [ApiController::class,'getToken']);
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:api','ipr'])->group(function () {
     Route::get('countries', [CountriesController::class, 'getAll']);
     Route::get('operators', [ApiController::class,'operators']);
     Route::get('countries/{id}/operators', [CountriesController::class, 'getOperatorsForCountry']);
