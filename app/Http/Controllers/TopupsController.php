@@ -23,7 +23,7 @@ class TopupsController extends Controller
             'page' => [
                 'type' => 'dashboard'
             ],
-            'topups' => $user['user_role']['name'] == 'ADMIN'?Topup::all():$user['topups']
+            'topups' => $user['user_role']['name'] == 'ADMIN'?Topup::with('discount_transaction')->get():$user->topups()->with('discount_transaction')->get()
         ]);
     }
 

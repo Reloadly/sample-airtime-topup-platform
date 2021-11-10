@@ -95,4 +95,8 @@ class Topup extends Model
                 return $this['status'];
         }
     }
+
+    public function discount_transaction(){
+        return $this->hasOne(AccountTransaction::class,'topup_id');
+    }
 }

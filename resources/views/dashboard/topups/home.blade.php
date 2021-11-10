@@ -27,6 +27,9 @@
                                         <th>Operator</th>
                                         <th>Number</th>
                                         <th>Amount</th>
+                                        @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
+                                            <th>Discount Amount</th>
+                                        @endif
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -45,6 +48,15 @@
                                         <td>{{ $topup['operator']['name'] }}</td>
                                         <td>{{ $topup['number'] }}</td>
                                         <td>{{ number_format($topup['topup'],2).' '.$topup['receiver_currency'] }}</td>
+                                        @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
+                                            <td>
+                                                @if($topup['discount_transaction'])
+                                                    {{$topup['discount_transaction']['amount']." ".$topup['discount_transaction']['currency']}}
+                                                @else
+                                                    ---
+                                                @endif
+                                            </td>
+                                        @endif
                                         <td>
                                             @switch($topup['status'])
                                                 @case('PENDING')
@@ -82,6 +94,9 @@
                                         <th>Operator</th>
                                         <th>Number</th>
                                         <th>Amount</th>
+                                        @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
+                                            <th>Discount Amount</th>
+                                        @endif
                                         <th>Status</th>
                                     </tr>
                                     </tfoot>
