@@ -10,6 +10,10 @@ trait ReloadlySystem {
         return Setting::get('reloadly_api_mode')?'https://topups.reloadly.com':'https://topups-sandbox.reloadly.com';
     }
 
+    public function getReloadlyGiftApiUrlAttribute(){
+        return Setting::get('reloadly_api_mode')?'https://giftcards.reloadly.com':'https://giftcards-sandbox.reloadly.com';
+    }
+
     public function getToken(){
         $ch = curl_init();
 
@@ -156,6 +160,72 @@ trait ReloadlySystem {
             'params' => '',
             'response' => $response
         ]);
+        return json_decode($response);
+    }
+
+    public function getGiftTokenAttribute(){
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://auth.reloadly.com/oauth/token");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
+
+        curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode([
+            'client_id' => Setting::get('reloadly_api_key'),
+            'client_secret' => Setting::get('reloadly_api_secret'),
+            'grant_type' => 'client_credentials',
+            'audience' => $this['reloadly_gift_api_url']
+        ]));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response);
+
+        return isset($response->access_token)?$response->access_token:null;
+    }
+
+    public function getReloadlyGiftProducts($page=1){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this['reloadly_gift_api_url']."/products?page=$page&size=50");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Content-Type:application/json",
+            "Authorization: Bearer ".$this['gift_token']
+        ));
+        $response = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($response);
+    }
+
+    public function orderReloadlyGiftProducts($rid, $iso, $quantity, $price, $identifier, $senderName, $email){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this['reloadly_gift_api_url']."/orders");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_ENCODING, '');
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Content-Type:application/json",
+            "Authorization: Bearer ".$this['gift_token']
+        ));
+        curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode([
+            'productId' => $rid,
+            'countryCode' => $iso,
+            'quantity' => $quantity,
+            'unitPrice' => $price,
+            'customIdentifier' => $identifier,
+            'senderName' => $senderName,
+            'recipientEmail' => $email
+        ]));
+        $response = curl_exec($ch);
+        curl_close($ch);
         return json_decode($response);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\GiftCardProductsController;
 use App\Http\Controllers\IpRestrictionController;
+use App\Http\Controllers\GiftCardTransactionsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -167,11 +169,6 @@ Route::middleware(['auth','tfa','ipr'])->group(function () {
         Route::post('/wallet/accounts/balance/create',[WalletController::class,'storeBalance']);
     });
 
-    /*Route::middleware(['role:wallet_transfer'])->group(function (){
-        Route::get('/wallet/transfer',[WalletTransferController::class,'index']);
-        Route::post('/wallet/transfer',[WalletTransferController::class,'store']);
-    });*/
-
     Route::middleware(['role:wallet_transactions'])->get('/wallet/transactions',[WalletController::class,'transactions']);
 
     Route::post('/file/upload',[DropzoneController::class,'upload']);
@@ -185,6 +182,13 @@ Route::middleware(['auth','tfa','ipr'])->group(function () {
     Route::post('/topups/bulk/wizard/schedule/file/{id}',[WizardController::class,'scheduleTopup']);
     Route::get('/topups/bulk/operators/{id}', [WizardController::class,'getOperators']);
 
+    Route::get('/gift_cards/gift_cards',[GiftCardProductsController::class,"index"]);
+    Route::get('/gift_cards/order',[GiftCardProductsController::class,"products"]);
+    Route::get('/gift_cards/show/{id}',[GiftCardProductsController::class,"showGiftCard"]);
+    Route::get('/gift_cards/history',[GiftCardTransactionsController::class,"index"]);
+    Route::post('gift_cards/gift_cards/sync', [GiftCardProductsController::class,'sync']);
+    Route::get('/gift_cards/history/{id}/success',[GiftCardTransactionsController::class,"getSuccessDetail"]);
+    Route::get('/gift_cards/history/{id}/failed',[GiftCardTransactionsController::class,"getFailedDetail"]);
 
 
 });

@@ -17,10 +17,10 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            @foreach(Auth::user()['user_role']->menu_items()->orderBy('id', 'asc')->get() as $menuItem)
+            @foreach(Auth::user()['user_role']->menu_items()->orderBy('order_number', 'asc')->get() as $menuItem)
                 @if (Auth::user()->hasPermissionMenuItem($menuItem['id']))
                     @if ($menuItem['show_on_sidebar'])
-                        @if (sizeof($menuItem['children']) == 0)
+                        @if (count($menuItem['children']) === 0)
                             @if($menuItem['parent_id'] === 0)
                                 <li class="nav-item {{ Request::is(strtolower(str_replace(' ','_',$menuItem['name']))) || Request::is(strtolower(str_replace(' ','_',$menuItem['name'])).'/*')?'active':'' }}">
                                     <a href="{{ url($menuItem['route']) }}">
@@ -30,11 +30,11 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item has-sub {{ Request::is(strtolower(str_replace(' ','_',str_replace('/','',$menuItem['route']))).'/*')?'open':'' }}"><a href="#"><i class="{{ $menuItem['icon'] }}"></i><span class="menu-title" data-i18n="{{ $menuItem['name'] }}">{{ $menuItem['name'] }}</span></a>
+                            <li class="nav-item has-sub {{ Request::is(strtolower(str_replace(' ','_',str_replace('/','',$menuItem['route']))).'/*')?'open':'' }}"><a href="{{ $menuItem['route'] }}"><i class="{{ $menuItem['icon'] }}"></i><span class="menu-title" data-i18n="{{ $menuItem['name'] }}">{{ $menuItem['name'] }}</span></a>
                                 <ul class="menu-content">
-                                    @foreach($menuItem['children'] as $child)
+                                    @foreach($menuItem->children()->orderBy('order_number','asc')->get() as $child)
                                         @if (Auth::user()->hasPermissionMenuItem($child['id']))
-                                        <li class="nav-item {{ Request::is(strtolower(str_replace(' ','_',$child['name']))) || Request::is('*/'.strtolower(str_replace(' ','_',$child['name'])))?'active':'' }}"><a href="{{ url($child['route']) }}"><i class="{{ $child['icon'] }}"></i><span class="menu-item" data-i18n="{{ $child['name'] }}">{{ $child['name'] }}</span></a></li>
+                                        <li class="nav-item {{ Request::is(strtolower(str_replace(' ','_',str_replace('/','',$menuItem['route']).'/'.$child['name'])))?'active':'' }}"><a href="{{ url($child['route']) }}"><i class="{{ $child['icon'] }}"></i><span class="menu-item" data-i18n="{{ $child['name'] }}">{{ $child['name'] }}</span></a></li>
                                         @endif
                                     @endforeach
                                 </ul>

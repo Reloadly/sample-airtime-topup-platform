@@ -23,6 +23,9 @@ class Invoice extends Model
     public function topup(){
         return $this->hasOne('App\Models\Topup', 'invoice_id');
     }
+    public function gift_card(){
+        return $this->hasOne(GiftCardTransaction::class,'invoice_id');
+    }
 
     public function user(){
         return $this->belongsTo('App\Models\User');

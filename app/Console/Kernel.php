@@ -25,12 +25,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('sync:topups')->withoutOverlapping(30);
+        $schedule->command('sync:gift_transactions')->withoutOverlapping(30);
         $schedule->command('sync:topup_discounts')->everyMinute()->withoutOverlapping(30);
         $schedule->command('sync:token')->daily();
         $schedule->command('process:files')->runInBackground()->withoutOverlapping(30);
         $schedule->command('sync:countries')->daily();
         $schedule->command('sync:operators')->daily();
         $schedule->command('sync:discounts')->daily();
+        $schedule->command('sync:gift_products')->daily();
         $schedule->command('sync:promotions')->hourly();
         $schedule->command('sync:stripe')->daily();
         $schedule->command('sync:paypal')->daily();

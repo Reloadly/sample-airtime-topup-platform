@@ -170,6 +170,28 @@
                             </div>
                         </div>
                     @break
+                    @case('GiftCard')
+                    <div class="row">
+                        <div class="table-responsive col-12">
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Local Amount</th>
+                                    <th>Bill Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{ @$invoice['gift_card']['product']['title']}}</td>
+                                    <td>{{ @$invoice['gift_card']['recipient_amount'].' '.@$invoice['gift_card']['recipient_currency']['abbr'] }}</td>
+                                    <td>{{ number_format($invoice['amount'],2).' '.$invoice['currency_code'] }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    @break
                 @endswitch
             </div>
             <div id="invoice-total-details" class="invoice-total-table">

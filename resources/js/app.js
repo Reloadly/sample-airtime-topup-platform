@@ -25,6 +25,8 @@ Vue.component('number-entry', require('./components/NumberEntry').default);
 Vue.component('topup-wizard', require('./components/TopupWizard.vue').default);
 Vue.component('send-topup', require('./components/SendTopup.vue').default);
 Vue.component('wallet-transfer', require('./components/WalletTransfer.vue').default);
+Vue.component('gifts-wizard', require('./components/GiftCards/GiftsWizard').default);
+Vue.component('gift-items', require('./components/GiftCards/GiftForm').default);
 Vue.use(require('vue-moment'));
 
 /**

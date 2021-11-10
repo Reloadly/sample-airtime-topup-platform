@@ -21,7 +21,9 @@
         "otifsolutions/laravel-forcessl": "^1.0",
         "otifsolutions/laravel-settings": "^1.0",
         "paypal/paypal-checkout-sdk": "^1.0",
-        "stripe/stripe-php": "^7.62"
+        "stripe/stripe-php": "^7.62",
+      "ext-json": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

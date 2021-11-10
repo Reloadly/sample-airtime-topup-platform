@@ -18,6 +18,10 @@ class Country extends Model
         return $this->hasMany('App\Models\Operator');
     }
 
+    public  function gifts(){
+        return $this->hasMany(GiftCardProduct::class,'country_id');
+    }
+
 
     public static function GetForInputField(){
         return Country::where('calling_codes','!=','[]')->get()->map(function($item){

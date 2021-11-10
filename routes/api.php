@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GiftCardProductsController;
 use App\Http\Controllers\TransactionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,5 +37,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('topup', [ApiController::class,'sendTopUp']);
     Route::get('transactions',[TransactionsController::class,'index']);
     Route::get('transactions/{ref}',[TransactionsController::class,'show']);
+    Route::post('gift_cards/receipt',[GiftCardProductsController::class,'createInvoice']);
+
+    Route::get('gift_cards/products',[GiftCardProductsController::class,'getGiftCardProducts']);
+    Route::get('gift_cards/products/{id}',[GiftCardProductsController::class,'getGiftCardProductById']);
+    Route::post('gift_cards/order',[GiftCardProductsController::class,'orderGiftCardProduct']);
 });
-//Route::get('users/find/{username}',[AuthController::class,'findUser']);
