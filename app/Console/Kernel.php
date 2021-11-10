@@ -37,6 +37,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sync:stripe')->daily();
         $schedule->command('sync:paypal')->daily();
         $schedule->command('process:refunds')->withoutOverlapping(30);
+        $schedule->command('calculate:balances')->hourly();
     }
 
     /**
