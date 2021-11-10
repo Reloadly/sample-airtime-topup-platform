@@ -52,10 +52,16 @@ class GiftCardProductsController extends Controller
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',
             'amount' => 'required',
-            'recipient_email' => 'required'
+            'recipient_email' => 'required',
+            'ref' => 'required'
         ]);
         if ($validator->fails())
-            return response()->json(['errors' => ['error' => 'product_id or amount or recipient_email is missing.']],422);
+            return response()->json(['errors' => ['error' => 'product_id or amount or recipient_email or ref is missing.']],422);
+
+        $transaction = GiftCardTransaction::where('reference',$request['ref'])->first();
+        if ($transaction)
+            return response()->json(['errors' => ['error' => 'Ref No is not unique.']],422);
+
         $user = User::find($request->user()['id']);
         if(!$user) {
             return response()->json(['errors' => ['error' => 'User not found.']], 422);
@@ -101,7 +107,7 @@ class GiftCardProductsController extends Controller
             'sender_amount' => $amount,
             'reloadly_fee' => $product['sender_fee'],
             'recipient_amount' => $paymentIndex,
-            'reference' => isset($request['ref_no'])?$request['ref_no']:Str::random(10)
+            'reference' => isset($request['ref'])?$request['ref']:Str::random(10)
         ]);
         $accountTransaction = AccountTransaction::firstOrCreate(['invoice_id' => $invoice['id']],[
             'user_id' => $invoice['user_id'],

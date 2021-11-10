@@ -49,12 +49,27 @@ class TransactionsController extends Controller
      * @param  string  $ref
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($ref)
+    public function showByRef($ref)
     {
         $user = Auth::user();
         if (!$user)
             return response()->json(['Errors' => ['Error' => 'Unauthorized Access']],422);
-        $topups = $user->topups()->where('ref_no',$ref)->orWhere('id',$ref)->get();
+        $topups = $user->topups()->where('ref_no',$ref)->first();
+        $topups->makeHidden(['user_id','file_entry_id','response']);
+        return response()->json($topups);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showById($id)
+    {
+        $user = Auth::user();
+        if (!$user)
+            return response()->json(['Errors' => ['Error' => 'Unauthorized Access']],422);
+        $topups = $user->topups()->Where('id',$id)->first();
         $topups->makeHidden(['user_id','file_entry_id','response']);
         return response()->json($topups);
     }

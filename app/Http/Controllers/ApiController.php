@@ -101,9 +101,14 @@ class ApiController extends Controller
         $validator = Validator::make($request->all(), [
             'operator' => 'required',
             'number' => 'required',
+            'ref' => 'required'
         ]);
         if ($validator->fails())
-            return response()->json(['errors' => ['error' => 'operator or number missing.']],422);
+            return response()->json(['errors' => ['error' => 'operator or number or ref is missing.']],422);
+
+        $topup = Topup::where('ref_no',$request['ref'])->first();
+        if ($topup)
+            return response()->json(['errors' => ['error' => 'Ref No is not unique.']],422);
 
         $isLocal = isset($request['is_local']) && $request['is_local'] == true;
         $operator = Operator::find($request['operator']);
@@ -134,7 +139,7 @@ class ApiController extends Controller
 
         $topup = Topup::create([
             'user_id' => $user['id'],
-            'ref_no' => isset($request['ref'])?$request['ref']:null,
+            'ref_no' => $request['ref'],
             'operator_id' => $operator['id'],
             'invoice_id' => $invoice['id'],
             'topup' => $isLocal?

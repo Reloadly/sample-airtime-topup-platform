@@ -36,7 +36,8 @@ Route::middleware(['auth:api','ipr'])->group(function () {
     Route::get('currencies', [CurrenciesController::class, 'getAll']);
     Route::post('topup', [ApiController::class,'sendTopUp']);
     Route::get('transactions',[TransactionsController::class,'index']);
-    Route::get('transactions/{ref}',[TransactionsController::class,'show']);
+    Route::get('transactions/id/{ref}',[TransactionsController::class,'showById']);
+    Route::get('transactions/reference/{ref}',[TransactionsController::class,'showByRef']);
     Route::post('gift_cards/receipt',[GiftCardProductsController::class,'createInvoice']);
 
     Route::get('gift_cards/products',[GiftCardProductsController::class,'getGiftCardProducts']);
