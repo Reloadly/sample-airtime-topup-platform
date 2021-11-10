@@ -27,6 +27,7 @@
                                         <th>Operator</th>
                                         <th>Number</th>
                                         <th>Amount</th>
+                                        <th>Local Amount</th>
                                         @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
                                             <th>Discount Amount</th>
                                         @endif
@@ -47,6 +48,7 @@
                                         </td>
                                         <td>{{ $topup['operator']['name'] }}</td>
                                         <td>{{ $topup['number'] }}</td>
+                                        <td>{{ number_format($topup['amount'],2).' '.$topup['sender_currency'] }}</td>
                                         <td>{{ number_format($topup['topup'],2).' '.$topup['receiver_currency'] }}</td>
                                         @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
                                             <td>
@@ -94,6 +96,7 @@
                                         <th>Operator</th>
                                         <th>Number</th>
                                         <th>Amount</th>
+                                        <th>Local Amount</th>
                                         @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
                                             <th>Discount Amount</th>
                                         @endif

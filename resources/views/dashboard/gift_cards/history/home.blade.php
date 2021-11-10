@@ -26,6 +26,7 @@
                                         <th>Timestamp</th>
                                         <th>Gift Card</th>
                                         <th>Amount</th>
+                                        <th>Bill Amount</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -34,7 +35,8 @@
                                         <tr>
                                             <td>{{ \Carbon\Carbon::parse($transaction['created_at'])->format('Y-m-d H:i') }}</td>
                                             <td>{{ $transaction['product']['title'] }}</td>
-                                            <td>{{ number_format($transaction['sender_amount'],2).' '.@$transaction['invoice']['currency_code'] }}</td>
+                                            <td>{{ number_format($transaction['recipient_amount'],2).' '.$transaction['recipient_currency']['abbr'] }}</td>
+                                            <td>{{ number_format($transaction['sender_amount'],2).' '.$transaction['sender_currency']['abbr'] }}</td>
                                             <td>
                                                 @switch($transaction['status'])
                                                     @case('PENDING')
@@ -63,6 +65,7 @@
                                         <th>Timestamp</th>
                                         <th>Gift Card</th>
                                         <th>Amount</th>
+                                        <th>Bill Amount</th>
                                         <th>Status</th>
                                     </tr>
                                     </tfoot>
