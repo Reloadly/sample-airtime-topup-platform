@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiDocController;
 use App\Http\Controllers\GiftCardProductsController;
 use App\Http\Controllers\IpRestrictionController;
 use App\Http\Controllers\GiftCardTransactionsController;
@@ -167,6 +168,10 @@ Route::middleware(['auth','tfa','ipr'])->group(function () {
         Route::get('/wallet/accounts',[WalletController::class,'wallets']);
         Route::get('/wallet/accounts/balance/add/{id}',[WalletController::class,'showModal']);
         Route::post('/wallet/accounts/balance/create',[WalletController::class,'storeBalance']);
+    });
+
+    Route::middleware(['role:api_doc'])->group(function (){
+        Route::get('/api_doc',[ApiDocController::class,'index']);
     });
 
     Route::middleware(['role:wallet_transactions'])->get('/wallet/transactions',[WalletController::class,'transactions']);
