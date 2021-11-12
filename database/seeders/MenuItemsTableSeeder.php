@@ -45,7 +45,7 @@ class MenuItemsTableSeeder extends Seeder
 
         MenuItem::updateOrCreate(['id'=>20],['parent_id' => 0,'order_number' => 8,'icon' => 'feather icon-circle','name' => 'Ip Restriction','route' => '/ip_restriction', 'generate_permission' => 'MANAGE_ONLY', 'show_on_sidebar' => 0])->user_roles()->sync([1,2,3]);
 
-        MenuItem::updateOrCreate(['id'=>21],['parent_id' => 0,'icon' => 'fa fa-circle','name' => 'Api Doc','route' => '/api_doc', 'generate_permission' => 'READ_ONLY', 'show_on_sidebar' => 1])->user_roles()->sync([2]);
+        MenuItem::updateOrCreate(['id'=>21],['parent_id' => 0,'order_number' => 9,'icon' => 'fa fa-circle','name' => 'Api Doc','route' => '/api_doc', 'generate_permission' => 'READ_ONLY', 'show_on_sidebar' => 1])->user_roles()->sync([2]);
 
         MenuItem::updateOrCreate(['id'=>22],['parent_id' => 0,'order_number' => 2,'icon' => 'feather icon-gift','name' => 'Gift Cards','route' => '/gift_cards', 'generate_permission' => 'MANAGE_ONLY', 'show_on_sidebar' => 1])->user_roles()->sync([1,2,3]);
         MenuItem::updateOrCreate(['id'=>23],['parent_id' => 22,'order_number' => 1,'icon' => 'feather icon-circle','name' => 'History','route' => '/gift_cards/history', 'generate_permission' => 'MANAGE_ONLY', 'show_on_sidebar' => 1])->user_roles()->sync([1,2,3]);

@@ -11,8 +11,12 @@ The project comes packed with reseller side API enabled for external use. There 
 - Get Single Operator (`/api/operators/{operatorId}`)
 - Send Topup (`/api/topup`)
 - Get Transactions (`/api/transactions`)
-- Get Transaction By Ref (`/api/transactions/{refNo}`)
-- Get Transaction By Id (`/api/transactions/{id}`)
+- Get Transaction By Ref (`/api/transactions/reference/{refNo}`)
+- Get Transaction By Id (`/api/transactions/id/{id}`)
+
+- Get Gift Card Products (`gift_cards/products`)
+- Get Gift Card Product By Id (`gift_cards/products/{id}`)
+- Order Gift Card (`gift_cards/order`)
 
 ## Get Token
 
@@ -548,19 +552,18 @@ Sample Response
 
 ## Get Transactions By Ref No
 
-To get All transctions by a reference no a user sends `GET` request to the `/api/transactions/{refNo}` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
+To get All transctions by a reference no a user sends `GET` request to the `/api/transactions/reference/{refNo}` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
 
 Sample Request
 
 ```json
-curl --location --request GET 'http://localhost/api/transactions/{refNo}' \
+curl --location --request GET 'http://localhost/api/transactions/reference/{refNo}' \
 --header 'Authorization: Bearer TOKEN_GOES_HERE'
 ```
 
 Sample Response
 
 ```json
-[
     {
         "id": 2,
         "ref_no": null,
@@ -583,24 +586,22 @@ Sample Response
         "updated_at": "2021-10-23T10:09:09.000000Z",
         "message": "Insufficient funds in the wallet to complete this transaction"
     }
-]
 ```
 
 ## Get Transactions By Id
 
-To get All transctions by id a user sends `GET` request to the `/api/transactions/{id}` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
+To get All transctions by id a user sends `GET` request to the `/api/transactions/id/{id}` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
 
 Sample Request
 
 ```json
-curl --location --request GET 'http://localhost/api/transactions/{id}' \
+curl --location --request GET 'http://localhost/api/transactions/id/{id}' \
 --header 'Authorization: Bearer TOKEN_GOES_HERE'
 ```
 
 Sample Response
 
 ```json
-[
     {
         "id": 2,
         "ref_no": null,
@@ -623,5 +624,143 @@ Sample Response
         "updated_at": "2021-10-23T10:09:09.000000Z",
         "message": "Insufficient funds in the wallet to complete this transaction"
     }
+```
+
+## Get Gift Card Products
+
+To get All gift card products  a user sends `GET` request to the `/api/gift_cards/products` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
+
+Sample Request
+
+```json
+curl --location --request GET 'http://localhost/api/gift_cards/products' \
+--header 'Authorization: Bearer TOKEN_GOES_HERE'
+```
+
+Sample Response
+
+```json
+[
+    {
+        "id": 1,
+        "title": "1-800-PetSupplies",
+        "is_global": 0,
+        "recipient_currency_code": "USD",
+        "sender_currency_code": "CAD",
+        "fixed_sender_denominations": [
+            31,
+            62
+        ],
+        "logo_urls": [
+            "https://cdn.reloadly.com/giftcards/5daa2b8b-b1ad-4ca6-a34d-a7ce3c14dfaf.jpg"
+        ],
+        "country": {
+            "id": 131,
+            "iso": "US",
+            "name": "United States",
+            "currency_code": "USD",
+            "currency_name": "US Dollar",
+            "currency_symbol": "$",
+            "flag": "https://s3.amazonaws.com/rld-flags/us.svg"
+        },
+        "redeem_instruction": {
+            "concise": "This card is redeemable for merchandise on www.1-800-petsupplies.com",
+            "verbose": "Your acceptance of this eCertificate constitutes your agreement to these terms and conditions. This card is redeemable in U.S. only for merchandise on www.1-800-petsupplies.com . Only two eCertificates are redeemable per order. eCertificates cannot be redeemed for cash, except as required by law. Void if altered or reproduced. This gift card is issued in U.S. funds by Tabcom, LLC. When Redeeming online please be sure to enter the entire gift card number including preceding zeros. The maximum number of eCertificates that can be used for phone is nine. By accepting these Terms and Conditions through your use of this Site, you certify that you reside in the United States and are 18 years of age or older. If you are under the age of 18 but at least 14 years of age you may use this Site only under the supervision of a parent or legal guardian who agrees to be bound by these Terms and Conditions."
+        },
+        "amounts": {
+            "25.00": 31.38,
+            "50.00": 62.15
+        }
+    }
 ]
+```
+
+## Get Gift Card By Id
+
+To get gift card by id a user sends `GET` request to the `/api/gift_cards/products/{id}` route. This is protected via OAuth 2.0 so requires token to be sent in the header. 
+
+Sample Request
+
+```json
+curl --location --request GET 'http://localhost/api/gift_cards/products/{id}' \
+--header 'Authorization: Bearer TOKEN_GOES_HERE'
+```
+
+Sample Response
+
+```json
+    {
+        "id": 1,
+        "title": "1-800-PetSupplies",
+        "is_global": 0,
+        "recipient_currency_code": "USD",
+        "sender_currency_code": "CAD",
+        "fixed_sender_denominations": [
+            31,
+            62
+        ],
+        "logo_urls": [
+            "https://cdn.reloadly.com/giftcards/5daa2b8b-b1ad-4ca6-a34d-a7ce3c14dfaf.jpg"
+        ],
+        "country": {
+            "id": 131,
+            "iso": "US",
+            "name": "United States",
+            "currency_code": "USD",
+            "currency_name": "US Dollar",
+            "currency_symbol": "$",
+            "flag": "https://s3.amazonaws.com/rld-flags/us.svg"
+        },
+        "redeem_instruction": {
+            "concise": "This card is redeemable for merchandise on www.1-800-petsupplies.com",
+            "verbose": "Your acceptance of this eCertificate constitutes your agreement to these terms and conditions. This card is redeemable in U.S. only for merchandise on www.1-800-petsupplies.com . Only two eCertificates are redeemable per order. eCertificates cannot be redeemed for cash, except as required by law. Void if altered or reproduced. This gift card is issued in U.S. funds by Tabcom, LLC. When Redeeming online please be sure to enter the entire gift card number including preceding zeros. The maximum number of eCertificates that can be used for phone is nine. By accepting these Terms and Conditions through your use of this Site, you certify that you reside in the United States and are 18 years of age or older. If you are under the age of 18 but at least 14 years of age you may use this Site only under the supervision of a parent or legal guardian who agrees to be bound by these Terms and Conditions."
+        },
+        "amounts": {
+            "25.00": 31.38,
+            "50.00": 62.15
+        }
+    }
+```
+
+## Order Gift Card
+
+To order gift card a user is required to send a `POST` call to `/api/gift_cards/order` route. This is protected via OAuth 2.0 so requires token to be sent in the header.
+
+Fields Supported
+
+- operator
+- number
+- amount
+
+Sample Request
+
+```json
+curl --location --request POST 'https://reloadly.otifcrew.com/api/gift_cards/order' \
+--header 'Authorization: Bearer TOKEN_GOES_HERE' \
+--form 'product_id=1' \
+--form 'recipient_email="abc@email.com"' \
+--form 'amount=31.38' \
+--form 'ref=ABC123'
+```
+
+Sample Response
+
+```json
+{
+    "success": {
+        "message": "Transaction created. It will be processed in a few minutes",
+        "transaction": {
+            "email": "abc@email.com",
+            "invoice_id": 32,
+            "product_id": 1,
+            "sender_amount": 31.38,
+            "recipient_amount": "25.00",
+            "reference": "some_reference_to_Track",
+            "updated_at": "2021-11-12T08:51:52.000000Z",
+            "created_at": "2021-11-12T08:51:51.000000Z",
+            "id": 8,
+            "status": "PENDING"
+        }
+    }
+}
 ```

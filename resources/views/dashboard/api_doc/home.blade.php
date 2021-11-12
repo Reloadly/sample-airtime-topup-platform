@@ -100,7 +100,7 @@
                                             <span class="font-weight-bold">Get Operators By Country id</span>
                                         </a>
                                     </li>
-                                    
+
                                     <!-- Operator By Id-->
                                     <li class="nav-item">
                                         <a class="nav-link" id="operator-id" data-toggle="pill" href="#api-operator-id" aria-expanded="false" role="tab">
@@ -108,7 +108,7 @@
                                             <span class="font-weight-bold">Get Operators By id</span>
                                         </a>
                                     </li>
-                                    
+
                                     <!-- Send Topup -->
                                     <li class="nav-item">
                                         <a class="nav-link" id="send-topup" data-toggle="pill" href="#api-send-topup" aria-expanded="false" role="tab">
@@ -116,7 +116,7 @@
                                             <span class="font-weight-bold">Send Topup</span>
                                         </a>
                                     </li>
-                                    
+
                                     <!-- Transactions -->
                                     <li class="nav-item">
                                         <a class="nav-link" id="transactions" data-toggle="pill" href="#api-transactions" aria-expanded="false" role="tab">
@@ -132,12 +132,34 @@
                                             <span class="font-weight-bold">Get Transactions By Ref no</span>
                                         </a>
                                     </li>
-                                    
+
                                     <!-- Transactions By Id-->
                                     <li class="nav-item">
                                         <a class="nav-link" id="transaction-id" data-toggle="pill" href="#api-transaction-id" aria-expanded="false" role="tab">
                                             <i class="feather icon-aperture"></i>
                                             <span class="font-weight-bold">Get Transactions By id</span>
+                                        </a>
+                                    </li>
+
+                                    <!-- Get Gift Card Products-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="gift_card_products" data-toggle="pill" href="#api-gift_card_products" aria-expanded="false" role="tab">
+                                            <i class="feather icon-aperture"></i>
+                                            <span class="font-weight-bold">Get Gift Card Products</span>
+                                        </a>
+                                    </li>
+                                    <!-- Get Gift Card Product By Id-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="gift_card_products_id" data-toggle="pill" href="#api-gift_card_products_id" aria-expanded="false" role="tab">
+                                            <i class="feather icon-aperture"></i>
+                                            <span class="font-weight-bold">Get Gift Card Product By Id</span>
+                                        </a>
+                                    </li>
+                                    <!-- Order Gift Card-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="order_gift_card" data-toggle="pill" href="#api-order_gift_card" aria-expanded="false" role="tab">
+                                            <i class="feather icon-aperture"></i>
+                                            <span class="font-weight-bold">Order Gift Card</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -179,8 +201,11 @@
                                                        <li class="mt-1">Get Single Operator <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/operators/{operatorId}</span></li>
                                                        <li class="mt-1">Send Topup  <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/topup</span></li>
                                                        <li class="mt-1">Get Transactions <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions</span></li>
-                                                       <li class="mt-1">Get Transaction By Ref <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/{refNo}</span></li>
-                                                       <li class="mt-1">Get ransaction By Id <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/{id}</span></li>
+                                                       <li class="mt-1">Get Transaction By Ref <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/reference/{refNo}</span></li>
+                                                       <li class="mt-1">Get Transaction By Id <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/id/{id}</span></li>
+                                                       <li class="mt-1">Get Gift Card Products<span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/gift_cards/products</span></li>
+                                                       <li class="mt-1">Get Gift Card Products By Id <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/gift_cards/products/{id}</span></li>
+                                                       <li class="mt-1">Order Gift Card <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/gift_cards/order</span></li>
                                                    </ul>
                                                 </div>
                                             </div>
@@ -902,7 +927,7 @@
             <span class="text-secondary font-weight-bolder">{</span>
                         <span class="text-success">"success"</span> <span class="text-danger">:</span> <span class="text-secondary font-weight-bolder">{</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
-                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span> 
+                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span>
                                 <span class="text-secondary">"ref_no"</span> <span class="text-danger">: </span> <span class="text-success">ABC123</span>
                                 <span class="text-secondary">"operator_id"</span> <span class="text-danger">: </span> <span class="text-success">793</span>
                                 <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">4</span>
@@ -926,9 +951,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
-                                
+
+
+
                                 <div class="tab-pane" id="api-transactions" role="tabpanel" aria-labelledby="transactions" aria-expanded="false">
                                     <!-- icon and header -->
                                     <div class="d-flex align-items-center">
@@ -975,7 +1000,7 @@
             <span class="text-secondary font-weight-bolder">[</span>
                         <span class="text-secondary font-weight-bolder">{</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
-                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span> 
+                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span>
                                 <span class="text-secondary">"ref_no"</span> <span class="text-danger">: </span> <span class="text-success">ABC123</span>
                                 <span class="text-secondary">"operator_id"</span> <span class="text-danger">: </span> <span class="text-success">793</span>
                                 <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">4</span>
@@ -990,11 +1015,11 @@
                                 <span class="text-secondary">"id"</span> <span class="text-danger">: </span> <span class="text-success">3</span>
                                 <span class="text-secondary">"status"</span> <span class="text-danger">: </span> <span class="text-success">PENDING</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">: </span> <span class="text-success">Transaction is paid. But its pending topup. Please wait a few minuites for the status to update.</span>
-                       <span class="text-secondary font-weight-bolder">}</span> 
+                       <span class="text-secondary font-weight-bolder">}</span>
                        <span class="text-secondary font-weight-bolder">,</span>
                        <span class="text-secondary font-weight-bolder">{</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
-                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span> 
+                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span>
                                 <span class="text-secondary">"ref_no"</span> <span class="text-danger">: </span> <span class="text-success">ABC123</span>
                                 <span class="text-secondary">"operator_id"</span> <span class="text-danger">: </span> <span class="text-success">793</span>
                                 <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">4</span>
@@ -1009,7 +1034,7 @@
                                 <span class="text-secondary">"id"</span> <span class="text-danger">: </span> <span class="text-success">3</span>
                                 <span class="text-secondary">"status"</span> <span class="text-danger">: </span> <span class="text-success">PENDING</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">: </span> <span class="text-success">Transaction is paid. But its pending topup. Please wait a few minuites for the status to update.</span>
-                       <span class="text-secondary font-weight-bolder">}</span> 
+                       <span class="text-secondary font-weight-bolder">}</span>
 
             <span class="text-secondary font-weight-bolder">]</span>
                                                     </pre>
@@ -1018,7 +1043,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="tab-pane" id="api-transaction-ref" role="tabpanel" aria-labelledby="transaction-ref" aria-expanded="false">
                                     <!-- icon and header -->
                                     <div class="d-flex align-items-center">
@@ -1029,7 +1054,7 @@
                                             <h4 class="mb-0 font-weight-bolder">Get Transactions By Ref No</h4>
                                             <span>
                                                 To get transactions by reference no a user is required to send a <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">GET</span> call to
-                                                <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/{refNo}</span> route.
+                                                <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/reference/{refNo}</span> route.
                                                 This is protected via OAuth 2.0 so requires token to be sent in the header.
                                             </span>
                                         </div>
@@ -1048,7 +1073,7 @@
     <span class="text-danger font-weight-bolder">curl</span>
             <span class="text-secondary">--location</span>
             <span class="text-secondary">--request GET</span>
-                      <span class="text-success">'/api/transactions/ABC123'</span>  \
+                      <span class="text-success">'/api/transactions/reference/ABC123'</span>  \
             <span class="text-secondary">--header</span>
                       <span class="text-success">'Authorization: Bearer TOKEN_GOES_HERE'</span>  \
                                                     </pre>
@@ -1062,10 +1087,9 @@
                                             <div id="api-transaction-ref-two" class="collapse bg-light" aria-labelledby="transactionRefTwo" data-parent="#api-transaction-ref-qna">
                                                 <div class="card-body shadow-none">
                                                       <pre class="py-2 font-weight-bolder">
-            <span class="text-secondary font-weight-bolder">[</span>
                         <span class="text-secondary font-weight-bolder">{</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
-                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span> 
+                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span>
                                 <span class="text-secondary">"ref_no"</span> <span class="text-danger">: </span> <span class="text-success">ABC123</span>
                                 <span class="text-secondary">"operator_id"</span> <span class="text-danger">: </span> <span class="text-success">793</span>
                                 <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">4</span>
@@ -1080,35 +1104,14 @@
                                 <span class="text-secondary">"id"</span> <span class="text-danger">: </span> <span class="text-success">3</span>
                                 <span class="text-secondary">"status"</span> <span class="text-danger">: </span> <span class="text-success">PENDING</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">: </span> <span class="text-success">Transaction is paid. But its pending topup. Please wait a few minuites for the status to update.</span>
-                       <span class="text-secondary font-weight-bolder">}</span> 
-                       <span class="text-secondary font-weight-bolder">,</span>
-                       <span class="text-secondary font-weight-bolder">{</span>
-                                <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
-                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span> 
-                                <span class="text-secondary">"ref_no"</span> <span class="text-danger">: </span> <span class="text-success">ABC123</span>
-                                <span class="text-secondary">"operator_id"</span> <span class="text-danger">: </span> <span class="text-success">793</span>
-                                <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">4</span>
-                                <span class="text-secondary">"topup"</span> <span class="text-danger">: </span> <span class="text-success">116.4314187</span>
-                                <span class="text-secondary">"amount"</span> <span class="text-danger">: </span> <span class="text-success">1.07</span>
-                                <span class="text-secondary">"number"</span> <span class="text-danger">: </span> <span class="text-success">123123123</span>
-                                <span class="text-secondary">"sender_currency"</span> <span class="text-danger">: </span> <span class="text-success">CAD</span>
-                                <span class="text-secondary">"receiver_currency"</span> <span class="text-danger">: </span> <span class="text-success">PKR</span>
-                                <span class="text-secondary">"is_local"</span> <span class="text-danger">: </span> <span class="text-success">false</span>
-                                <span class="text-secondary">"updated_at"</span> <span class="text-danger">: </span> <span class="text-success">2021-10-23T10:18:48.000000Z</span>
-                                <span class="text-secondary">"created_at"</span> <span class="text-danger">: </span> <span class="text-success">2021-10-23T10:18:47.000000Z</span>
-                                <span class="text-secondary">"id"</span> <span class="text-danger">: </span> <span class="text-success">3</span>
-                                <span class="text-secondary">"status"</span> <span class="text-danger">: </span> <span class="text-success">PENDING</span>
-                                <span class="text-secondary">"message"</span> <span class="text-danger">: </span> <span class="text-success">Transaction is paid. But its pending topup. Please wait a few minuites for the status to update.</span>
-                       <span class="text-secondary font-weight-bolder">}</span> 
-
-            <span class="text-secondary font-weight-bolder">]</span>
+                       <span class="text-secondary font-weight-bolder">}</span>
                                                     </pre>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="tab-pane" id="api-transaction-id" role="tabpanel" aria-labelledby="transaction-id" aria-expanded="false">
                                     <!-- icon and header -->
                                     <div class="d-flex align-items-center">
@@ -1119,7 +1122,7 @@
                                             <h4 class="mb-0 font-weight-bolder">Get Transactions By Id</h4>
                                             <span>
                                                 To get transactions by id a user is required to send a <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">GET</span> call to
-                                                <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/{id}</span> route.
+                                                <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/transactions/id/{id}</span> route.
                                                 This is protected via OAuth 2.0 so requires token to be sent in the header.
                                             </span>
                                         </div>
@@ -1138,7 +1141,7 @@
     <span class="text-danger font-weight-bolder">curl</span>
             <span class="text-secondary">--location</span>
             <span class="text-secondary">--request GET</span>
-                      <span class="text-success">'/api/transactions/3'</span>  \
+                      <span class="text-success">'/api/transactions/id/3'</span>  \
             <span class="text-secondary">--header</span>
                       <span class="text-success">'Authorization: Bearer TOKEN_GOES_HERE'</span>  \
                                                     </pre>
@@ -1152,10 +1155,9 @@
                                             <div id="api-transaction-id-two" class="collapse bg-light" aria-labelledby="transactionIdTwo" data-parent="#api-transaction-id-qna">
                                                 <div class="card-body shadow-none">
                                                       <pre class="py-2 font-weight-bolder">
-            <span class="text-secondary font-weight-bolder">[</span>
                         <span class="text-secondary font-weight-bolder">{</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
-                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span> 
+                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span>
                                 <span class="text-secondary">"ref_no"</span> <span class="text-danger">: </span> <span class="text-success">ABC123</span>
                                 <span class="text-secondary">"operator_id"</span> <span class="text-danger">: </span> <span class="text-success">793</span>
                                 <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">4</span>
@@ -1170,26 +1172,81 @@
                                 <span class="text-secondary">"id"</span> <span class="text-danger">: </span> <span class="text-success">3</span>
                                 <span class="text-secondary">"status"</span> <span class="text-danger">: </span> <span class="text-success">PENDING</span>
                                 <span class="text-secondary">"message"</span> <span class="text-danger">: </span> <span class="text-success">Transaction is paid. But its pending topup. Please wait a few minuites for the status to update.</span>
-                       <span class="text-secondary font-weight-bolder">}</span> 
+                       <span class="text-secondary font-weight-bolder">}</span>
+                                                    </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="api-gift_card_products" role="tabpanel" aria-labelledby="gift_card_products" aria-expanded="false">
+                                    <!-- icon and header -->
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-tag bg-light-primary mr-1">
+                                            <i class="feather icon-send"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-0 font-weight-bolder">Get Gift Card Products</h4>
+                                            <span>
+                                                To get all gift card products a user is required to send a <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">GET</span> call to
+                                                <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/gift_cards/products</span> route.
+                                                This is protected via OAuth 2.0 so requires token to be sent in the header.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- frequent answer and question  collapse  -->
+                                    <div class="collapse-margin collapse-icon mt-2" id="api-gift_card_products-qna">
+                                        <div class="card" style="box-shadow: none !important;">
+                                            <div class="card-header bg-custom" id="gift_card_productsOne" data-toggle="collapse" role="button" data-target="#api-gift_card_products-one" aria-expanded="false" aria-controls="api-gift_card_products-one">
+                                                <span class="lead collapse-title font-weight-bolder">Sample Request</span>
+                                            </div>
+
+                                            <div id="api-gift_card_products-one" class="collapse bg-light show" aria-labelledby="gift_card_productsOne" data-parent="#api-gift_card_products-qna">
+                                                <div class="card-body">
+                                                    <pre class="py-2 font-weight-bolder">
+    <span class="text-danger font-weight-bolder">curl</span>
+            <span class="text-secondary">--location</span>
+            <span class="text-secondary">--request GET</span>
+                      <span class="text-success">'/api/gift_cards/products'</span>  \
+            <span class="text-secondary">--header</span>
+                      <span class="text-success">'Authorization: Bearer TOKEN_GOES_HERE'</span>  \
+                                                    </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card" style="box-shadow: none !important;">
+                                            <div class="card-header bg-custom" id="gift_card_productsTwo" data-toggle="collapse" role="button" data-target="#api-gift_card_products-two" aria-expanded="false" aria-controls="api-gift_card_products-two">
+                                                <span class="lead collapse-title font-weight-bolder">Sample Response</span>
+                                            </div>
+                                            <div id="api-gift_card_products-two" class="collapse bg-light" aria-labelledby="gift_card_productsTwo" data-parent="#api-gift_card_products-qna">
+                                                <div class="card-body shadow-none">
+                                                      <pre class="py-2 font-weight-bolder">
+            <span class="text-secondary font-weight-bolder">[</span>
+                        <span class="text-secondary font-weight-bolder">{</span>
+                                <span class="text-secondary">"id"</span> <span class="text-danger">:</span> <span class="text-success">1</span>
+                                <span class="text-secondary">"title"</span> <span class="text-danger">:</span> <span class="text-success">1-800-PetSupplies</span>
+                                                          <span class="text-secondary">"is_global"</span> <span class="text-danger">:</span> <span class="text-success">0</span>
+                                                          <span class="text-secondary">"recipient_currency_code"</span> <span class="text-danger">:</span> <span class="text-success">USD</span>
+                                                          <span class="text-secondary">"sender_currency_code"</span> <span class="text-danger">:</span> <span class="text-success">CAD</span>
+                                                          <span class="text-secondary">"logo_urls"</span> <span class="text-danger">:</span> <span class="text-success">[</span>
+                                                          <span class="text-secondary"></span> <span class="text-danger"></span> <span class="text-success">"https://cdn.reloadly.com/giftcards/5daa2b8b-b1ad-4ca6-a34d-a7ce3c14dfaf.jpg"</span>
+                                                          <span class="text-secondary">"logo_urls"</span> <span class="text-danger">:</span> <span class="text-success">],</span>
+                                                          <span class="text-secondary">"country"</span> <span class="text-danger">:</span> <span class="text-success">{</span>
+                                                          <span class="text-secondary">"id"</span> <span class="text-danger">:</span> <span class="text-success">131</span>
+                                                          <span class="text-secondary">"iso"</span> <span class="text-danger">:</span> <span class="text-success">US</span>
+                                                          <span class="text-secondary">"name"</span> <span class="text-danger">:</span> <span class="text-success">United States</span>
+                                                          <span class="text-secondary">"currency_code"</span> <span class="text-danger">:</span> <span class="text-success">USD</span>
+                                                          <span class="text-secondary">"currency_name"</span> <span class="text-danger">:</span> <span class="text-success">US Dollar</span>
+                                                          <span class="text-secondary">"currency_symbol"</span> <span class="text-danger">:</span> <span class="text-success">$</span>
+                                                          <span class="text-secondary"></span> <span class="text-danger"></span> <span class="text-success">}</span>
+                                                          <span class="text-secondary">"amounts"</span> <span class="text-danger">:</span> <span class="text-success">{</span>
+                                                          <span class="text-secondary">"25.00"</span> <span class="text-danger">:</span> <span class="text-success">31.38</span>
+                                                          <span class="text-secondary">"50.00"</span> <span class="text-danger">:</span> <span class="text-success">62.15</span>
+                                                          <span class="text-secondary"></span> <span class="text-danger"></span> <span class="text-success">}</span>
+                       <span class="text-secondary font-weight-bolder">}</span>
                        <span class="text-secondary font-weight-bolder">,</span>
-                       <span class="text-secondary font-weight-bolder">{</span>
-                                <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
-                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span> 
-                                <span class="text-secondary">"ref_no"</span> <span class="text-danger">: </span> <span class="text-success">ABC123</span>
-                                <span class="text-secondary">"operator_id"</span> <span class="text-danger">: </span> <span class="text-success">793</span>
-                                <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">4</span>
-                                <span class="text-secondary">"topup"</span> <span class="text-danger">: </span> <span class="text-success">116.4314187</span>
-                                <span class="text-secondary">"amount"</span> <span class="text-danger">: </span> <span class="text-success">1.07</span>
-                                <span class="text-secondary">"number"</span> <span class="text-danger">: </span> <span class="text-success">123123123</span>
-                                <span class="text-secondary">"sender_currency"</span> <span class="text-danger">: </span> <span class="text-success">CAD</span>
-                                <span class="text-secondary">"receiver_currency"</span> <span class="text-danger">: </span> <span class="text-success">PKR</span>
-                                <span class="text-secondary">"is_local"</span> <span class="text-danger">: </span> <span class="text-success">false</span>
-                                <span class="text-secondary">"updated_at"</span> <span class="text-danger">: </span> <span class="text-success">2021-10-23T10:18:48.000000Z</span>
-                                <span class="text-secondary">"created_at"</span> <span class="text-danger">: </span> <span class="text-success">2021-10-23T10:18:47.000000Z</span>
-                                <span class="text-secondary">"id"</span> <span class="text-danger">: </span> <span class="text-success">3</span>
-                                <span class="text-secondary">"status"</span> <span class="text-danger">: </span> <span class="text-success">PENDING</span>
-                                <span class="text-secondary">"message"</span> <span class="text-danger">: </span> <span class="text-success">Transaction is paid. But its pending topup. Please wait a few minuites for the status to update.</span>
-                       <span class="text-secondary font-weight-bolder">}</span> 
 
             <span class="text-secondary font-weight-bolder">]</span>
                                                     </pre>
@@ -1198,9 +1255,168 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
-                                
+                                <div class="tab-pane" id="api-gift_card_products_id" role="tabpanel" aria-labelledby="gift_card_products_id" aria-expanded="false">
+                                    <!-- icon and header -->
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-tag bg-light-primary mr-1">
+                                            <i class="feather icon-send"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-0 font-weight-bolder">Get Gift Card Product By Id</h4>
+                                            <span>
+                                                To get gift card product by id a user is required to send a <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">GET</span> call to
+                                                <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/gift_cards/products/{id}</span> route.
+                                                This is protected via OAuth 2.0 so requires token to be sent in the header.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- frequent answer and question  collapse  -->
+                                    <div class="collapse-margin collapse-icon mt-2" id="api-gift_card_products-qna">
+                                        <div class="card" style="box-shadow: none !important;">
+                                            <div class="card-header bg-custom" id="gift_card_productsOne" data-toggle="collapse" role="button" data-target="#api-gift_card_products-one" aria-expanded="false" aria-controls="api-gift_card_products-one">
+                                                <span class="lead collapse-title font-weight-bolder">Sample Request</span>
+                                            </div>
+
+                                            <div id="api-gift_card_products-one" class="collapse bg-light show" aria-labelledby="gift_card_productsOne" data-parent="#api-gift_card_products-qna">
+                                                <div class="card-body">
+                                                    <pre class="py-2 font-weight-bolder">
+    <span class="text-danger font-weight-bolder">curl</span>
+            <span class="text-secondary">--location</span>
+            <span class="text-secondary">--request GET</span>
+                      <span class="text-success">'/api/gift_cards/products/1'</span>  \
+            <span class="text-secondary">--header</span>
+                      <span class="text-success">'Authorization: Bearer TOKEN_GOES_HERE'</span>  \
+                                                    </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card" style="box-shadow: none !important;">
+                                            <div class="card-header bg-custom" id="gift_card_productsTwo" data-toggle="collapse" role="button" data-target="#api-gift_card_products-two" aria-expanded="false" aria-controls="api-gift_card_products-two">
+                                                <span class="lead collapse-title font-weight-bolder">Sample Response</span>
+                                            </div>
+                                            <div id="api-gift_card_products-two" class="collapse bg-light" aria-labelledby="gift_card_productsTwo" data-parent="#api-gift_card_products-qna">
+                                                <div class="card-body shadow-none">
+                                                      <pre class="py-2 font-weight-bolder">
+                        <span class="text-secondary font-weight-bolder">{</span>
+                                <span class="text-secondary">"id"</span> <span class="text-danger">:</span> <span class="text-success">1</span>
+                                <span class="text-secondary">"title"</span> <span class="text-danger">:</span> <span class="text-success">1-800-PetSupplies</span>
+                                                          <span class="text-secondary">"is_global"</span> <span class="text-danger">:</span> <span class="text-success">0</span>
+                                                          <span class="text-secondary">"recipient_currency_code"</span> <span class="text-danger">:</span> <span class="text-success">USD</span>
+                                                          <span class="text-secondary">"sender_currency_code"</span> <span class="text-danger">:</span> <span class="text-success">CAD</span>
+                                                          <span class="text-secondary">"logo_urls"</span> <span class="text-danger">:</span> <span class="text-success">[</span>
+                                                          <span class="text-secondary"></span> <span class="text-danger"></span> <span class="text-success">"https://cdn.reloadly.com/giftcards/5daa2b8b-b1ad-4ca6-a34d-a7ce3c14dfaf.jpg"</span>
+                                                          <span class="text-secondary">"logo_urls"</span> <span class="text-danger">:</span> <span class="text-success">],</span>
+                                                          <span class="text-secondary">"country"</span> <span class="text-danger">:</span> <span class="text-success">{</span>
+                                                          <span class="text-secondary">"id"</span> <span class="text-danger">:</span> <span class="text-success">131</span>
+                                                          <span class="text-secondary">"iso"</span> <span class="text-danger">:</span> <span class="text-success">US</span>
+                                                          <span class="text-secondary">"name"</span> <span class="text-danger">:</span> <span class="text-success">United States</span>
+                                                          <span class="text-secondary">"currency_code"</span> <span class="text-danger">:</span> <span class="text-success">USD</span>
+                                                          <span class="text-secondary">"currency_name"</span> <span class="text-danger">:</span> <span class="text-success">US Dollar</span>
+                                                          <span class="text-secondary">"currency_symbol"</span> <span class="text-danger">:</span> <span class="text-success">$</span>
+                                                          <span class="text-secondary"></span> <span class="text-danger"></span> <span class="text-success">}</span>
+                                                          <span class="text-secondary">"amounts"</span> <span class="text-danger">:</span> <span class="text-success">{</span>
+                                                          <span class="text-secondary">"25.00"</span> <span class="text-danger">:</span> <span class="text-success">31.38</span>
+                                                          <span class="text-secondary">"50.00"</span> <span class="text-danger">:</span> <span class="text-success">62.15</span>
+                                                          <span class="text-secondary"></span> <span class="text-danger"></span> <span class="text-success">}</span>
+                       <span class="text-secondary font-weight-bolder">}</span>
+                                                    </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="api-order_gift_card" role="tabpanel" aria-labelledby="order_gift_card" aria-expanded="false">
+                                    <!-- icon and header -->
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-tag bg-light-primary mr-1">
+                                            <i class="feather icon-send"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="mb-0 font-weight-bolder">Order Gift Card Product</h4>
+                                            <span>
+                                                To order gift card product a user is required to send a <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">POST</span> call to
+                                                <span class="badge badge-pill badge-light-primary" style="border-radius: 0;">/api/gift_cards/order</span> route.
+                                                This is protected via OAuth 2.0 so requires token to be sent in the header.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- frequent answer and question  collapse  -->
+                                    <div class="collapse-margin collapse-icon mt-2" id="api-topup-qna">
+                                        <div class="card" style="box-shadow: none !important;">
+                                            <div class="card-header bg-custom" id="topupZero" data-toggle="collapse" role="button" data-target="#api-topup-zero" aria-expanded="true" aria-controls="api-topup-one">
+                                                <span class="lead collapse-title font-weight-bolder">Fields Supported</span>
+                                            </div>
+
+                                            <div id="api-topup-zero" class="collapse bg-light show" aria-labelledby="topupZero" data-parent="#api-topup-qna">
+                                                <div class="card-body">
+                                                    <ul class="list-style-square my-1">
+                                                        <li>product_id</li>
+                                                        <li>recipient_email</li>
+                                                        <li>amount</li>
+                                                        <li>ref</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card" style="box-shadow: none !important;">
+                                            <div class="card-header bg-custom" id="topupOne" data-toggle="collapse" role="button" data-target="#api-topup-one" aria-expanded="false" aria-controls="api-topup-one">
+                                                <span class="lead collapse-title font-weight-bolder">Sample Request</span>
+                                            </div>
+
+                                            <div id="api-topup-one" class="collapse bg-light" aria-labelledby="topupOne" data-parent="#api-topup-qna">
+                                                <div class="card-body">
+                                                    <pre class="py-2 font-weight-bolder">
+    <span class="text-danger font-weight-bolder">curl</span>
+            <span class="text-secondary">--location</span>
+            <span class="text-secondary">--request POST</span>
+                      <span class="text-success">'/api/gift_cards/order'</span>  \
+            <span class="text-secondary">--header</span>
+                      <span class="text-success">'Authorization: Bearer TOKEN_GOES_HERE'</span>  \
+            <span class="text-secondary">--form</span>
+                      <span class="text-success">'product_id=1'</span>  \
+            <span class="text-secondary">--form</span>
+                      <span class="text-success">'recipient_email="abc@email.com"'</span>  \
+            <span class="text-secondary">--form</span>
+                      <span class="text-success">'amount=31.38'</span>  \
+            <span class="text-secondary">--form</span>
+                      <span class="text-success">'ref="some_reference_to_Track"'</span>  \
+                                                    </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card" style="box-shadow: none !important;">
+                                            <div class="card-header bg-custom" id="topupTwo" data-toggle="collapse" role="button" data-target="#api-topup-two" aria-expanded="false" aria-controls="api-topup-two">
+                                                <span class="lead collapse-title font-weight-bolder">Sample Response</span>
+                                            </div>
+                                            <div id="api-topup-two" class="collapse bg-light" aria-labelledby="topupTwo" data-parent="#api-topup-qna">
+                                                <div class="card-body shadow-none">
+                                                      <pre class="py-2 font-weight-bolder">
+            <span class="text-secondary font-weight-bolder">{</span>
+                        <span class="text-success">"success"</span> <span class="text-danger">:</span> <span class="text-secondary font-weight-bolder">{</span>
+                                <span class="text-secondary">"message"</span> <span class="text-danger">:</span> <span class="text-success">Transaction created. It will be processed in a few minutes.</span>
+                                <span class="text-secondary">"transaction"</span> <span class="text-danger">: {</span>
+                                <span class="text-secondary">"email"</span> <span class="text-danger">: </span> <span class="text-success">abc@email.com</span>
+                                                          <span class="text-secondary">"invoice_id"</span> <span class="text-danger">: </span> <span class="text-success">32</span>
+                                                          <span class="text-secondary">"product_id"</span> <span class="text-danger">: </span> <span class="text-success">1</span>
+                                                          <span class="text-secondary">"sender_amount"</span> <span class="text-danger">: </span> <span class="text-success">31.38</span>
+                                                          <span class="text-secondary">"recipient_amount"</span> <span class="text-danger">: </span> <span class="text-success">25.00</span>
+                                                          <span class="text-secondary">"reference"</span> <span class="text-danger">: </span> <span class="text-success">some_reference_to_Track</span>
+                                                          <span class="text-secondary">"updated_at"</span> <span class="text-danger">: </span> <span class="text-success">2021-11-12T08:51:52.000000Z</span>
+                                                          <span class="text-secondary">"created_at"</span> <span class="text-danger">: </span> <span class="text-success">2021-11-12T08:51:51.000000Z</span>
+                                                          <span class="text-secondary">"id"</span> <span class="text-danger">: </span> <span class="text-success">10</span>
+                                                          <span class="text-secondary">"status"</span> <span class="text-danger">: </span> <span class="text-success">PENDING</span>
+                       <span class="text-secondary font-weight-bolder">}</span> <span class="text-secondary font-weight-bolder">,</span>
+
+            <span class="text-secondary font-weight-bolder">}</span>
+                                                    </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
