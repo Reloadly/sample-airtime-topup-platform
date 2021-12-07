@@ -174,9 +174,10 @@ class ApiController extends Controller
             $invoice->save();
             $topup['status'] = 'PENDING';
             $topup->save();
+            $topup->sendTopup();
             return response()->json([
                 'success' => [
-                    'message' => 'Transaction created. It will be processed in a few minutes',
+                    'message' => 'Transaction created. Please check internal transaction status for details.',
                     'transaction' => $topup->makeHidden(['user_id','file_entry_id','response'])
                 ]
             ],200);
