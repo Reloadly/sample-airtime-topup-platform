@@ -152,6 +152,7 @@ class TopupsController extends Controller
                 $invoice->save();
                 $topup['status'] = 'PENDING';
                 $topup->save();
+                $topup->sendTopup();
                 return response()->json([
                     'location' => '/topups/history',
                     'message' => 'Payment Success. Redirecting now.'
