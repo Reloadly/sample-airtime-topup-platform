@@ -124,10 +124,11 @@ class GiftCardProductsController extends Controller
             $invoice->save();
             $transaction['status'] = 'PENDING';
             $transaction->save();
+            $transaction->sendTransaction();
             return response()->json([
                 'success' => [
-                    'message' => 'Transaction created. It will be processed in a few minutes',
-                    'transaction' => $transaction->makeHidden(['user_id','product','recipient_currency_id','sender_currency_id','reloadly_fee'])
+                    'message' => 'Transaction created. Please check internal transaction details for more information.',
+                    'transaction' => $transaction->makeHidden(['user_id','product','recipient_currency_id','sender_currency_id','reloadly_fee','response','user'])
                 ]
             ]);
         }

@@ -58,16 +58,7 @@ class SyncGiftTransactions extends Command
         {
             $this->info(count($giftTransactions)." Reloadly Gift Transactions Found.");
             foreach ($giftTransactions as $reloadlyGiftCardTransaction){
-                $response = User::admin()->orderReloadlyGiftProducts($reloadlyGiftCardTransaction['product']['rid'],$reloadlyGiftCardTransaction['product']['country']['isoName'],1,$reloadlyGiftCardTransaction['recipient_amount'],$reloadlyGiftCardTransaction['reference'],$reloadlyGiftCardTransaction['user']['name'],$reloadlyGiftCardTransaction['email']);
-
-                if((isset($response->status)) && ($response->status === 'SUCCESSFUL')){
-                    $reloadlyGiftCardTransaction['transaction_id'] = $response->transactionId;
-                    $reloadlyGiftCardTransaction['status'] = 'SUCCESS';
-                }else{
-                    $reloadlyGiftCardTransaction['status'] = 'FAIL';
-                }
-                $reloadlyGiftCardTransaction['response'] = $response;
-                $reloadlyGiftCardTransaction->save();
+                $reloadlyGiftCardTransaction->sendTransaction();
             }
             $this->info(count($giftTransactions)." Transactions Synced !!!");
         });

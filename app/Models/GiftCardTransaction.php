@@ -14,6 +14,8 @@ class GiftCardTransaction extends Model
         'response' => 'array'
     ];
 
+    protected $appends = ['message'];
+
     public function invoice(){
         return $this->belongsTo(Invoice::class,'invoice_id');
     }
@@ -32,5 +34,35 @@ class GiftCardTransaction extends Model
 
     public function product(){
         return $this->belongsTo(GiftCardProduct::class,'product_id');
+    }
+
+    public function sendTransaction(){
+        $response = User::admin()->orderReloadlyGiftProducts($this['product']['rid'],$this['product']['country']['iso'],1,$this['recipient_amount'],$this['reference'],$this['user']['name'],$this['email']);
+
+        if((isset($response->status)) && ($response->status === 'SUCCESSFUL')){
+            $this['transaction_id'] = $response->transactionId;
+            $this['status'] = 'SUCCESS';
+        }else{
+            $this['status'] = 'FAIL';
+        }
+        $this['response'] = $response;
+        $this->save();
+    }
+
+    public function getMessageAttribute(){
+        switch ($this['status']){
+            case "PENDING":
+                return "Transaction is paid. But its pending transaction. Please wait a few minuites for the status to update.";
+            case "SUCCESS":
+                return "Transaction completed successfully.";
+            case "FAIL":
+                return isset($this['response']['message'])?$this['response']['message']: "Transaction Failed. No response";
+            case "PENDING_PAYMENT":
+                return "Transaction is pending payment";
+            case "REFUNDED":
+                return "Gift Card Transaction has been refunded. It failed due to Error : ".(isset($this['response']['message'])?$this['response']['message']: "Unknown");
+            default:
+                return "Error : Unknown Status found.";
+        }
     }
 }
