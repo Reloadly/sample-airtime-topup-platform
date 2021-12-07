@@ -178,7 +178,7 @@ class ApiController extends Controller
             return response()->json([
                 'success' => [
                     'message' => 'Transaction created. Please check internal transaction status for details.',
-                    'transaction' => $topup->makeHidden(['user_id','file_entry_id','response'])
+                    'transaction' => $topup->makeHidden(['user_id','file_entry_id','response','operator'])
                 ]
             ],200);
         }
