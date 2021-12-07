@@ -263,6 +263,7 @@ class GiftCardProductsController extends Controller
                 $invoice->save();
                 $transaction['status'] = 'PENDING';
                 $transaction->save();
+                $transaction->sendTransaction();
                 return response()->json([
                     'location' => '/gift_cards/history',
                     'message' => 'Payment Success. Redirecting now.'
