@@ -99,13 +99,13 @@ class AuthController extends Controller
             {
                 $user['2fa_mode'] = 'DISABLED';
                 $user->save();
-                return response()->json(['Errors' => ['Error' => 'Invalid Request.']],422);
+                return response()->json(['errors' => ['error' => 'Invalid Request.']],422);
             }
             return response()->json([
                 'message' => 'Please check OTP on Google Authenticator App.'
             ]);
         }else
-            return response()->json(['Errors' => ['Error' => 'Invalid Request.']],422);
+            return response()->json(['errors' => ['error' => 'Invalid Request.']],422);
     }
 
     public function tfaVerify(Request $request){
@@ -129,9 +129,9 @@ class AuthController extends Controller
                     'location' => $return
                 ]);
             }else
-                return response()->json(['Errors' => ['Error' => 'Invalid PIN']],422);
+                return response()->json(['errors' => ['error' => 'Invalid PIN']],422);
         }else
-            return response()->json(['Errors' => ['Error' => 'Invalid Request.']],422);
+            return response()->json(['errors' => ['error' => 'Invalid Request.']],422);
 
     }
 }

@@ -43,7 +43,7 @@ class WalletController extends Controller
     public function showModal($id){
         $reseller = User::find($id);
         if (!$reseller)
-            return response()->json(['Errors' => ['Error' => 'Reseller not found']],422);
+            return response()->json(['errors' => ['error' => 'Reseller not found']],422);
         return view('dashboard.wallet.add_balance',[
             'currency' => @Setting::get('reloadly_currency'),
             'reseller' => $reseller
@@ -68,7 +68,7 @@ class WalletController extends Controller
         if (!isset($user))
             return response()->json(['errors' => [ 'error' => 'User not found.']],422);
         if ($request['amount'] < 5)
-            return response()->json(['Errors' => ['Error' => 'Minimum Amount is 5.00']],422);
+            return response()->json(['errors' => ['error' => 'Minimum Amount is 5.00']],422);
 
         $invoice = Invoice::create([
             'user_id' => $user['id'],
@@ -88,10 +88,10 @@ class WalletController extends Controller
             'currency' => 'required'
         ]);
         if ($request['amount'] <= 0)
-            return response()->json(['Errors' => ['Error' => 'Amount should be greater than zero']],422);
+            return response()->json(['errors' => ['error' => 'Amount should be greater than zero']],422);
         $reseller = User::find($request['reseller_id']);
         if (!$reseller)
-            return response()->json(['Errors' => ['Error' => 'Reseller not found']],422);
+            return response()->json(['errors' => ['error' => 'Reseller not found']],422);
 
         $transaction = new AccountTransaction();
         $transaction['user_id'] = $reseller['id'];

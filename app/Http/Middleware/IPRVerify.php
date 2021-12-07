@@ -25,7 +25,7 @@ class IPRVerify
             return $next($request);
 
         if( $request->is('api/*')){
-            return response()->json(['Errors' => ['Error' => 'IP Address is not authorized for this actions.']],422);
+            return response()->json(['errors' => ['error' => 'IP Address is not authorized for this actions.']],422);
         }
 
         return redirect('/ip_address/blocked');

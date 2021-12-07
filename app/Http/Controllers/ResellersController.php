@@ -120,9 +120,9 @@ class ResellersController extends Controller
         if (!isset($user) || !isset($user['user_role']))
             return response()->json(['errors' => [ 'error' => 'User or User Role not found.']],422);
         if($user['user_role']['name'] != 'RESELLER')
-            return response()->json(['Errors' => ['Error' => 'Applicable for Resellers Only']],422);
+            return response()->json(['errors' => ['error' => 'Applicable for Resellers Only']],422);
         if (!$user)
-            return response()->json(['Errors' => ['Error' => 'User Not Found']],422);
+            return response()->json(['errors' => ['error' => 'User Not Found']],422);
 
         foreach ($request['operator_id'] as $key => $operatorId)
         {
@@ -205,7 +205,7 @@ class ResellersController extends Controller
     public function changeTFAStatus($id){
         $user = User::find($id);
         if(!$user)
-            return response()->json(['Errors' => ['Error' => "Sorry! User not found."]],422);
+            return response()->json(['errors' => ['error' => "Sorry! User not found."]],422);
 
         $user['2fa_mode'] = $user['2fa_mode']==='ENABLED'?'DISABLED':'ENABLED';
         $user->save();
@@ -218,7 +218,7 @@ class ResellersController extends Controller
     public function changeIPRStatus($id){
         $user = User::find($id);
         if(!$user)
-            return response()->json(['Errors' => ['Error' => "Sorry! User not found."]],422);
+            return response()->json(['errors' => ['error' => "Sorry! User not found."]],422);
 
         $user['ip_restriction'] = $user['ip_restriction']==='ENABLED'?'DISABLED':'ENABLED';
         $user->save();

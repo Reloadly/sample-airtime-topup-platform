@@ -16,7 +16,7 @@ class IpRestrictionController extends Controller
     {
         $user = Auth::user();
         if (!$user)
-            return response()->json(['Errors' => ['Error' => 'Authentication Failed']],422);
+            return response()->json(['errors' => ['error' => 'Authentication Failed']],422);
         return view('dashboard.ips.home', [
             'page' => [
                 'type' => 'dashboard'
@@ -48,7 +48,7 @@ class IpRestrictionController extends Controller
         ]);
         $user = Auth::user();
         if (!$user)
-            return response()->json(['Errors' => ['Error' => 'Authentication Failed']],422);
+            return response()->json(['errors' => ['error' => 'Authentication Failed']],422);
         $ip = $user->ips()->find($request['id']);
         if ($ip === null){
             $ip = new IpAddress();
@@ -109,7 +109,7 @@ class IpRestrictionController extends Controller
     {
         $user = Auth::user();
         if (!$user)
-            return response()->json(['Errors' => ['Error' => 'Authentication Failed']],422);
+            return response()->json(['errors' => ['error' => 'Authentication Failed']],422);
 
         $ip = $user->ips()->find($id);
         if (!$ip)
@@ -120,7 +120,7 @@ class IpRestrictionController extends Controller
     public function changeStatus(Request $request){
         $user = Auth::user();
         if (!$user)
-            return response()->json(['Errors' => ['Error' => 'Authentication Failed']],422);
+            return response()->json(['errors' => ['error' => 'Authentication Failed']],422);
         $user['ip_restriction'] = $user['ip_restriction']==='ENABLED'?'DISABLED':'ENABLED';
         $user->save();
         return response()->json([

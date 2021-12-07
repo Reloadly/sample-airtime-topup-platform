@@ -94,7 +94,7 @@ class ProfileController extends Controller
 
     public function changeTwoFAStatus(Request $request){
         if (!Auth::user()->hasPermission('UPDATE'))
-            return response()->json(['Errors' => ['Error' => 'Unauthorized Access.']],422);
+            return response()->json(['errors' => ['error' => 'Unauthorized Access.']],422);
 
         if (isset($request['user_id']))
             $user = User::find($request['user_id']);

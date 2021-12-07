@@ -71,7 +71,7 @@ class SettingsController extends Controller
 
         $token = Auth::user()->getToken();
         if ($token === null)
-            return response()->json([ 'errors' => ['Error' => 'Api Auth Failed. Please Check Key/Secret and try again.']],422);
+            return response()->json([ 'errors' => ['error' => 'Api Auth Failed. Please Check Key/Secret and try again.']],422);
         Setting::set('reloadly_api_token',@$token,'STRING');
 
     }

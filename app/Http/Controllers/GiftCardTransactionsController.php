@@ -24,7 +24,7 @@ class GiftCardTransactionsController extends Controller
 
     public function getFailedDetail($id){
         if (!Auth::user()->hasPermission('READ'))
-            return response()->json(['Errors' => ['Error' => 'Unauthorized Access.']],422);
+            return response()->json(['errors' => ['error' => 'Unauthorized Access.']],422);
         return view('dashboard.gift_cards.history.failed',[
             'transaction' => GiftCardTransaction::find($id)
         ]);
@@ -32,7 +32,7 @@ class GiftCardTransactionsController extends Controller
 
     public function getSuccessDetail($id){
         if (!Auth::user()->hasPermission('READ'))
-            return response()->json(['Errors' => ['Error' => 'Unauthorized Access.']],422);
+            return response()->json(['errors' => ['error' => 'Unauthorized Access.']],422);
         return view('dashboard.gift_cards.history.redeem',[
             'transaction' => GiftCardTransaction::find($id)
         ]);

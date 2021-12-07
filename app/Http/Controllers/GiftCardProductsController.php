@@ -21,7 +21,7 @@ class GiftCardProductsController extends Controller
 {
     public function index(Request $request){
         if (!Auth::user()->hasPermission('READ'))
-            return response()->json(['Errors' => ['Error' => 'Unauthorized Access.']],422);
+            return response()->json(['errors' => ['error' => 'Unauthorized Access.']],422);
         return view('dashboard.gift_cards.home',[
             'page' => [
                 'type' => 'dashboard'
@@ -76,10 +76,10 @@ class GiftCardProductsController extends Controller
 
         $senderCurrency = Currency::where('abbr', $product['sender_currency_code'])->first();
         if (!$senderCurrency)
-            return response()->json(['errors' => ['Error' => 'Sender Currency not found!']],401);
+            return response()->json(['errors' => ['error' => 'Sender Currency not found!']],401);
         $recipientCurrency = Currency::where('abbr', $product['recipient_currency_code'])->first();
         if (!$recipientCurrency)
-            return response()->json(['errors' => ['Error' => 'Recipient Currency not found!']],401);
+            return response()->json(['errors' => ['error' => 'Recipient Currency not found!']],401);
 
         $amount = $product['fixed_denominations_map'][$paymentIndex] + $product['sender_fee'];
         if (isset($product['pivot']['discount']))
@@ -171,7 +171,7 @@ class GiftCardProductsController extends Controller
         else
             $giftCard = GiftCardProduct::with('country')->find($id);
         if (!$giftCard)
-            return response()->json(['Errors' => ['Error' => 'Biller Not Found!']]);
+            return response()->json(['errors' => ['error' => 'Biller Not Found!']]);
         $user = Auth::user();
         if ($user && $user['user_role_id'] === 3)
             $customerRate = Setting::get('customer_rate') ?: 0;
@@ -206,13 +206,13 @@ class GiftCardProductsController extends Controller
         else
             $giftCard = GiftCardProduct::find($request['gift_id']);
         if (!$giftCard)
-            return response()->json(['errors' => ['Error' => 'Biller not found!']],401);
+            return response()->json(['errors' => ['error' => 'Biller not found!']],401);
         $senderCurrency = Currency::where('abbr', $giftCard['sender_currency_code'])->first();
         if (!$senderCurrency)
-            return response()->json(['errors' => ['Error' => 'Sender Currency not found!']],401);
+            return response()->json(['errors' => ['error' => 'Sender Currency not found!']],401);
         $recipientCurrency = Currency::where('abbr', $giftCard['recipient_currency_code'])->first();
         if (!$recipientCurrency)
-            return response()->json(['errors' => ['Error' => 'Recipient Currency not found!']],401);
+            return response()->json(['errors' => ['error' => 'Recipient Currency not found!']],401);
 
         $amount = $giftCard['fixed_sender_denominations'][$paymentIndex] + $giftCard['sender_fee'];
 

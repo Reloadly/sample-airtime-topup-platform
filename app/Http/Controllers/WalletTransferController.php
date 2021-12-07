@@ -28,22 +28,22 @@ class WalletTransferController extends Controller
         $user = User::find($request['user']);
         $me = Auth::user();
         if (!isset($user) || !isset($me))
-            return response()->json(['Errors' => ['Error' => 'User Not Found']],422);
+            return response()->json(['errors' => ['error' => 'User Not Found']],422);
         $amount = doubleval($request['amount']);
         if ($amount <= 0)
-            return response()->json(['Errors' => ['Error' => 'Amount should be greater than zero']],422);
+            return response()->json(['errors' => ['error' => 'Amount should be greater than zero']],422);
         if ($me['id'] === $user['id'])
-            return response()->json(['Errors' => ['Error' => 'Cannot transfer to self']],422);
+            return response()->json(['errors' => ['error' => 'Cannot transfer to self']],422);
         $fee = 0;
         $system = System::me();
         if (isset($me['user_role']) && ($me['user_role']['name'] !== "ADMIN") ){
             if ($me['balance_value'] < $amount)
-                return response()->json(['Errors' => ['Error' => 'Insufficient Balance for Transfer']],422);
+                return response()->json(['errors' => ['error' => 'Insufficient Balance for Transfer']],422);
             if (!isset($me['stripe_response']['currency']))
-                return response()->json(['Errors' => ['Error' => 'Invalid Currency for Wallet Found.']],422);
+                return response()->json(['errors' => ['error' => 'Invalid Currency for Wallet Found.']],422);
             $response = System::StripeTransferBalance($me,$amount,$me['stripe_response']['currency'],'Transferred to '.$user['username']);
             if (!$response)
-                return response()->json(['Errors' => ['Error' => 'Transfer Failed. Unable to deduct from Wallet']],422);
+                return response()->json(['errors' => ['error' => 'Transfer Failed. Unable to deduct from Wallet']],422);
             $fee = $user['user_role']['name'] === "CLIENT"?$system['wtw_customer_fee']:$system['wtw_reseller_fee'];
         }
         $meCurrency = Currency::where('code',$me['stripe_response']['currency'])->first();
@@ -59,7 +59,7 @@ class WalletTransferController extends Controller
 
         $response = System::StripeTransferBalance($user,-$amount,$currency['code'],'Received from '.$me['username']);
         if (!$response)
-            return response()->json(['Errors' => ['Error' => 'Transfer Failed. Unable to send Transfer.']],422);
+            return response()->json(['errors' => ['error' => 'Transfer Failed. Unable to send Transfer.']],422);
         return response()->json([
             'message' => 'Transfer Successful',
             'location' => 'transfer'
