@@ -36,6 +36,8 @@ class GiftCardProductsController extends Controller
             return response()->json(['errors' => ['error' => 'User not found.']], 422);
         }
         $products = $user->gift_cards()->with('country')->get();
+        if (!$products)
+            return response()->json(['errors' => ['error' => 'Transaction Not Found.']], 422);
         $products->makeHidden(['rid','fixed_sender_denominations','sender_fee','fixed_denominations_map','pivot','country_id','discount_percentage','brand','created_at','updated_at','min_recipient_denomination','max_recipient_denomination','denomination_type','min_sender_denomination','max_sender_denomination','fixed_recipient_denominations']);
         return response()->json($products);
     }
@@ -45,6 +47,8 @@ class GiftCardProductsController extends Controller
             return response()->json(['errors' => ['error' => 'User not found.']], 422);
         }
         $products = $user->gift_cards()->with('country')->find($id);
+        if (!$products)
+            return response()->json(['errors' => ['error' => 'Transaction Not Found.']], 422);
         $products->makeHidden(['rid','fixed_sender_denominations','sender_fee','fixed_denominations_map','pivot','country_id','discount_percentage','brand','created_at','updated_at','min_recipient_denomination','max_recipient_denomination','denomination_type','min_sender_denomination','max_sender_denomination','fixed_recipient_denominations','fixed_sender_denominations']);
         return response()->json($products);
     }

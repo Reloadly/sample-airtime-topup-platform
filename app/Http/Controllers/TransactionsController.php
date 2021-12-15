@@ -55,6 +55,8 @@ class TransactionsController extends Controller
         if (!$user)
             return response()->json(['errors' => ['error' => 'Unauthorized Access']],422);
         $topups = $user->topups()->where('ref_no',$ref)->first();
+        if (!$topups)
+            return response()->json(['errors' => ['error' => 'Transaction Not Found.']],422);
         $topups->makeHidden(['user_id','file_entry_id','response']);
         return response()->json($topups);
     }
@@ -70,6 +72,8 @@ class TransactionsController extends Controller
         if (!$user)
             return response()->json(['errors' => ['error' => 'Unauthorized Access']],422);
         $topups = $user->topups()->Where('id',$id)->first();
+        if (!$topups)
+            return response()->json(['errors' => ['error' => 'Transaction Not Found.']],422);
         $topups->makeHidden(['user_id','file_entry_id','response']);
         return response()->json($topups);
     }
