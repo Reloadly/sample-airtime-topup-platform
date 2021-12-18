@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sync:topups')->withoutOverlapping(30);
         $schedule->command('sync:gift_transactions')->withoutOverlapping(30);
         $schedule->command('sync:topup_discounts')->everyMinute()->withoutOverlapping(30);
-        $schedule->command('sync:token')->daily();
+        $schedule->command('sync:token')->hourly();
         $schedule->command('process:files')->runInBackground()->withoutOverlapping(30);
         $schedule->command('sync:countries')->daily();
         $schedule->command('sync:operators')->daily();
