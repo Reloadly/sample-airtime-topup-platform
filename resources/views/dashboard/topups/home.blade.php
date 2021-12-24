@@ -20,7 +20,7 @@
                                 <h5 class="mb-0">Status : </h5>
                                 <div class="col-auto pr-0">
                                     <select class="form-control" name="status">
-                                        <option value="all" {{ isset($_GET['status']) && $_GET['status'] === "all" ? 'selected' : '' }}>All</option>
+                                        <option value="all" {{ isset($_GET['status']) && $_GET['status'] === "All" ? 'selected' : '' }}>All</option>
                                         <option value="SUCCESS" {{ isset($_GET['status']) && $_GET['status'] === "SUCCESS" ? 'selected' : '' }}>Success</option>
                                         <option value="PENDING" {{ isset($_GET['status']) && $_GET['status'] === "PENDING" ? 'selected' : '' }}>Pending</option>
                                         <option value="FAIL" {{ isset($_GET['status']) && $_GET['status'] === "FAIL" ? 'selected' : '' }}>Failed</option>
