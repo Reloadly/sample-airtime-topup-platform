@@ -5,6 +5,7 @@
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="/css/pages/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
 
 @section('content')
@@ -12,8 +13,31 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header justify-content-center align-items-center">
+                    <div class="card-header justify-content-between align-items-center">
                         <h4 class="card-title"><i class="feather icon-codepen"></i> Topup History</h4>
+                        <div class="col">
+                            <div class="row justify-content-end align-items-center">
+                                <h5 class="mb-0">Status : </h5>
+                                <div class="col-auto pr-0">
+                                    <select class="form-control" name="status">
+                                        <option value="all" {{ isset($_GET['status']) && $_GET['status'] === "all" ? 'selected' : '' }}>All</option>
+                                        <option value="SUCCESS" {{ isset($_GET['status']) && $_GET['status'] === "SUCCESS" ? 'selected' : '' }}>Success</option>
+                                        <option value="PENDING" {{ isset($_GET['status']) && $_GET['status'] === "PENDING" ? 'selected' : '' }}>Pending</option>
+                                        <option value="FAIL" {{ isset($_GET['status']) && $_GET['status'] === "FAIL" ? 'selected' : '' }}>Failed</option>
+                                        <option value="REFUNDED" {{ isset($_GET['status']) && $_GET['status'] === "REFUNDED" ? 'selected' : '' }}>Refunded</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto pr-0">
+                                    <button id="reportrange" class="btn btn-secondary">
+                                        <i class="fa fa-calendar"></i>&nbsp;
+                                        <span></span> <i class="fa fa-caret-down"></i>
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <button id="filter" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-content">
                         <div class="card-body card-dashboard">
@@ -123,6 +147,8 @@
     <script src="/js/datatable/buttons.print.min.js"></script>
     <script src="/js/datatable/buttons.bootstrap.min.js"></script>
     <script src="/js/datatable/datatables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
         $('.zero-configuration').DataTable({
             dom: "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -174,6 +200,39 @@
                     });
                 }
             });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+
+            var start = {!! isset($_GET['start'])?"moment('".$_GET['start']."')":"moment().startOf('month')"  !!};
+            var end = {!! isset($_GET['end'])?"moment('".$_GET['end']."')":"moment().endOf('month')"  !!};
+
+            function cb(s, e) {
+                start = s;
+                end = e;
+                $('#reportrange span').html(start.format('MMM D') + ' - ' + end.format('MMM D'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+
+            cb(start, end);
+
+            $('#filter').click(function () {
+                window.location = 'history?start='+start.format('YYYY-MM-DD')+'&end='+end.format('YYYY-MM-DD')+'&status='+$('select[name="status"]').val();
+            });
+
         });
     </script>
 
