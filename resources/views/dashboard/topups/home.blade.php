@@ -46,6 +46,11 @@
                                     <thead>
                                     <tr>
                                         <th>Timestamp</th>
+                                        @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
+                                            <th>User ID</th>
+                                            <th>User Email</th>
+                                            <th>Reloadly Id</th>
+                                        @endif
                                         <th>Topup ID</th>
                                         <th>Is Local</th>
                                         <th>Operator</th>
@@ -62,6 +67,11 @@
                                     @foreach($topups as $topup)
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($topup['created_at'])->format('Y-m-d H:m') }}</td>
+                                        @if(\Illuminate\Support\Facades\Auth::user()['user_role_id'] === 1 OR \Illuminate\Support\Facades\Auth::user()['user_role_id'] === 2)
+                                            <td>{{ $topup['user']['id'] }}</td>
+                                            <td>{{ $topup['user']['email'] }}</td>
+                                            <td>{{ isset($topup['response']['transactionId'])?$topup['response']['transactionId']:"" }}</td>
+                                        @endif
                                         <td>{{ $topup['id'] }}</td>
                                         <td>
                                             @if($topup['is_local'])
