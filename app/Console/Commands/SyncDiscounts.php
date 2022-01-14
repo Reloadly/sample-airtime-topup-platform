@@ -52,27 +52,26 @@ class SyncDiscounts extends Command
             $this->info("Fetch Success !!!");
             $page++;
             $this->line("Syncing with Database");
-            //print_r($response->content);
-            foreach ($response->content as $discount){
-                if (@$discount->operator->operatorId){
-                    $operatorId = Operator::where('rid',$discount->operator->operatorId)->first()['id'];
+            foreach ($response['content'] as $discount){
+                if (isset($discount['operator']['operatorId'])){
+                    $operatorId = Operator::where('rid',$discount['operator']['operatorId'])->first()['id'];
                     if($operatorId) {
                         Discount::updateOrCreate(
-                            ['rid' => @$discount->operator->operatorId],
+                            ['rid' => $discount['operator']['operatorId']],
                             [
-                                'rid' => $discount->operator->operatorId,
+                                'rid' => $discount['operator']['operatorId'],
                                 'operator_id' => $operatorId,
-                                'percentage' => $discount->percentage,
-                                'international_percentage' => $discount->internationalPercentage,
-                                'local_percentage' => $discount->localPercentage,
-                                'updated_at' => $discount->updatedAt
+                                'percentage' => $discount['percentage'],
+                                'international_percentage' => $discount['internationalPercentage'],
+                                'local_percentage' => $discount['localPercentage'],
+                                'updated_at' => $discount['updatedAt']
                             ]
                         );
                     }
                 }
             }
-            $this->info("Sync Completed For ".sizeof($response->content)." Discounts");
-        }while($response->totalPages >= $page);
+            $this->info("Sync Completed For ".count($response['content'])." Discounts");
+        }while($response['totalPages'] >= $page);
         $this->line("****************************************************************");
         $this->info("All Discounts Synced !!! ");
         $this->line("****************************************************************");
