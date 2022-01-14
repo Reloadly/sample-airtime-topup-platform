@@ -73,7 +73,22 @@ export default {
         },500);
     },
     watch: {
-
+        selectedCountry: function () {
+            this.isLoading = true;
+            axios.get('/gift_cards/countries/'+this.selectedCountry.id+"/products").then(response => {
+                this.selectedCountry.gifts = response.data;
+                this.isLoading = false;
+            }).catch(error => {
+                this.isLoading = false;
+                let errors = error.response.data.errors;
+                if (errors)
+                    for (let e in errors)
+                        if (errors[e])
+                            toastr.error(errors[e]);
+                        else
+                            toastr.error('Server Error, Please contact admin');
+            });
+        }
     },
     components: {
         Loading

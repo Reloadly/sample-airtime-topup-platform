@@ -152,8 +152,11 @@ class GiftCardProductsController extends Controller
 
     public function products()
     {
-        $countryIds = GiftCardProduct::pluck('country_id');
         $user = Auth::user();
+        if ($user && ($user['user_role_id'] === 2 || $user['user_role_id'] === 3))
+            $countryIds = $user->gift_cards()->pluck('country_id');
+        else
+            $countryIds = GiftCardProduct::pluck('country_id');
         if ($user && $user['user_role_id'] === 3)
             $customerRate = Setting::get('customer_rate') ?: 0;
         else
@@ -162,10 +165,19 @@ class GiftCardProductsController extends Controller
             'page' => [
                 'type' => 'dashboard'
             ],
-            'countries' => Country::whereIn('id',$countryIds)->with('gifts')->orderBy('name')->get(),
+            'countries' => Country::whereIn('id',$countryIds)->orderBy('name')->get(),
             'token' => $user->createToken('Token')->accessToken,
             'customerRate' => $customerRate
         ]);
+    }
+
+    public function getProductsForCountryId($id){
+        $user = Auth::user();
+        if ($user && ($user['user_role_id'] === 2 || $user['user_role_id'] === 3))
+            $products = $user->gift_cards()->where('country_id',$id)->get();
+        else
+            $products = GiftCardProduct::where('country_id',$id)->get();
+        return response()->json($products);
     }
 
     public function showGiftCard($id)
@@ -176,7 +188,7 @@ class GiftCardProductsController extends Controller
         else
             $giftCard = GiftCardProduct::with('country')->find($id);
         if (!$giftCard)
-            return response()->json(['errors' => ['error' => 'Biller Not Found!']]);
+            return response()->json(['errors' => ['error' => 'Biller Not Available!']]);
         $user = Auth::user();
         if ($user && $user['user_role_id'] === 3)
             $customerRate = Setting::get('customer_rate') ?: 0;
