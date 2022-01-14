@@ -189,6 +189,7 @@ Route::middleware(['auth','tfa','ipr'])->group(function () {
 
     Route::get('/gift_cards/gift_cards',[GiftCardProductsController::class,"index"]);
     Route::get('/gift_cards/order',[GiftCardProductsController::class,"products"]);
+    Route::get('/gift_cards/countries/{id}/products',[GiftCardProductsController::class,"getProductsForCountryId"]);
     Route::get('/gift_cards/show/{id}',[GiftCardProductsController::class,"showGiftCard"]);
     Route::get('/gift_cards/history',[GiftCardTransactionsController::class,"index"]);
     Route::post('gift_cards/gift_cards/sync', [GiftCardProductsController::class,'sync']);

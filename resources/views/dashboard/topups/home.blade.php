@@ -114,6 +114,9 @@
                                                 @case('PENDING_PAYMENT')
                                                 <div class="badge badge-pill badge-secondary">Pending Payment</div>
                                                 @break
+                                                @case('PROCESSING')
+                                                <div class="badge badge-pill badge-secondary">Processing</div>
+                                                @break
                                                 @case('REFUNDED')
                                                 <button class="btn btn-sm round btn-black" data-toggle="modal-feed" data-target="#modal_lg" data-feed="history/{{ $topup['id'] }}/failed">Refunded</button>
                                                 @break

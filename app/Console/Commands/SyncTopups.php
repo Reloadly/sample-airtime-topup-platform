@@ -45,7 +45,7 @@ class SyncTopups extends Command
         $this->info("Started Sync of Topups");
         $this->line("****************************************************************");
         $this->line("Getting Topups that are PENDING");
-        Topup::where('status','PENDING')->chunk(100, function($topups)
+        Topup::whereIn('status',['PENDING','PROCESSING'])->chunk(100, function($topups)
         {
             $this->info(sizeof($topups)." Topups Found.");
             foreach ($topups as $topup){

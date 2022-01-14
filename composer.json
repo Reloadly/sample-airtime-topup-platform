@@ -9,6 +9,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -18,12 +20,11 @@
         "lcobucci/jwt": "3.3.1",
         "league/oauth2-server": "8.1",
         "otifsolutions/aclmenu": "^1.0",
+        "otifsolutions/curl-handler": "^1.0",
         "otifsolutions/laravel-forcessl": "^1.0",
         "otifsolutions/laravel-settings": "^1.0",
         "paypal/paypal-checkout-sdk": "^1.0",
-        "stripe/stripe-php": "^7.62",
-      "ext-json": "*",
-        "ext-curl": "*"
+        "stripe/stripe-php": "^7.62"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
