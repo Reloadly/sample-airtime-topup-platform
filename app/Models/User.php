@@ -63,7 +63,7 @@ class User extends Authenticatable
     }
 
     public function account_transactions(){
-        return $this->hasMany('App\Models\AccountTransaction');
+        return $this->hasMany('App\Models\AccountTransaction')->orderBy('created_at');
     }
 
     public function getBalanceValueAttribute(){
