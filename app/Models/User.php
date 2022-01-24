@@ -63,11 +63,11 @@ class User extends Authenticatable
     }
 
     public function account_transactions(){
-        return $this->hasMany('App\Models\AccountTransaction')->orderBy('created_at');
+        return $this->hasMany('App\Models\AccountTransaction')->orderBy('id');
     }
 
     public function getBalanceValueAttribute(){
-        return $this->account_transactions()->orderBy('created_at','DESC')->first()['ending_balance'];
+        return $this->account_transactions()->orderBy('id','DESC')->first()['ending_balance'];
     }
 
     public function topups(){

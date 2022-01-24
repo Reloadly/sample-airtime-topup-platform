@@ -40,7 +40,7 @@ class ReCalculateAccountBalances extends Command
     {
         $users = User::where('user_role_id',2)->with('account_transactions')->get();
         $this->withProgressBar($users,function ($user){
-            $transactions = $user['account_transactions']->sortBy('created_at');
+            $transactions = $user['account_transactions']->sortBy('id');
             $balance = 0;
             foreach ($transactions as $transaction){
                 if ($transaction['type'] === "CREDIT")
