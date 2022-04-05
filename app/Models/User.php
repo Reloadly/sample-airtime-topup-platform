@@ -47,7 +47,7 @@ class User extends Authenticatable
     ];
 
     public static function admin(){
-        return User::first();
+        return self::first();
     }
 
     public function invoices(){
@@ -63,11 +63,12 @@ class User extends Authenticatable
     }
 
     public function account_transactions(){
-        return $this->hasMany('App\Models\AccountTransaction')->orderBy('id');
+        return $this->hasMany('App\Models\AccountTransaction')->orderBy('id','DESC');
     }
 
     public function getBalanceValueAttribute(){
-        return $this->account_transactions()->orderBy('id','DESC')->first()['ending_balance'];
+        $balanceItem = $this->account_transactions()->orderBy('id','DESC')->first();
+        return $balanceItem? $balanceItem['ending_balance'] : 0;
     }
 
     public function topups(){

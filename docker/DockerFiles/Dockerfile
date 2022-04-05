@@ -1,6 +1,6 @@
-FROM php:7.3-apache
+FROM php:8.1.2-apache
 
-# Environment variables that can be changed on runtime
+# Environment variables
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -9,17 +9,16 @@ ENV APPLICATION_USER "application"
 ENV APPLICATION_USER_ID "1000"
 ENV APPLICATION_GROUP "application"
 ENV APPLICATION_GROUP_ID "1000"
-
-# Environment variables that cannot (yet?) be changed on runtime
-ENV NODE_VERSION=14.3.0
+ENV NODE_VERSION=16.14.0
+ENV NVM_VERSION=v0.39.1
 ENV NVM_DIR=/usr/local/nvm
 ENV PATH ${PATH}:${APP_ROOT}/bin:${APP_ROOT}/scripts:${APP_ROOT}/app
 
 RUN a2enmod rewrite expires include deflate proxy headers ssl
 RUN a2ensite default-ssl
 RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man7/
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
         sshpass \
         libpng-dev \
         libjpeg-dev \
@@ -55,52 +54,48 @@ RUN apt-get update \
         mariadb-client \
         postgresql-client \
         ssl-cert \
-        cron \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1 \
-    && ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
+        cron
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+RUN ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
     && ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so \
     && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
-    && rm -rf /var/lib/apt/lists/* \
-    && pecl install imagick-beta \
-    && pecl install mcrypt-1.0.3 \
-    && pecl install xdebug \
-    && docker-php-ext-configure gd \
-        --with-gd \
-        --with-webp-dir \
-        --with-jpeg-dir \
-        --with-png-dir \
-        --with-zlib-dir \
-        --with-xpm-dir \
-        --with-freetype-dir \
-    && docker-php-ext-install gd \
-        mysqli \
-        opcache \
-        pdo \
-        pdo_mysql \
-        pdo_pgsql \
-        pgsql \
-        ldap \
-        intl \
-        gmp \
-        zip \
-        bcmath \
-        mbstring \
-        pcntl \
-        xml \
-        simplexml \
-        exif \
-        sockets \
-        soap \
-        sysvsem \
-    && docker-php-ext-enable imagick mcrypt \
-    && make-ssl-cert generate-default-snakeoil
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
+RUN docker-php-ext-configure gd \
+    --with-webp \
+    --with-jpeg \
+    --with-xpm \
+    --with-freetype
+RUN docker-php-ext-install gd \
+    mysqli \
+    opcache \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    pgsql \
+    ldap \
+    intl \
+    gmp \
+    zip \
+    bcmath \
+    pcntl \
+    xml \
+    simplexml \
+    exif \
+    soap \
+    sysvsem
+#add sockets to above command after 8.1.3 this bellow command is a workaround to an open issue with php 8.1.2
+RUN CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install sockets
+RUN make-ssl-cert generate-default-snakeoil
 
 COPY ./docker/etc/motd /etc/motd
 COPY ./docker/etc/vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY ./docker/etc/vhost-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 COPY ./docker/etc/init_container.sh /bin/
 
-RUN docker-php-ext-enable xdebug
 RUN chmod 777 /var/log \
     && chmod 777 /var/run \
     && chmod 777 /var/lock \
@@ -130,7 +125,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Install nodejs / npm via nvm
 RUN mkdir -p $NVM_DIR \
-    && curl https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | bash \
+    && curl https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
@@ -148,6 +143,13 @@ RUN echo | tee -a /etc/skel/.bashrc >> /etc/bash.bashrc \
 # Create user
 RUN groupadd -g $APPLICATION_GROUP_ID $APPLICATION_GROUP \
     && useradd -m -s /bin/bash -u $APPLICATION_USER_ID -g $APPLICATION_GROUP $APPLICATION_USER
+
+# SSL CERTIFICATE FOR HTTPS
+
+RUN mkdir /etc/apache2/ssl \
+    && openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj \
+    "/C=PK/ST=PUNJAB/L=LAHORE/O=OTIF Solutions/CN=localhost" \
+    -keyout /etc/apache2/ssl/ssl.key -out /etc/apache2/ssl/ssl.crt
 
 WORKDIR ${APP_ROOT}
 

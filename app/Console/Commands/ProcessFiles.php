@@ -39,8 +39,11 @@ class ProcessFiles extends Command
     public function handle()
     {
         $files = File::where('status','PROCESSING')->get();
-        foreach ($files as $file)
-            if ($file['is_valid'])
+        $this->withProgressBar($files,function ($file){
+            if ($file['is_valid']) {
                 $file->processNumbers();
+            }
+        });
+
     }
 }

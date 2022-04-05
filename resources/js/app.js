@@ -5,7 +5,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-window.Vue = require('vue');
+window.Vue = require('vue').default;
 
 axios = require('axios');
 

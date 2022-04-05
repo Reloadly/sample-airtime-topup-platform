@@ -12,47 +12,51 @@ class File extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public function getIsValidAttribute(){
+    public function getIsValidAttribute(): bool
+    {
         $lines = explode(PHP_EOL, Storage::get($this['path'].'/'.$this['name']));
         $count = 0;
         foreach ($lines as $line) {
-            $line = str_replace("\r","",$line);
-            $line = str_replace("+","",$line);
-            $line = str_replace(" ","",$line);
-            if ($line == '' || $line == 'CountryCode,PhoneNumber,IsLocal,Amount') continue;
+            $line = str_replace(array("\r", "+", " "), "", $line);
+            if ($line === '' || $line === 'CountryCode,PhoneNumber,IsLocal,Amount') continue;
             $item = explode(',',$line);
-            if (sizeof($item) != 4) continue;
-            else
-                $count++;
+            if (count($item) !== 4) {
+                continue;
+            }
+
+            $count++;
         }
-        if ($count !== 0)
+        if ($count !== 0) {
             return true;
-        else{
-            $this['status'] = 'INVALID';
-            $this->save();
-            return false;
         }
+
+        $this['status'] = 'INVALID';
+        $this->save();
+        return false;
     }
 
-    public function processNumbers(){
+    /**
+     * @throws \Exception
+     */
+    public function processNumbers(): void
+    {
         if ($this['status'] !== 'PROCESSING') return;
         $lines = explode(PHP_EOL, Storage::get($this['path'].'/'.$this['name']));
         foreach ($lines as $line) {
-            $line = str_replace("\r","",$line);
-            $line = str_replace("+","",$line);
-            $line = str_replace(" ","",$line);
-            if ($line == '' || $line == 'CountryCode,PhoneNumber,IsLocal,Amount') continue;
+            $line = str_replace(array("\r", "+", " "), "", $line);
+            if ($line === '' || $line === 'CountryCode,PhoneNumber,IsLocal,Amount') continue;
             $item = explode(',',$line);
-            if (sizeof($item) != 4) continue;
+            if (count($item) !== 4) continue;
+            $operator = System::autoDetectOperator($item[1],$item[0],$this['id']);
             FileEntry::create([
                 'file_id' => $this['id'],
                 'country_id' => Country::where('iso',$item[0])->first()['id'],
-                'operator_id' => System::autoDetectOperator($item[1],$item[0],$this['id'])['id'],
-                'is_local' => $item[2] != '0',
-                'amount' => floatval($item[3]),
-                'number' => doubleval($item[1])
+                'operator_id' => $operator ? $operator['id'] : 0,
+                'is_local' => $item[2] !== '0',
+                'amount' => (float)$item[3],
+                'number' => (float)$item[1]
             ]);
-            sleep(rand(0,2));
+            sleep(random_int(0,2));
         }
         $this['status'] = 'START';
         $this->save();
