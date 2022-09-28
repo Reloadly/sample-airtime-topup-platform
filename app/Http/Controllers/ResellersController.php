@@ -81,9 +81,11 @@ class ResellersController extends Controller
             $user->operators()->sync($operators->pluck('id'));
             $userOperators = $user->operators()->get();
             foreach ($userOperators as $operator){
-                $operator->pivot->international_discount = $operator['discount']['international_percentage'] * (Setting::get('reseller_discount') / 100);
-                $operator->pivot->local_discount = $operator['discount']['local_percentage'] * (Setting::get('reseller_discount') / 100);
-                $operator->pivot->save();
+                if ($operator['discount']){
+                    $operator->pivot->international_discount = $operator['discount']['international_percentage'] * (Setting::get('reseller_discount') / 100);
+                    $operator->pivot->local_discount = $operator['discount']['local_percentage'] * (Setting::get('reseller_discount') / 100);
+                    $operator->pivot->save();
+                }
             }
         }
 

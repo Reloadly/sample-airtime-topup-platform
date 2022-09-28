@@ -153,7 +153,7 @@ class GiftCardProductsController extends Controller
     public function products()
     {
         $user = Auth::user();
-        if ($user && ($user['user_role_id'] === 2 || $user['user_role_id'] === 3))
+        if ($user && ($user['user_role_id'] === 2))
             $countryIds = $user->gift_cards()->pluck('country_id');
         else
             $countryIds = GiftCardProduct::pluck('country_id');
@@ -173,7 +173,7 @@ class GiftCardProductsController extends Controller
 
     public function getProductsForCountryId($id){
         $user = Auth::user();
-        if ($user && ($user['user_role_id'] === 2 || $user['user_role_id'] === 3))
+        if ($user && ($user['user_role_id'] === 2))
             $products = $user->gift_cards()->where('country_id',$id)->get();
         else
             $products = GiftCardProduct::where('country_id',$id)->get();

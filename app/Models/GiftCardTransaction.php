@@ -37,10 +37,10 @@ class GiftCardTransaction extends Model
     }
 
     public function sendTransaction(){
-        $response = User::admin()->orderReloadlyGiftProducts($this['product']['rid'],$this['product']['country']['iso'],1,$this['recipient_amount'],$this['reference'],$this['user']['name'],$this['email']);
+        $response = User::admin()->orderReloadlyGiftProducts($this['product']['rid'],$this['product']['country']['isoName'],1,$this['recipient_amount'],$this['reference'],$this['user']['name'],$this['email']);
 
-        if((isset($response->status)) && ($response->status === 'SUCCESSFUL')){
-            $this['transaction_id'] = $response->transactionId;
+        if((isset($response['status'])) && ($response['status'] === 'SUCCESSFUL')){
+            $this['transaction_id'] = $response['transactionId'];
             $this['status'] = 'SUCCESS';
         }else{
             $this['status'] = 'FAIL';
