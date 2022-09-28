@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="col-8">
                                                 <div class="position-relative has-icon-left">
-                                                    <p>{{biller.sender_currency_code +' '+ (((amount+biller.sender_fee)*(1+(customerRate/100)))*(1-(typeof biller.pivot.discount !== 'undefined'? biller.pivot.discount/100 : 0))).toFixed(2)}}</p>
+                                                    <p>{{biller.sender_currency_code +' '+ (((amount+biller.sender_fee)*(1+(customerRate/100)))*(1-((biller && biller.pivot &&typeof biller.pivot.discount !== 'undefined')? biller.pivot.discount/100 : 0))).toFixed(2)}}</p>
                                                 </div>
                                             </div>
                                         </div>
