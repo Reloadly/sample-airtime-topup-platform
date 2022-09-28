@@ -34,8 +34,9 @@ trait ReloadlySystem {
         return isset($response['access_token'])?$response['access_token']:null;
     }
 
-    public function getCountries(){
-        $response = Curl::Make()->GET->url($this['reloadly_api_url']."/countries")->header([
+    public function getCountries($iso=null){
+        $url = $this['reloadly_api_url'].'/countries';
+        $response = Curl::Make()->GET->url($url.($iso? '/'.$iso:''))->header([
             "Content-Type:application/json",
             "Authorization: Bearer ".Setting::get('reloadly_api_token')
         ])->execute();
