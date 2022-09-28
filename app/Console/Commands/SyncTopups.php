@@ -45,25 +45,30 @@ class SyncTopups extends Command
         $this->info("Started Sync of Topups");
         $this->line("****************************************************************");
         $this->line("Getting Topups that are PENDING");
-        Topup::whereIn('status',['PENDING','PROCESSING'])->chunk(100, function($topups)
-        {
-            $this->info(sizeof($topups)." Topups Found.");
-            foreach ($topups as $topup){
-                if (Carbon::now()->addMinutes(10) < new Carbon($topup['created_at']))
-                    continue;
-                if($topup['scheduled_datetime'] && isset($topup['timezone'])){
-                    $now = Carbon::now();
-                    $datetime = Carbon::parse($topup['scheduled_datetime'],$topup['timezone']['utc'][0]);
-                    if ($datetime <= $now)
+        try {
+            Topup::whereIn('status',['PENDING','PROCESSING'])->chunk(100, function($topups)
+            {
+                $this->info(count($topups)." Topups Found.");
+                foreach ($topups as $topup){
+                    if (Carbon::now()->addMinutes(10) < new Carbon($topup['created_at']))
+                        continue;
+                    if($topup['scheduled_datetime'] && isset($topup['timezone'])){
+                        $now = Carbon::now();
+                        $datetime = Carbon::parse($topup['scheduled_datetime'],$topup['timezone']['utc'][0]);
+                        if ($datetime <= $now)
+                            $topup->sendTopup();
+                    }else
                         $topup->sendTopup();
-                }else
-                    $topup->sendTopup();
-            }
-            $this->info(sizeof($topups)." Topups Synced !!!");
-        });
+                }
+                $this->info(count($topups)." Topups Synced !!!");
+            });
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
+        }
         $this->line("****************************************************************");
         $this->info("All Topups Synced !!! ");
         $this->line("****************************************************************");
         $this->line("");
+        return 0;
     }
 }

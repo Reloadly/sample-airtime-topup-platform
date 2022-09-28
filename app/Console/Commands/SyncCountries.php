@@ -44,25 +44,30 @@ class SyncCountries extends Command
         $this->info("Started Sync of Countries with Reloadly Platform");
         $this->line("****************************************************************");
         $this->line("Fetching Countries list from Reloadly");
-        $countries = User::admin()->getCountries();
-        $this->info("Fetching Complete.");
-        $this->line("Syncing with database.");
-        foreach ($countries as $country) {
-            Country::updateOrCreate(
-                ['iso' => $country['isoName']],
-                [
-                    'name' => $country['name'],
-                    'currency_code' => $country['currencyCode'],
-                    'currency_name' => $country['currencyName'],
-                    'currency_symbol' => $country['currencySymbol'],
-                    'flag' => $country['flag'],
-                    'calling_codes' => $country['callingCodes']
-                ]
-            );
+        try{
+            $countries = User::admin()->getCountries();
+            $this->info("Fetching Complete.");
+            $this->line("Syncing with database.");
+            foreach ($countries as $country) {
+                Country::updateOrCreate(
+                    ['iso' => $country['isoName']],
+                    [
+                        'name' => $country['name'],
+                        'currency_code' => $country['currencyCode'],
+                        'currency_name' => $country['currencyName'],
+                        'currency_symbol' => $country['currencySymbol'],
+                        'flag' => $country['flag'],
+                        'calling_codes' => $country['callingCodes']
+                    ]
+                );
+            }
+            $this->line("****************************************************************");
+            $this->info("Sync Complete !!! ".count($countries)." Countries Synced.");
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");
-        $this->info("Sync Complete !!! ".count($countries)." Countries Synced.");
-        $this->line("****************************************************************");
         $this->line("");
+        return 0;
     }
 }

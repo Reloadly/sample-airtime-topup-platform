@@ -45,46 +45,50 @@ class ProcessRefunds extends Command
         $this->line("****************************************************************");
         $this->info("Started Sync of Countries with Reloadly Platform");
         $this->line("****************************************************************");
-        $topups = Topup::where('status','FAIL')->with('invoice','user')->get();
-        foreach ($topups as $topup){
-            switch ($topup['invoice']['payment_method']){
-                case "BALANCE":
-                    $accountTransaction = AccountTransaction::updateOrCreate([
-                        'invoice_id' => $topup['invoice']['id'],
-                        'user_id' => $topup['user_id'],
-                        'amount' => $topup['invoice']['amount'],
-                        'currency' => $topup['invoice']['currency_code'],
-                        'type' => 'CREDIT',
-                        'description' => 'Invoice Refunded. Invoice: '.$topup['invoice']['id']
-                    ],[
-                        'ending_balance' => $topup['user']['balance_value'] + $topup['invoice']['amount']
-                    ]);
-                    if($accountTransaction) {
-                        $topup['status'] = 'REFUNDED';
-                        $topup->save();
-                        $topup['invoice']['status'] = 'REFUNDED';
-                        $topup['invoice']->save();
-                    }
-                break;
-                case "STRIPE":
-                    if (StripeSystem::refundInvoice($topup['invoice'])){
-                        $topup['status'] = 'REFUNDED';
-                        $topup->save();
-                        $topup['invoice']['status'] = 'REFUNDED';
-                        $topup['invoice']->save();
-                    }
-                    break;
-                case "PAYPAL":
-                    if (PaypalSystem::refundPaypalOrder($topup['invoice'])){
-                        $topup['status'] = 'REFUNDED';
-                        $topup->save();
-                        $topup['invoice']['status'] = 'REFUNDED';
-                        $topup['invoice']->save();
-                    }
-                    break;
-                default:
-                    break;
+        try{
+            $topups = Topup::where('status', 'FAIL')->with('invoice', 'user')->get();
+            foreach ($topups as $topup) {
+                switch ($topup['invoice']['payment_method']) {
+                    case "BALANCE":
+                        $accountTransaction = AccountTransaction::updateOrCreate([
+                            'invoice_id' => $topup['invoice']['id'],
+                            'user_id' => $topup['user_id'],
+                            'amount' => $topup['invoice']['amount'],
+                            'currency' => $topup['invoice']['currency_code'],
+                            'type' => 'CREDIT',
+                            'description' => 'Invoice Refunded. Invoice: '.$topup['invoice']['id']
+                        ], [
+                            'ending_balance' => $topup['user']['balance_value'] + $topup['invoice']['amount']
+                        ]);
+                        if ($accountTransaction) {
+                            $topup['status'] = 'REFUNDED';
+                            $topup->save();
+                            $topup['invoice']['status'] = 'REFUNDED';
+                            $topup['invoice']->save();
+                        }
+                        break;
+                    case "STRIPE":
+                        if (StripeSystem::refundInvoice($topup['invoice'])) {
+                            $topup['status'] = 'REFUNDED';
+                            $topup->save();
+                            $topup['invoice']['status'] = 'REFUNDED';
+                            $topup['invoice']->save();
+                        }
+                        break;
+                    case "PAYPAL":
+                        if (PaypalSystem::refundPaypalOrder($topup['invoice'])) {
+                            $topup['status'] = 'REFUNDED';
+                            $topup->save();
+                            $topup['invoice']['status'] = 'REFUNDED';
+                            $topup['invoice']->save();
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
         }
 
         $this->line("****************************************************************");

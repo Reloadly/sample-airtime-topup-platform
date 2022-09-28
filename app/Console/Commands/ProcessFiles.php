@@ -38,12 +38,16 @@ class ProcessFiles extends Command
      */
     public function handle()
     {
-        $files = File::where('status','PROCESSING')->get();
-        $this->withProgressBar($files,function ($file){
-            if ($file['is_valid']) {
-                $file->processNumbers();
-            }
-        });
-
+        try{
+            $files = File::where('status', 'PROCESSING')->get();
+            $this->withProgressBar($files, function ($file) {
+                if ($file['is_valid']) {
+                    $file->processNumbers();
+                }
+            });
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
+        }
+        return 0;
     }
 }

@@ -47,35 +47,43 @@ class SyncStripe extends Command
         $this->line("****************************************************************");
 
         $this->line("Searching Database for users not registered with Stripe.");
-        $users = User::all();
-        $this->info(sizeof($users)." User(s) Found.");
+        try{
+            $users = User::all();
+            $this->info(count($users)." User(s) Found.");
 
-        $this->line("Syncing with Stripe.");
-        foreach ($users as $user)
-            System::registerUserWithStripe($user);
-        $this->info("Users Synced with Stripe.");
+            $this->line("Syncing with Stripe.");
+            foreach ($users as $user) {
+                System::registerUserWithStripe($user);
+            }
+            $this->info("Users Synced with Stripe.");
 
-        $this->line("Searching Database for PENDING Invoices");
-        $invoices = Invoice::where('status','PENDING')->get();
-        $this->info(sizeof($invoices)." Invoice(s) Found.");
+            $this->line("Searching Database for PENDING Invoices");
+            $invoices = Invoice::where('status', 'PENDING')->get();
+            $this->info(count($invoices)." Invoice(s) Found.");
 
-        $this->line("Syncing with Stripe.");
-        foreach ($invoices as $invoice)
-            System::updatePaymentIntent($invoice);
-        $this->info("Invoices Synced with Stripe.");
+            $this->line("Syncing with Stripe.");
+            foreach ($invoices as $invoice) {
+                System::updatePaymentIntent($invoice);
+            }
+            $this->info("Invoices Synced with Stripe.");
 
-        $this->line("Searching Database for all stripe Clients");
-        $users = User::where('stripe_id','!=',null)->where('user_role_id',UserRole::where('name','CUSTOMER')->first()['id'])->get();
-        $this->info(sizeof($users)." Customer(s) Found.");
+            $this->line("Searching Database for all stripe Clients");
+            $users = User::where('stripe_id', '!=', null)->where('user_role_id',
+                UserRole::where('name', 'CUSTOMER')->first()['id'])->get();
+            $this->info(count($users)." Customer(s) Found.");
 
-        $this->line("Syncing with Stripe.");
-        foreach ($users as $user)
-            System::updatePaymentMethods($user);
+            $this->line("Syncing with Stripe.");
+            foreach ($users as $user) {
+                System::updatePaymentMethods($user);
+            }
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
+        }
         $this->info("Customers Payment Methods Synced with Stripe.");
         $this->line("****************************************************************");
         $this->info("Stripe Sync Completed (Pending Invoices, Users, Payment Methods) !!! ");
         $this->line("****************************************************************");
         $this->line("");
-
+        return 0;
     }
 }

@@ -46,21 +46,21 @@ class SyncDiscounts extends Command
         $this->info("Started Sync of Operators Discount with Reloadly Platform");
         $this->line("****************************************************************");
         $page=1;
-        do{
+        do {
             $this->line("Fetching Discounts Page : ".$page);
             $response = User::admin()->getOperatorsDiscount($page);
             $this->info("Fetch Success !!!");
             $page++;
             $this->line("Syncing with Database");
-            foreach ($response['content'] as $discount){
-                if (isset($discount['operator']['operatorId'])){
-                    $operatorId = Operator::where('rid',$discount['operator']['operatorId'])->first()['id'];
-                    if($operatorId) {
+            foreach ($response['content'] as $discount) {
+                try{
+                    if (isset($discount['operator']['operatorId'])) {
+                        $operator = Operator::where('rid', $discount['operator']['operatorId'])->first();
                         Discount::updateOrCreate(
                             ['rid' => $discount['operator']['operatorId']],
                             [
                                 'rid' => $discount['operator']['operatorId'],
-                                'operator_id' => $operatorId,
+                                'operator_id' => $operator['id'],
                                 'percentage' => $discount['percentage'],
                                 'international_percentage' => $discount['internationalPercentage'],
                                 'local_percentage' => $discount['localPercentage'],
@@ -68,13 +68,16 @@ class SyncDiscounts extends Command
                             ]
                         );
                     }
+                }catch (\Exception $exception){
+                    $this->error('Operator not found '.$discount['operator']['name']);
                 }
             }
             $this->info("Sync Completed For ".count($response['content'])." Discounts");
-        }while($response['totalPages'] >= $page);
+        } while ($response['totalPages'] >= $page);
         $this->line("****************************************************************");
         $this->info("All Discounts Synced !!! ");
         $this->line("****************************************************************");
         $this->line("");
+        return 0;
     }
 }

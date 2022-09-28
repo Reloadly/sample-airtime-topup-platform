@@ -47,40 +47,47 @@ class SyncTopupDIscounts extends Command
         $this->info("Started Sync of Topup Discounts");
         $this->line("****************************************************************");
         $this->line("Searching Database for Resellers.");
-        $resellers = User::where('user_role_id', UserRole::where('name', 'RESELLER')->first()['id'])->get();
-        $this->info(sizeof($resellers) . " Reseller(s) Found.");
+        try{
+            $resellers = User::where('user_role_id', UserRole::where('name', 'RESELLER')->first()['id'])->get();
+            $this->info(count($resellers)." Reseller(s) Found.");
 
-        $this->line("Syncing with Topups for Discount.");
-        foreach ($resellers as $reseller) {
-            $accountTransactions = $reseller->account_transactions()->where('topup_id', '!=' , NULL)->where('type', 'CREDIT')->pluck('topup_id')->toArray();
-            $topups = $reseller->topups()->where('status', 'SUCCESS')->whereNotIn('id',$accountTransactions)->get();
-            $this->info(count($topups) . " Topup(s) Found for ".$reseller['name']);
-            foreach ($topups as $topup) {
-                if (isset($topup['invoice'], $topup['operator'])) {
-                    $discountPercentage = 0;
-                    $operator = $reseller->operators()->where('operator_id', $topup['operator']['id'])->first();
-                    if ($topup['is_local'] && $operator->pivot->local_discount)
-                        $discountPercentage = $operator->pivot->local_discount;
-                    elseif (!$topup['is_local'] && $operator->pivot->international_discount)
-                        $discountPercentage = $operator->pivot->international_discount;
-                    if ($discountPercentage) {
-                        $discount = $topup['amount'] * ($discountPercentage / 100);
-                        AccountTransaction::firstOrCreate(['topup_id' => $topup['id']], [
-                            'user_id' => $topup['user_id'],
-                            'topup_id' => $topup['id'],
-                            'amount' => $discount,
-                            'currency' => $topup['invoice']['currency_code'],
-                            'type' => 'CREDIT',
-                            'description' => 'Commission Paid. Topup # ' . $topup['id'] . ' @' . $discountPercentage . '%',
-                            'ending_balance' => $reseller['balance_value'] + $discount
-                        ]);
+            $this->line("Syncing with Topups for Discount.");
+            foreach ($resellers as $reseller) {
+                $accountTransactions = $reseller->account_transactions()->where('topup_id', '!=', null)->where('type',
+                    'CREDIT')->pluck('topup_id')->toArray();
+                $topups = $reseller->topups()->where('status', 'SUCCESS')->whereNotIn('id',
+                    $accountTransactions)->get();
+                $this->info(count($topups)." Topup(s) Found for ".$reseller['name']);
+                foreach ($topups as $topup) {
+                    if (isset($topup['invoice'], $topup['operator'])) {
+                        $discountPercentage = 0;
+                        $operator = $reseller->operators()->where('operator_id', $topup['operator']['id'])->first();
+                        if ($topup['is_local'] && $operator->pivot->local_discount) {
+                            $discountPercentage = $operator->pivot->local_discount;
+                        } elseif (!$topup['is_local'] && $operator->pivot->international_discount) {
+                            $discountPercentage = $operator->pivot->international_discount;
+                        }
+                        if ($discountPercentage) {
+                            $discount = $topup['amount'] * ($discountPercentage / 100);
+                            AccountTransaction::firstOrCreate(['topup_id' => $topup['id']], [
+                                'user_id' => $topup['user_id'],
+                                'topup_id' => $topup['id'],
+                                'amount' => $discount,
+                                'currency' => $topup['invoice']['currency_code'],
+                                'type' => 'CREDIT',
+                                'description' => 'Commission Paid. Topup # '.$topup['id'].' @'.$discountPercentage.'%',
+                                'ending_balance' => $reseller['balance_value'] + $discount
+                            ]);
+                        }
                     }
                 }
             }
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");
         $this->info("Reseller Topup Discounts Synced");
         $this->line("****************************************************************");
-
+        return 0;
     }
 }

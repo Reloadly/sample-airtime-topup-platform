@@ -38,22 +38,26 @@ class ReCalculateAccountBalances extends Command
      */
     public function handle()
     {
-        $users = User::where('user_role_id',2)->with('account_transactions')->get();
-        $this->withProgressBar($users,function ($user){
-            $transactions = $user['account_transactions']->sortBy('id');
-            $balance = 0;
-            foreach ($transactions as $transaction){
-                if ($transaction['type'] === "CREDIT")
-                    $balance += $transaction['amount'];
-                else
-                    $balance -= $transaction['amount'];
-                if ($transaction['ending_balance'] !== $balance)
-                {
-                    $transaction['ending_balance'] = $balance;
-                    $transaction->save();
+        try{
+            $users = User::where('user_role_id', 2)->with('account_transactions')->get();
+            $this->withProgressBar($users, function ($user) {
+                $transactions = $user['account_transactions']->sortBy('id');
+                $balance = 0;
+                foreach ($transactions as $transaction) {
+                    if ($transaction['type'] === "CREDIT") {
+                        $balance += $transaction['amount'];
+                    } else {
+                        $balance -= $transaction['amount'];
+                    }
+                    if ($transaction['ending_balance'] !== $balance) {
+                        $transaction['ending_balance'] = $balance;
+                        $transaction->save();
+                    }
                 }
-            }
-        });
+            });
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
+        }
         $this->line(' ');
         return 0;
     }
