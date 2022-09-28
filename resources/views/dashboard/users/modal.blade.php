@@ -50,20 +50,20 @@
                 </div>
                 <div class="col-12">
                     <div class="form-label-group position-relative has-icon-left">
-                        <input type="password" id="first-name-floating-icon" class="form-control" placeholder="Password" name="password" value="">
+                        <input type="password" id="password-floating-icon" class="form-control" placeholder="Password" name="password" value="">
                         <div class="form-control-position">
                             <i class="feather icon-lock"></i>
                         </div>
-                        <label for="first-name-floating-icon">Password</label>
+                        <label for="password-floating-icon">Password</label>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-label-group position-relative has-icon-left">
-                        <input type="password" id="email-id-floating-icon" class="form-control" name="confirm_password" placeholder="Confirm Password" value="">
+                        <input type="password" id="conf-password-floating-icon" class="form-control" name="confirm_password" placeholder="Confirm Password" value="">
                         <div class="form-control-position">
                             <i class="feather icon-lock"></i>
                         </div>
-                        <label for="email-id-floating-icon">Confirm Password</label>
+                        <label for="conf-password-floating-icon">Confirm Password</label>
                     </div>
                 </div>
             </div>

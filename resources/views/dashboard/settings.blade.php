@@ -105,7 +105,7 @@
                                     </div>
                                     <div class="col-md-4 col-6">
                                         <div class="form-label-group position-relative has-icon-left">
-                                            <input type="number" min="0" id="customer-rate" class="form-control" placeholder="Customer Rate"
+                                            <input type="number" step="any" id="customer-rate" class="form-control" placeholder="Customer Rate"
                                                    name="customer_rate" value="{{ @OTIFSolutions\Laravel\Settings\Models\Setting::get('customer_rate') }}">
                                             <div class="form-control-position">
                                                 <i class="feather icon-percent"></i>

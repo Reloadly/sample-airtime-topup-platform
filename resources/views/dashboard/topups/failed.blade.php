@@ -19,8 +19,8 @@
                 <tbody>
                     <tr>
                         <td>Operator</td>
-                        <td><img src="{{ $topup['operator']['country']['flag'] }}" width="20px" class="mr-1">
-                            {{ $topup['operator']['country']['name'].' '.$topup['file_entry']['operator']['name'] }}
+                        <td><img src="{{ @$topup['operator']['country']['flag'] }}" width="20px" class="mr-1">
+                            {{ @$topup['operator']['country']['name'].' '.@$topup['file_entry']['operator']['name'] }}
                         </td>
                     </tr>
                     <tr>
