@@ -14,6 +14,6 @@ class Promotion extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'end_date', 'start_date'];
 
     public function operator(){
-        return $this->belongsTo('App\Models\Operator');
+        return $this->belongsTo(Operator::class);
     }
 }

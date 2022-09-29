@@ -51,19 +51,19 @@ class User extends Authenticatable
     }
 
     public function invoices(){
-        return $this->hasMany('App\Models\Invoice');
+        return $this->hasMany(Invoice::class);
     }
 
     public function stripe_payment_methods(){
-        return $this->hasMany('App\Models\StripePaymentMethod');
+        return $this->hasMany(StripePaymentMethod::class);
     }
 
     public function default_stripe_payment_method(){
-        return $this->belongsTo('App\Models\StripePaymentMethod','stripe_payment_method_id','id');
+        return $this->belongsTo(StripePaymentMethod::class,'stripe_payment_method_id','id');
     }
 
     public function account_transactions(){
-        return $this->hasMany('App\Models\AccountTransaction')->orderBy('id','DESC');
+        return $this->hasMany(AccountTransaction::class)->orderBy('id','DESC');
     }
 
     public function getBalanceValueAttribute(){
@@ -72,11 +72,11 @@ class User extends Authenticatable
     }
 
     public function topups(){
-        return $this->hasMany('App\Models\Topup');
+        return $this->hasMany(Topup::class);
     }
 
     public function files(){
-        return $this->hasMany('App\Models\File');
+        return $this->hasMany(File::class);
     }
 
     public function operators(){

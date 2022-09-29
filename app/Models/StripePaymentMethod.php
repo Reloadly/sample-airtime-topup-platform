@@ -13,6 +13,6 @@ class StripePaymentMethod extends Model
     protected $casts = ['response' => 'array'];
 
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 }

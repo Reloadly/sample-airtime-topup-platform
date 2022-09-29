@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class File extends Model
 {
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function getIsValidAttribute(): bool
@@ -63,11 +63,11 @@ class File extends Model
     }
 
     public function topups(){
-        return $this->hasMany('App\Models\Topup');
+        return $this->hasMany(Topup::class);
     }
 
     public function numbers(){
-        return $this->hasMany('App\Models\FileEntry');
+        return $this->hasMany(FileEntry::class);
     }
 
     public function getTotalAmountAttribute(){

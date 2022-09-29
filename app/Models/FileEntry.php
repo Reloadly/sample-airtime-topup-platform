@@ -13,11 +13,11 @@ class FileEntry extends Model
     protected $appends = ['operators'];
 
     public function country(){
-        return $this->belongsTo('App\Models\Country');
+        return $this->belongsTo(Country::class);
     }
 
     public function operator(){
-        return $this->belongsTo('App\Models\Operator');
+        return $this->belongsTo(Operator::class);
     }
 
     public function getOperatorsAttribute(){

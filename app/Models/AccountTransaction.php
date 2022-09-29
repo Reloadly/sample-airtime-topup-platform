@@ -14,15 +14,15 @@ class AccountTransaction extends Model
     ];
 
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function invoice(){
-        return $this->belongsTo('App\Models\Invoice');
+        return $this->belongsTo(Invoice::class);
     }
 
     public function topup(){
-        return $this->belongsTo('App\Models\Topup');
+        return $this->belongsTo(Topup::class);
     }
 
 

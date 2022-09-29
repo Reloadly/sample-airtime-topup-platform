@@ -26,15 +26,15 @@ class Operator extends Model
     ];
 
     public function country(){
-        return $this->belongsTo('App\Models\Country');
+        return $this->belongsTo(Country::class);
     }
 
     public  function discount(){
-        return $this->hasOne('App\Models\Discount');
+        return $this->hasOne(Discount::class);
     }
 
     public function topups(){
-        return $this->hasMany('App\Models\Topup');
+        return $this->hasMany(Topup::class);
     }
 
    /* public function numbers(){
@@ -42,7 +42,7 @@ class Operator extends Model
     }*/
 
     public function promotions(){
-        return $this->hasMany('App\Models\Promotion');
+        return $this->hasMany(Promotion::class);
     }
 
     public function resellers(){

@@ -19,19 +19,19 @@ class Topup extends Model
     protected $appends = ['message'];
 
     public function operator(){
-        return $this->belongsTo('App\Models\Operator');
+        return $this->belongsTo(Operator::class);
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function invoice(){
-        return $this->belongsTo('App\Models\Invoice');
+        return $this->belongsTo(Invoice::class);
     }
 
     public function file_entry(){
-        return $this->belongsTo('App\Models\FileEntry');
+        return $this->belongsTo(FileEntry::class);
     }
 
     public function getMessageAttribute(){

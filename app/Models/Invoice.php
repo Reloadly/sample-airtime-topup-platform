@@ -17,17 +17,17 @@ class Invoice extends Model
     ];
 
     public function topups(){
-        return $this->hasMany('App\Models\Topup');
+        return $this->hasMany(Topup::class);
     }
 
     public function topup(){
-        return $this->hasOne('App\Models\Topup', 'invoice_id');
+        return $this->hasOne(Topup::class, 'invoice_id');
     }
     public function gift_card(){
         return $this->hasOne(GiftCardTransaction::class,'invoice_id');
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 }

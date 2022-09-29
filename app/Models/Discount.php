@@ -13,7 +13,7 @@ class Discount extends Model
     protected $guarded = [];
 
     public function operator(){
-        return $this->belongsTo('App\Models\Operator');
+        return $this->belongsTo(Operator::class);
     }
 
     public function getInternationalPercentageResellerAttribute(){

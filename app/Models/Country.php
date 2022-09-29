@@ -15,7 +15,7 @@ class Country extends Model
     protected $hidden = ['created_at', 'updated_at', 'calling_codes'];
 
     public  function operators(){
-        return $this->hasMany('App\Models\Operator');
+        return $this->hasMany(Operator::class);
     }
 
     public  function gifts(){
