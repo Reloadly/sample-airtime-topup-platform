@@ -244,8 +244,8 @@ class GiftCardProductsController extends Controller
             $amount *= (1 - ($giftCard['pivot']['discount']/100));
         $amount = round($amount,2);
 
-        //if(($user['user_role']['name'] === 'RESELLER') && ($user['balance_value'] < $amount))
-          //  return response()->json( ['errors' => ['error' => 'Insufficient Balance for Transfer']],422);
+        if(($user['user_role']['name'] === 'RESELLER') && ($user['balance_value'] < $amount))
+            return response()->json( ['errors' => ['error' => 'Insufficient Balance for Transfer']],422);
 
         $invoice = Invoice::create([
             'user_id' => $user['id'],
