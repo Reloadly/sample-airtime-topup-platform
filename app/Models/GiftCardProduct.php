@@ -30,11 +30,16 @@ class GiftCardProduct extends Model
         else
             $discount = 0;
         $amounts = [];
-        foreach ($this['fixed_denominations_map'] as $key => $denomonation)
-        {
-            $amounts[$key] = $denomonation + $this['sender_fee'];
-            $amounts[$key] *= (1 - ($discount / 100));
-            $amounts[$key] = round($amounts[$key],2);
+        if ($this['denomination_type'] === "FIXED"){
+            foreach ($this['fixed_denominations_map'] as $key => $denomonation)
+            {
+                $amounts[$key] = $denomonation + $this['sender_fee'];
+                $amounts[$key] *= (1 - ($discount / 100));
+                $amounts[$key] = round($amounts[$key],2);
+            }
+        }else{
+            $amounts[] = $this['min_recipient_denomination'];
+            $amounts[] = $this['max_recipient_denomination'];
         }
         return $amounts;
     }

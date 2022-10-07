@@ -37,17 +37,30 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12" v-if="biller.fixed_recipient_denominations">
-                                        <div class="form-group row mb-0 align-items-center justify-content-center">
+                                    <div class="col-12">
+                                        <div class="form-group row align-items-center justify-content-center">
                                             <div class="col-4">
-                                                <p class="m-0">Gift Card</p>
+                                                <div class="row align-items-center">
+                                                    <p class="m-0 col">Gift Card</p>
+                                                    <label class="col" v-if="biller.denomination_type === 'RANGE'"> <b>Min : {{ biller.min_recipient_denomination }} <br>Max : {{ biller.max_recipient_denomination }}</b></label>
+                                                </div>
                                             </div>
-                                            <div class="col-8">
-                                                <fieldset class="form-group">
+                                            <div class="col-8" v-if="biller.denomination_type === 'FIXED'">
+                                                <fieldset class="">
                                                     <select class="form-control" id="basicSelect" v-model="selectedPaymentIndex">
                                                         <option v-for="(payment,index) in biller.fixed_recipient_denominations" :value="index">{{ biller.recipient_currency_code+' '+payment }}</option>
                                                     </select>
                                                 </fieldset>
+                                            </div>
+                                            <div class="col-8" v-if="biller.denomination_type === 'RANGE'">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <select class="custom-select form-control">
+                                                            <option>{{ biller.recipient_currency_code }}</option>
+                                                        </select>
+                                                    </div>
+                                                    <input type="number" step="any" :min="biller.min_recipient_denomination" :max="biller.max_recipient_denomination" class="form-control required" id="text_amount" name="amount" v-model="amount">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -58,7 +71,7 @@
                                             </div>
                                             <div class="col-8">
                                                 <div class="position-relative has-icon-left">
-                                                    <p>{{biller.sender_currency_code +' '+ (((amount+biller.sender_fee)*(1+(customerRate/100)))*(1-((biller && biller.pivot &&typeof biller.pivot.discount !== 'undefined')? biller.pivot.discount/100 : 0))).toFixed(2)}}</p>
+                                                    <p>{{biller.sender_currency_code +' '+ ((((biller.denomination_type === "FIXED"? parseFloat(amount) : (parseFloat(amount) * rate))+biller.sender_fee)*(1+(customerRate/100)))*(1-((biller && biller.pivot &&typeof biller.pivot.discount !== 'undefined')? biller.pivot.discount/100 : 0))).toFixed(2)}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -97,20 +110,28 @@ export default {
             selectedPaymentIndex: 0,
             amount:0.00,
             invoice_id:-1,
-            customerRate: 0
+            customerRate: 0,
+            rate: 0
         }
     },
     mounted() {
         this.biller = JSON.parse(this._gift_card);
         this.customerRate = parseFloat(this._customer_rate);
-        this.amount = this.biller.fixed_sender_denominations[0];
+        if (this.biller.denomination_type === "FIXED")
+            this.amount = this.biller.fixed_sender_denominations[0];
+        else
+        {
+            this.amount = this.biller.min_recipient_denomination;
+            this.rate = this.biller.min_sender_denomination/ this.biller.min_recipient_denomination;
+        }
     },
     created() {
         this.isLoading = false;
     },
     watch: {
         selectedPaymentIndex:function () {
-            this.amount = this.biller.fixed_sender_denominations[this.selectedPaymentIndex];
+            if (this.biller.denomination_type === "FIXED")
+                this.amount = this.biller.fixed_sender_denominations[this.selectedPaymentIndex];
         },
     },
     components: {
@@ -118,6 +139,13 @@ export default {
     },
     methods: {
         createInvoice:function () {
+            if (this.biller.denomination_type === 'RANGE'){
+                if (parseFloat(this.amount) < this.biller.min_recipient_denomination || parseFloat(this.amount) > this.biller.max_recipient_denomination)
+                {
+                    toastr.error('Invalid Amount. Please enter within the min and max boundary');
+                    return;
+                }
+            }
             if (this.validateEmail(this.email) === true){
                 let config = {
                     headers: {Authorization: `Bearer ${this._token}`},

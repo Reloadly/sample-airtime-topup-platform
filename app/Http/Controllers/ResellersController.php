@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GiftCardProduct;
 use App\Models\Operator;
 use App\Models\User;
 use App\Traits\GoogleAuthenticator;
@@ -76,16 +77,28 @@ class ResellersController extends Controller
             $user['password'] = Hash::make($request['password']);
         $user->save();
 
+        $resellerDiscount = Setting::get('reseller_discount');
         if(!count($user['operators'])){
             $operators = Operator::all();
             $user->operators()->sync($operators->pluck('id'));
             $userOperators = $user->operators()->get();
             foreach ($userOperators as $operator){
                 if ($operator['discount']){
-                    $operator->pivot->international_discount = $operator['discount']['international_percentage'] * (Setting::get('reseller_discount') / 100);
-                    $operator->pivot->local_discount = $operator['discount']['local_percentage'] * (Setting::get('reseller_discount') / 100);
+                    $operator->pivot->international_discount = $operator['discount']['international_percentage'] * ($resellerDiscount / 100);
+                    $operator->pivot->local_discount = $operator['discount']['local_percentage'] * ($resellerDiscount / 100);
                     $operator->pivot->save();
                 }
+            }
+        }
+
+        if(!count($user['gift_cards'])){
+            $exists = $user->gift_cards()->pluck('id');
+            $products = GiftCardProduct::whereNotIn('id', $exists)->pluck('id');
+            $user->gift_cards()->syncWithoutDetaching($products);
+            $userGiftCards = $user->gift_cards()->whereIn('id', $products)->get();
+            foreach ($userGiftCards as $giftCard) {
+                $giftCard->pivot->discount = $giftCard['discount_percentage'] * ($resellerDiscount / 100);
+                $giftCard->pivot->save();
             }
         }
 

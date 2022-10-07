@@ -231,15 +231,21 @@ class GiftCardProductsController extends Controller
         if (!$recipientCurrency)
             return response()->json(['errors' => ['error' => 'Recipient Currency not found!']],401);
 
-        $amount = $giftCard['fixed_sender_denominations'][$paymentIndex] + $giftCard['sender_fee'];
+        if ($giftCard['denomination_type'] === "FIXED")
+            $amount = $giftCard['fixed_sender_denominations'][$paymentIndex] + $giftCard['sender_fee'];
+        else
+        {
+            $rate = $giftCard['min_sender_denomination'] / $giftCard['min_recipient_denomination'];
+            $amount = ($request['amount'] * $rate) + $giftCard['sender_fee'];
+        }
 
         $amount *= (1 + ($customerRate/100));
         if (isset($giftCard['pivot']['discount']))
             $amount *= (1 - ($giftCard['pivot']['discount']/100));
         $amount = round($amount,2);
 
-        if(($user['user_role']['name'] === 'RESELLER') && ($user['balance_value'] < $amount))
-            return response()->json( ['errors' => ['error' => 'Insufficient Balance for Transfer']],422);
+        //if(($user['user_role']['name'] === 'RESELLER') && ($user['balance_value'] < $amount))
+          //  return response()->json( ['errors' => ['error' => 'Insufficient Balance for Transfer']],422);
 
         $invoice = Invoice::create([
             'user_id' => $user['id'],
@@ -259,7 +265,7 @@ class GiftCardProductsController extends Controller
             'sender_currency_id' => $senderCurrency['id'],
             'sender_amount' => $amount,
             'reloadly_fee' => $giftCard['sender_fee'],
-            'recipient_amount' => $giftCard['fixed_recipient_denominations'][$paymentIndex],
+            'recipient_amount' => $giftCard['denomination_type'] === "FIXED"? $giftCard['fixed_recipient_denominations'][$paymentIndex] : $request['amount'],
             'reference' => Str::random(10),
         ]);
 
