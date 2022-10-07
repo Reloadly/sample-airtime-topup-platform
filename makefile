@@ -18,6 +18,10 @@ install:
 	$(info $(pink)------------------------------------------------------$(reset))
 	@docker-compose build
 	@docker-compose up -d
+	@docker exec $(DOCKER_PROJECT_CODE)_php composer install -vvv
+	@docker exec $(DOCKER_PROJECT_CODE)_php php artisan migrate
+	@docker exec $(DOCKER_PROJECT_CODE)_php php artisan db:seed
+	@docker exec $(DOCKER_PROJECT_CODE)_php php artisan sync:countries
 	@docker-compose down
 	@make -s start
 update:
