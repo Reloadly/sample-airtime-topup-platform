@@ -44,10 +44,10 @@ As this repository is built for both local deployment and server deployment. If 
 3- cd into project folder (`cd sample-airtime-topup-platform`)<br>
 4- Make .env file (`cp .env.example .env`)<br>
 5- Edit the .env file( Change root password, database, database user, database user password based on server and database details)<br>
-6- Install the project dependencies(`composer install`)
-7- Create Database with migrations (`php artisan migrate`)
-8- Seed the new database with default data (`php artisan db:seed`)
-9- Install Passport to manage authentication (`php artisan passport:install`) 
+6- Install the project dependencies(`composer install`)<br>
+7- Create Database with migrations (`php artisan migrate`)<br>
+8- Seed the new database with default data (`php artisan db:seed`)<br>
+9- Install Passport to manage authentication (`php artisan passport:install`) <br>
 
 ## Default Credentials
 
