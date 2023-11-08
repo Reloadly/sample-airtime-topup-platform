@@ -282,6 +282,12 @@ export default {
             .then(response => {
                 this.countries = response.data;
                 this.selectedCountry = this.countries[0].id;
+                axios
+                    .get("/api/countries/"+this.countries[0].id+"/operators", config)
+                    .then(response => {
+                        this.operators = response.data;
+                        this.selectedOperator = this.operators[0];
+                    });
                 var countries = window.intlTelInputGlobals.getCountryData();
                 countries.length = 0;
                 var Temp = JSON.parse(this.int_input);

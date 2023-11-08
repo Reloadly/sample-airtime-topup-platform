@@ -210,6 +210,11 @@ export default {
         axios.get("/api/countries").then(response => {
             this.countries = response.data;
             this.selectedCountry = this.countries[0]
+            axios.get("/api/countries/"+this.selectedCountry.id+"/operators").then(response => {
+                this.operators = response.data;
+                this.selectedOperator = this.operators[0];
+                this.isLocalTransfer = false;
+            });
         });
     }
     ,watch: {

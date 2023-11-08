@@ -25,12 +25,7 @@ services:
 
   mariadb:
     container_name: ${DOCKER_PROJECT_CODE}_db
-    build:
-      context: docker/etc/mariadb
-      args:
-        - http_proxy
-        - https_proxy
-        - no_proxy
+    image: mariadb
     volumes:
       - ./volumes/mariadb:/var/lib/mysql
     environment:
