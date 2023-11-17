@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\Topup;
-use App\Models\System;
+use Exception;
 use Carbon\Carbon;
+use App\Models\Topup;
+use Illuminate\Console\Command;
 
 class SyncTopups extends Command
 {
@@ -24,16 +24,6 @@ class SyncTopups extends Command
     protected $description = 'Sync topups with the Reloadly and MyPaga Platforms';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -46,23 +36,27 @@ class SyncTopups extends Command
         $this->line("****************************************************************");
         $this->line("Getting Topups that are PENDING");
         try {
-            Topup::whereIn('status',['PENDING','PROCESSING'])->chunk(100, function($topups)
-            {
-                $this->info(count($topups)." Topups Found.");
-                foreach ($topups as $topup){
-                    if (Carbon::now()->addMinutes(10) < new Carbon($topup['created_at']))
-                        continue;
-                    if($topup['scheduled_datetime'] && isset($topup['timezone'])){
-                        $now = Carbon::now();
-                        $datetime = Carbon::parse($topup['scheduled_datetime'],$topup['timezone']['utc'][0]);
-                        if ($datetime <= $now)
+            Topup::query()
+                ->whereIn('status',['PENDING','PROCESSING'])
+                ->chunk(100, function($topups) {
+                    $this->info(count($topups)." Topups Found.");
+                    foreach ($topups as $topup){
+                        if (Carbon::now()->addMinutes(10) < new Carbon($topup['created_at'])) {
+                            continue;
+                        }
+                        if($topup['scheduled_datetime'] && isset($topup['timezone'])){
+                            $now = Carbon::now();
+                            $datetime = Carbon::parse($topup['scheduled_datetime'],$topup['timezone']['utc'][0]);
+                            if ($datetime <= $now) {
+                                $topup->sendTopup();
+                            }
+                        }else {
                             $topup->sendTopup();
-                    }else
-                        $topup->sendTopup();
-                }
-                $this->info(count($topups)." Topups Synced !!!");
-            });
-        }catch (\Exception $exception){
+                        }
+                    }
+                    $this->info(count($topups)." Topups Synced !!!");
+                });
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");

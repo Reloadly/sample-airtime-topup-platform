@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use Exception;
 use App\Models\User;
+use Illuminate\Console\Command;
 use OTIFSolutions\Laravel\Settings\Models\Setting;
 
 class SyncToken extends Command
@@ -23,16 +24,6 @@ class SyncToken extends Command
     protected $description = 'Sync Token with the Reloadly platform';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -48,7 +39,7 @@ class SyncToken extends Command
             if ($token !== null) {
                 Setting::set('reloadly_api_token', $token, 'STRING');
             }
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
 

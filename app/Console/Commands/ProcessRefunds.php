@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\AccountTransaction;
 use App\Models\Topup;
 use App\Traits\PaypalSystem;
 use App\Traits\StripeSystem;
 use Illuminate\Console\Command;
+use App\Models\AccountTransaction;
 
 class ProcessRefunds extends Command
 {
@@ -25,16 +25,6 @@ class ProcessRefunds extends Command
     protected $description = 'Process Refunds of Failed Orders';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
@@ -46,11 +36,14 @@ class ProcessRefunds extends Command
         $this->info("Started Sync of Countries with Reloadly Platform");
         $this->line("****************************************************************");
         try{
-            $topups = Topup::where('status', 'FAIL')->with('invoice', 'user')->get();
+            $topups = Topup::query()
+                ->where('status', 'FAIL')
+                ->with('invoice', 'user')
+                ->get();
             foreach ($topups as $topup) {
                 switch ($topup['invoice']['payment_method']) {
                     case "BALANCE":
-                        $accountTransaction = AccountTransaction::updateOrCreate([
+                        $accountTransaction = AccountTransaction::query()->updateOrCreate([
                             'invoice_id' => $topup['invoice']['id'],
                             'user_id' => $topup['user_id'],
                             'amount' => $topup['invoice']['amount'],

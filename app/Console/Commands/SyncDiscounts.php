@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Exception;
+use App\Models\User;
 use App\Models\Discount;
 use App\Models\Operator;
-use App\Models\Country;
-use App\Models\User;
 use Illuminate\Console\Command;
 
 class SyncDiscounts extends Command
@@ -23,16 +23,6 @@ class SyncDiscounts extends Command
      * @var string
      */
     protected $description = 'Sync Operators Discount with the Reloadly Platform';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -55,8 +45,10 @@ class SyncDiscounts extends Command
             foreach ($response['content'] as $discount) {
                 try{
                     if (isset($discount['operator']['operatorId'])) {
-                        $operator = Operator::where('rid', $discount['operator']['operatorId'])->first();
-                        Discount::updateOrCreate(
+                        $operator = Operator::query()
+                            ->where('rid', $discount['operator']['operatorId'])
+                            ->first();
+                        Discount::query()->updateOrCreate(
                             ['rid' => $discount['operator']['operatorId']],
                             [
                                 'rid' => $discount['operator']['operatorId'],
@@ -68,7 +60,7 @@ class SyncDiscounts extends Command
                             ]
                         );
                     }
-                }catch (\Exception $exception){
+                }catch (Exception $exception){
                     $this->error('Operator not found '.$discount['operator']['name']);
                 }
             }

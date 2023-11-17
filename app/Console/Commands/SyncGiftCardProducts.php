@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Country;
-use App\Models\GiftCardProduct;
+use Exception;
 use App\Models\User;
+use App\Models\Country;
 use Illuminate\Console\Command;
+use App\Models\GiftCardProduct;
 use OTIFSolutions\ACLMenu\Models\UserRole;
 use OTIFSolutions\Laravel\Settings\Models\Setting;
 
@@ -24,16 +25,6 @@ class SyncGiftCardProducts extends Command
      * @var string
      */
     protected $description = 'Sync Gift Products with the Reloadly Platform';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -57,9 +48,11 @@ class SyncGiftCardProducts extends Command
                 $this->line("Syncing with Database");
                 foreach ($response['content'] as $product) {
                     if (isset($product['productId'], $product['country']['isoName'])) {
-                        $country = Country::where('iso', $product['country']['isoName'])->first();
+                        $country = Country::query()
+                            ->where('iso', $product['country']['isoName'])
+                            ->first();
                         if (!$country) {
-                            $country = Country::updateOrCreate(['iso' => $product['country']['isoName']], [
+                            $country = Country::query()->updateOrCreate(['iso' => $product['country']['isoName']], [
                                 'name' => $product['country']['name'],
                                 'flag' => $product['country']['flagUrl'],
                                 'currency_code' => $product['recipientCurrencyCode'],
@@ -68,7 +61,7 @@ class SyncGiftCardProducts extends Command
                                 'calling_codes' => []
                             ]);
                         }
-                        GiftCardProduct::updateOrCreate(
+                        GiftCardProduct::query()->updateOrCreate(
                             ['rid' => $product['productId']],
                             [
                                 'rid' => $product['productId'],
@@ -100,11 +93,11 @@ class SyncGiftCardProducts extends Command
             $this->line("****************************************************************");
             $this->info("All Gift Products Synced !!! ");
             $this->line("Re-Syncing Reseller User's Rates");
-            $role = UserRole::where('name', 'RESELLER')->first();
-            $resellers = User::where('user_role_id', $role['id'])->get();
+            $role = UserRole::query()->where('name', 'RESELLER')->first();
+            $resellers = User::query()->where('user_role_id', $role['id'])->get();
             foreach ($resellers as $reseller) {
                 $exists = $reseller->gift_cards()->pluck('id');
-                $products = GiftCardProduct::whereNotIn('id', $exists)->pluck('id');
+                $products = GiftCardProduct::query()->whereNotIn('id', $exists)->pluck('id');
                 $reseller->gift_cards()->syncWithoutDetaching($products);
                 $userGiftCards = $reseller->gift_cards()->whereIn('id', $products)->get();
                 foreach ($userGiftCards as $giftCard) {
@@ -112,7 +105,7 @@ class SyncGiftCardProducts extends Command
                     $giftCard->pivot->save();
                 }
             }
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");

@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Invoice;
-use App\Models\System;
+use Exception;
 use App\Models\User;
+use App\Models\System;
+use App\Models\Invoice;
 use Illuminate\Console\Command;
 use OTIFSolutions\ACLMenu\Models\UserRole;
 
@@ -23,16 +24,6 @@ class SyncStripe extends Command
      * @var string
      */
     protected $description = 'Sync Invoices and PaymentMethods with Stripe';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -58,7 +49,9 @@ class SyncStripe extends Command
             $this->info("Users Synced with Stripe.");
 
             $this->line("Searching Database for PENDING Invoices");
-            $invoices = Invoice::where('status', 'PENDING')->get();
+            $invoices = Invoice::query()
+                ->where('status', 'PENDING')
+                ->get();
             $this->info(count($invoices)." Invoice(s) Found.");
 
             $this->line("Syncing with Stripe.");
@@ -68,15 +61,15 @@ class SyncStripe extends Command
             $this->info("Invoices Synced with Stripe.");
 
             $this->line("Searching Database for all stripe Clients");
-            $users = User::where('stripe_id', '!=', null)->where('user_role_id',
-                UserRole::where('name', 'CUSTOMER')->first()['id'])->get();
+            $users = User::query()->where('stripe_id', '!=', null)->where('user_role_id',
+                UserRole::query()->where('name', 'CUSTOMER')->first()['id'])->get();
             $this->info(count($users)." Customer(s) Found.");
 
             $this->line("Syncing with Stripe.");
             foreach ($users as $user) {
                 System::updatePaymentMethods($user);
             }
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->info("Customers Payment Methods Synced with Stripe.");

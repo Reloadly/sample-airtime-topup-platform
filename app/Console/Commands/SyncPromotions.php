@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Exception;
+use App\Models\User;
 use App\Models\Operator;
 use App\Models\Promotion;
-use App\Models\User;
 use Illuminate\Console\Command;
 
 class SyncPromotions extends Command
@@ -24,16 +25,6 @@ class SyncPromotions extends Command
     protected $description = 'Sync Promotions with the Reloadly Platform';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -45,7 +36,7 @@ class SyncPromotions extends Command
         $this->info("Started Sync of Promotions with Reloadly Platform");
         $this->line("****************************************************************");
         $this->line("Removing all current promotions.");
-        Promotion::truncate();
+        Promotion::query()->truncate();
         $this->info("All Promotions Removed.");
         $page=1;
         try{
@@ -57,11 +48,11 @@ class SyncPromotions extends Command
                 $this->line("Syncing with Database");
                 foreach ($response['content'] as $promotion) {
                     if (isset($promotion['promotionId'])) {
-                        Promotion::updateOrCreate(
+                        Promotion::query()->updateOrCreate(
                             ['rid' => $promotion['promotionId']],
                             [
                                 'rid' => $promotion['promotionId'],
-                                'operator_id' => Operator::where('rid', $promotion['operatorId'])->first()['id'],
+                                'operator_id' => Operator::query()->where('rid', $promotion['operatorId'])->first()['id'],
                                 'title' => $promotion['title'],
                                 'title2' => $promotion['title2'],
                                 'description' => $promotion['description'],
@@ -75,7 +66,7 @@ class SyncPromotions extends Command
                 }
                 $this->info("Sync Completed For ".count($response['content'])." Promotions");
             } while ($response['totalPages'] >= $page);
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");

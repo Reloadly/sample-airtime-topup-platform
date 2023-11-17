@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\Country;
+use Exception;
 use App\Models\User;
+use App\Models\Country;
+use Illuminate\Console\Command;
 
 class SyncCountries extends Command
 {
@@ -23,16 +24,6 @@ class SyncCountries extends Command
     protected $description = 'Sync Countries with the Reloadly platform';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -49,7 +40,7 @@ class SyncCountries extends Command
             $this->info("Fetching Complete.");
             $this->line("Syncing with database.");
             foreach ($countries as $country) {
-                Country::updateOrCreate(
+                Country::query()->updateOrCreate(
                     ['iso' => $country['isoName']],
                     [
                         'name' => $country['name'],
@@ -63,7 +54,7 @@ class SyncCountries extends Command
             }
             $this->line("****************************************************************");
             $this->info("Sync Complete !!! ".count($countries)." Countries Synced.");
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");

@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\AccountTransaction;
-use App\Models\Topup;
+use Exception;
 use App\Models\User;
 use Illuminate\Console\Command;
+use App\Models\AccountTransaction;
 use OTIFSolutions\ACLMenu\Models\UserRole;
-use OTIFSolutions\Laravel\Settings\Models\Setting;
 
 class SyncTopupDIscounts extends Command
 {
@@ -26,16 +25,6 @@ class SyncTopupDIscounts extends Command
     protected $description = 'Add Discounted amount to Reseller Wallet for sending topup';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
@@ -48,7 +37,9 @@ class SyncTopupDIscounts extends Command
         $this->line("****************************************************************");
         $this->line("Searching Database for Resellers.");
         try{
-            $resellers = User::where('user_role_id', UserRole::where('name', 'RESELLER')->first()['id'])->get();
+            $resellers = User::query()
+                ->where('user_role_id', UserRole::where('name', 'RESELLER')->first()['id'])
+                ->get();
             $this->info(count($resellers)." Reseller(s) Found.");
 
             $this->line("Syncing with Topups for Discount.");
@@ -69,7 +60,7 @@ class SyncTopupDIscounts extends Command
                         }
                         if ($discountPercentage) {
                             $discount = $topup['amount'] * ($discountPercentage / 100);
-                            AccountTransaction::firstOrCreate(['topup_id' => $topup['id']], [
+                            AccountTransaction::query()->firstOrCreate(['topup_id' => $topup['id']], [
                                 'user_id' => $topup['user_id'],
                                 'topup_id' => $topup['id'],
                                 'amount' => $discount,
@@ -82,7 +73,7 @@ class SyncTopupDIscounts extends Command
                     }
                 }
             }
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");

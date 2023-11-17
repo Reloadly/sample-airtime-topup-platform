@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -22,16 +23,6 @@ class ReCalculateAccountBalances extends Command
     protected $description = 'Command description';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
@@ -39,7 +30,10 @@ class ReCalculateAccountBalances extends Command
     public function handle()
     {
         try{
-            $users = User::where('user_role_id', 2)->with('account_transactions')->get();
+            $users = User::query()
+                ->where('user_role_id', 2)
+                ->with('account_transactions')
+                ->get();
             $this->withProgressBar($users, function ($user) {
                 $transactions = $user['account_transactions']->sortBy('id');
                 $balance = 0;
@@ -55,7 +49,7 @@ class ReCalculateAccountBalances extends Command
                     }
                 }
             });
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->line(' ');

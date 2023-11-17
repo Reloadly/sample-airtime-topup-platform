@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use App\Models\File;
 use Illuminate\Console\Command;
 
@@ -22,16 +23,6 @@ class ProcessFiles extends Command
     protected $description = 'Process All Files that are uploaded.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -39,13 +30,15 @@ class ProcessFiles extends Command
     public function handle()
     {
         try{
-            $files = File::where('status', 'PROCESSING')->get();
+            $files = File::query()
+                ->where('status', 'PROCESSING')
+                ->get();
             $this->withProgressBar($files, function ($file) {
                 if ($file['is_valid']) {
                     $file->processNumbers();
                 }
             });
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         return 0;

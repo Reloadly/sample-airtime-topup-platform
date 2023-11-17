@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\GiftCardTransaction;
-use App\Models\User;
+use Exception;
 use Illuminate\Console\Command;
+use App\Models\GiftCardTransaction;
 
 class SyncGiftTransactions extends Command
 {
@@ -23,16 +23,6 @@ class SyncGiftTransactions extends Command
     protected $description = 'Sync Reloadly Gift Card Transactions with Reloadly Platform';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -45,7 +35,9 @@ class SyncGiftTransactions extends Command
         $this->line("****************************************************************");
         $this->line("Syncing with PAID invoices");
         try{
-            $reloadlyGiftCardTransactions = GiftCardTransaction::where('status', 'PENDING_PAYMENT')->get();
+            $reloadlyGiftCardTransactions = GiftCardTransaction::query()
+                ->where('status', 'PENDING_PAYMENT')
+                ->get();
             $this->info(count($reloadlyGiftCardTransactions)." Reloadly Gift Transactions Found");
             foreach ($reloadlyGiftCardTransactions as $transaction) {
                 if ($transaction['invoice']['status'] === 'PAID') {
@@ -54,14 +46,16 @@ class SyncGiftTransactions extends Command
                 }
             }
             $this->line("Getting Reloadly Gift Card Transactions that are PENDING");
-            GiftCardTransaction::where('status', 'PENDING')->chunk(100, function ($giftTransactions) {
-                $this->info(count($giftTransactions)." Reloadly Gift Transactions Found.");
-                foreach ($giftTransactions as $reloadlyGiftCardTransaction) {
-                    $reloadlyGiftCardTransaction->sendTransaction();
-                }
-                $this->info(count($giftTransactions)." Transactions Synced !!!");
-            });
-        }catch (\Exception $exception){
+            GiftCardTransaction::query()
+                ->where('status', 'PENDING')
+                ->chunk(100, function ($giftTransactions) {
+                    $this->info(count($giftTransactions)." Reloadly Gift Transactions Found.");
+                    foreach ($giftTransactions as $reloadlyGiftCardTransaction) {
+                        $reloadlyGiftCardTransaction->sendTransaction();
+                    }
+                    $this->info(count($giftTransactions)." Transactions Synced !!!");
+                });
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
         $this->line("****************************************************************");

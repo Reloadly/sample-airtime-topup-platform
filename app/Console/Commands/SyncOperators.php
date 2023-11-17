@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Operator;
-use App\Models\Country;
+use Exception;
 use App\Models\User;
+use App\Models\Country;
+use App\Models\Operator;
 use Illuminate\Console\Command;
 use OTIFSolutions\ACLMenu\Models\UserRole;
 use OTIFSolutions\Laravel\Settings\Models\Setting;
@@ -24,16 +25,6 @@ class SyncOperators extends Command
      * @var string
      */
     protected $description = 'Sync Operators with the Reloadly Platform';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -56,10 +47,12 @@ class SyncOperators extends Command
                 $this->line("Syncing with Database");
                 foreach ($response['content'] as $operator) {
                     if (isset($operator['operatorId'])) {
-                        $country = Country::where('iso', $operator['country']['isoName'])->first();
+                        $country = Country::query()
+                            ->where('iso', $operator['country']['isoName'])
+                            ->first();
                         if (!$country){
                             $countryResponse = User::admin()->getCountries($operator['country']['isoName']);
-                            $country = Country::updateOrCreate(
+                            $country = Country::query()->updateOrCreate(
                                 ['iso' => $countryResponse['isoName']],
                                 [
                                     'name' => $countryResponse['name'],
@@ -71,7 +64,7 @@ class SyncOperators extends Command
                                 ]
                             );
                         }
-                        Operator::updateOrCreate(
+                        Operator::query()->updateOrCreate(
                             ['rid' => $operator['operatorId']],
                             [
                                 'rid' => $operator['operatorId'],
@@ -115,11 +108,11 @@ class SyncOperators extends Command
             $this->line("****************************************************************");
 
             $this->line("Re-Syncing Reseller User's Operator Rates");
-            $role = UserRole::where('name', 'RESELLER')->first();
-            $resellers = User::where('user_role_id', $role['id'])->get();
+            $role = UserRole::query()->where('name', 'RESELLER')->first();
+            $resellers = User::query()->where('user_role_id', $role['id'])->get();
             foreach ($resellers as $reseller) {
                 $exists = $reseller->operators()->pluck('id');
-                $operators = Operator::whereNotIn('id', $exists)->pluck('id');
+                $operators = Operator::query()->whereNotIn('id', $exists)->pluck('id');
                 $reseller->operators()->syncWithoutDetaching($operators);
                 $userOperators = $reseller->operators()->whereIn('id', $operators)->get();
                 foreach ($userOperators as $operator) {
@@ -128,7 +121,7 @@ class SyncOperators extends Command
                     $operator->pivot->save();
                 }
             }
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             $this->error($exception->getMessage());
         }
 

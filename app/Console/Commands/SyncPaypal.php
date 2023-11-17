@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Invoice;
 use App\Models\System;
-use App\Models\User;
+use App\Models\Invoice;
 use Illuminate\Console\Command;
-use OTIFSolutions\ACLMenu\Models\UserRole;
 
 class SyncPaypal extends Command
 {
@@ -25,16 +23,6 @@ class SyncPaypal extends Command
     protected $description = 'Sync Invoices with Paypal';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -46,7 +34,10 @@ class SyncPaypal extends Command
         $this->info("Started Sync of Invoices with Paypal");
         $this->line("****************************************************************");
         $this->line("Searching Database for PENDING/PROCESSING Invoices");
-        $invoices = Invoice::where('status','PENDING')->orWhere('status','PROCESSING')->get();
+        $invoices = Invoice::query()
+            ->where('status','PENDING')
+            ->orWhere('status','PROCESSING')
+            ->get();
         $this->info(count($invoices)." Invoice(s) Found.");
 
         $this->line("Syncing with Paypal.");
